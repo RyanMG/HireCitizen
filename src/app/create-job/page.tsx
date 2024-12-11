@@ -1,4 +1,4 @@
-export default function Home() {
+export default function CreateJob() {
     return (
       <div className="flex-grow p-4">
         Create a job

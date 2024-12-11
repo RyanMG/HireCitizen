@@ -1,5 +1,6 @@
 import Image from "next/image";
 import SideBarLink from "@/components/sidebarLink";
+import Link from "next/link";
 
 export default function Sidebar() {
 
@@ -7,20 +8,24 @@ export default function Sidebar() {
     <div className="m-2">
       <div className="bg-dark-blue h-full w-60 p-4 flex flex-col rounded-xl border border-indigo-900">
         <div className="flex flex-col flex-1">
-          <div className="flex flex-row items-center gap-1">
-            <Image
-              src="/1SCU-logo.png"
-              width={50}
-              height={50}
-              alt="1 scu box"
-            />
-            <div className="text-white text-2xl font-bold">HireCitizen</div>
-          </div>
+          <Link
+            href={"/"}
+          >
+            <div className="flex flex-row items-center gap-1">
+              <Image
+                src="/1SCU-logo.png"
+                width={50}
+                height={50}
+                alt="1 scu box"
+              />
+              <div className="text-white text-2xl font-bold">HireCitizen</div>
+            </div>
+          </Link>
 
           <div className="border-b border-gray-500 w-full pt-3"></div>
 
           <div className="flex flex-col gap-2 pt-3">
-            <SideBarLink link="/" text="Job Listings">
+            <SideBarLink link="/job-list" text="Job Listings">
               <path d="M80-200v-80h400v80H80Zm0-200v-80h200v80H80Zm0-200v-80h200v80H80Zm744 400L670-354q-24 17-52.5 25.5T560-320q-83 0-141.5-58.5T360-520q0-83 58.5-141.5T560-720q83 0 141.5 58.5T760-520q0 29-8.5 57.5T726-410l154 154-56 56ZM560-400q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Z"/>
             </SideBarLink>
 
