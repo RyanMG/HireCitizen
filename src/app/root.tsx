@@ -4,6 +4,7 @@ import Sidebar from "@/sidebar/page";
 import Loading from "@/components/loading";
 import { useQuery } from "@tanstack/react-query"
 import { fetchActiveUser } from "@/api/userApi";
+import Notification from "./notifications";
 
 export default function ProviderRoot({
   children,
@@ -26,9 +27,10 @@ export default function ProviderRoot({
       {activeUser && Object.keys(activeUser).length > 0 &&
         <>
           <Sidebar />
-          <main>
+          <main className="flex-grow">
             {children}
           </main>
+          <Notification />
         </>
       }
     </div>
