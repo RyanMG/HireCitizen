@@ -1,7 +1,9 @@
-export default function Home() {
+import PageHeader from "@/components/pageHeader";
+
+export default function Profile() {
   return (
     <div className="flex-grow p-4">
-      Profile
+      <PageHeader title="Your Profile" />
     </div>
   );
  }
