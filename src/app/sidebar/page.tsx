@@ -46,8 +46,11 @@ export default function Sidebar() {
         </div>
 
         <footer className="flex-end">
-          <div className="text-sm leading-3 text-gray-600">© Rad Times 2024</div>
-          <a className="text-sm leading-3 text-gray-600" href="/about">About</a>
+          <div className="flex flex-row justify-between">
+            <div className="text-sm leading-3 text-gray-600 cursor-default">© Rad Times 2024</div>
+            <div className="text-sm leading-3 text-gray-600 cursor-default">|</div>
+            <a className="text-sm leading-3 text-gray-600" href="/about">About</a>
+          </div>
         </footer>
       </div>
     </aside>

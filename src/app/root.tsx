@@ -1,6 +1,6 @@
 'use client'
 
-import Sidebar from "@/sidebar/page";
+import Sidebar from "@/app/sidebar/page";
 import Loading from "@/components/loading";
 import { useQuery } from "@tanstack/react-query"
 import { fetchActiveUser } from "@/api/userApi";

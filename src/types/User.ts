@@ -8,6 +8,11 @@ export type User = {
   timezone: string;
   account_status: string;
   profile_image: string;
-  language_code: string;
+  language: UserLanguage;
   reputation: number;
 };
+
+export type UserLanguage = {
+  code: string;
+  name: string;
+}
