@@ -9,6 +9,8 @@ export default {
   theme: {
     extend: {
       colors: {
+        'construction-yellow': '#b8972a',
+        'construction-yellow-light': '#d4ac2a',
         'blue': '#0B1B39',
         'dark-blue': '#0B0826',
         'light-blue': '#799bd1',

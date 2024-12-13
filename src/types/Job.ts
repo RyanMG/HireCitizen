@@ -5,6 +5,12 @@ export type JobType = {
   description: string;
 };
 
+export type JobTypeCategory = {
+  id: number;
+  name: string;
+  description: string;
+};
+
 export type Job = {
   id: number;
   owner: User;
