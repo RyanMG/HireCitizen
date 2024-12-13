@@ -17,7 +17,7 @@ export default function NotificationSnipe() {
       </div>
 
       {/* Notification pop over */}
-      <div className={`transition ease-in-out duration-300 ${notificationsShown ? "translate-x-0" : "translate-x-64"}`}>
+      <div className={`fixed right-0 top-0 h-full transition ease-in-out duration-300 ${notificationsShown ? "translate-x-0" : "translate-x-64"}`}>
         <div className={`w-60 bg-light-blue absolute bottom-5 right-2 top-5 rounded-xl p-4`}>
 
           <div className="flex flex-row justify-between border-b-2 border-gray-300 pb-2">
