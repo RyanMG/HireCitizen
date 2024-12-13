@@ -26,9 +26,16 @@ export default function JobList() {
   }, [searchValue]);
 
   useEffect(() => {
-    debouncedSearch();
-    return () => {
-      debouncedSearch.cancel();
+    if (searchValue.length === 0) {
+      debouncedSearch();
+      return;
+    }
+
+    if (searchValue.length > 3) {
+      debouncedSearch();
+      return () => {
+        debouncedSearch.cancel();
+      }
     }
   }, [searchValue]);
 

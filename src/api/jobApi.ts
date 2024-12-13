@@ -11,7 +11,7 @@ export async function searchJobs({
 }:ISearchJobsProps):Promise<Job[]> {
   try {
     const params = new URLSearchParams();
-    params.set("search", searchText);
+    params.set("searchTerm", searchText);
 
     if (filters) {
       params.set("filter", filters.join(","));
