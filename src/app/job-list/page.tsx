@@ -8,13 +8,18 @@ import { searchJobs } from "@/api/jobApi";
 import { debounce as _debounce } from 'lodash';
 import Loading from "@/components/loading";
 import JobSearchResult from "@/components/jobSearchResult"
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function JobList() {
   const router = useRouter();
-  const [jobSearchTerm, setJobSearchTerm] = useState<string>("");
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [filters, setFilters] = useState<string[]>([]);
+  const searchParams = useSearchParams();
+
+  const searchQuery = searchParams.get('searchTerm')
+  const filtersQuery = searchParams.get('filters')
+
+  const [jobSearchTerm, setJobSearchTerm] = useState<string>(searchQuery || "");
+  const [searchValue, setSearchValue] = useState<string>(searchQuery || "");
+  const [filters, setFilters] = useState<string[]>(filtersQuery ? filtersQuery.split(',') : []);
 
   const { data: jobs, isLoading, error } = useQuery({
     queryKey: [`search-jobs`, jobSearchTerm],
@@ -46,7 +51,7 @@ export default function JobList() {
         value={searchValue}
         onInputChange={(e) => {
           setSearchValue(e.target.value);
-          router.push(`?searchTerm=${searchValue}&filters=${filters.join(',')}`);
+          router.push(`?searchTerm=${e.target.value}&filters=${filters.join(',')}`);
         }}
       />
       <div className="flex flex-col gap-4 flex-1">
