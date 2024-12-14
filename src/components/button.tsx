@@ -1,7 +1,7 @@
 interface IButtonProps {
   label: string;
   theme?: "primary" | "secondary" | "destory";
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 const themeMap = {
@@ -12,7 +12,10 @@ const themeMap = {
 
 export default function Button({ label, theme = "primary", onClick }: IButtonProps) {
   return (
-    <button className={`flex justify-center items-center bg-blue-500 pl-4 pr-4 pt-2 pb-2 rounded-lg ${themeMap[theme]}`} onClick={onClick}>
+    <button className={`flex justify-center items-center bg-blue-500 pl-4 pr-4 pt-2 pb-2 rounded-lg ${themeMap[theme]}`} onClick={(e) => {
+      e.preventDefault();
+      onClick();
+    }}>
       <p className="text-white">{label}</p>
     </button>
   );

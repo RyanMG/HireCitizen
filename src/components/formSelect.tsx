@@ -23,10 +23,10 @@ export default function FormSelect({
   disabled = false,
   options
 }: IFormInputProps) {
-  const [selectedOption, setSelectedOption] = useState<IFormOption | null>(formValue);
+  const [selectedOption, setSelectedOption] = useState<IFormOption | null>(null);
 
   return (
-    <div className="flex flex-col border border-gray-800 rounded-lg mt-2 mb-2">
+    <div className="flex flex-col border border-gray-400 hover:border-gray-800 rounded-lg mt-2 mb-2">
       {label !== "" && (
         <div className="flex -my-4 ml-3">
           <label className="bg-gray-300 text-gray-400 pl-1 pr-1 text-sm">{label}</label>
@@ -34,7 +34,7 @@ export default function FormSelect({
       )}
 
       <Select
-        className={`${label !== "" ? "pt-5 pb-2" : ""} pl-3 pr-3 bg-transparent outline-none text-gray-700`}
+        className={`${label !== "" ? "pt-4 pb-1" : ""} pl-3 pr-3 bg-transparent outline-none text-gray-700`}
         styles={{
           control: (baseStyles, state) => ({
             ...baseStyles,
@@ -58,7 +58,8 @@ export default function FormSelect({
             backgroundColor: "#DDDDDD",
             width: "95%",
             borderColor: "#BBB",
-            borderWidth: "1px"
+            borderWidth: "1px",
+            zIndex: 1000
           }),
           option: (baseStyles, state) => ({
             ...baseStyles,

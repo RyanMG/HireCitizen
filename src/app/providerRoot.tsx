@@ -1,6 +1,8 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import RootView from "./root";
 
 const queryClient = new QueryClient();
@@ -12,9 +14,11 @@ export default function ProviderRoot({
 }>) {
   return (
     <QueryClientProvider client={queryClient}>
-      <RootView>
-        {children}
-      </RootView>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <RootView>
+          {children}
+        </RootView>
+      </LocalizationProvider>
     </QueryClientProvider>
   );
 }
