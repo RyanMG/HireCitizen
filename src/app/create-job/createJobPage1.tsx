@@ -1,9 +1,11 @@
 import { useState } from "react";
-import FormInput from "@/components/formInput";
-import FormSelect from "@/components/formSelect";
-import FormDatePicker from "@/components/formDatePicker";
-import FormTimePicker from "@/components/formTimePicker";
-import Button from "@/components/button";
+import FormInput from "@/components/form-elements/formInput";
+import FormSelect from "@/components/form-elements/formSelect";
+import FormDatePicker from "@/components/form-elements/formDatePicker";
+import FormTimePicker from "@/components/form-elements/formTimePicker";
+import FormCheckbox from "@/components/form-elements/formCheckbox";
+import Button from "@/components/form-elements/button";
+
 import { Dayjs } from "dayjs";
 import initialCap from "@/utils/initialCap";
 import dayjs from "dayjs";
@@ -26,6 +28,7 @@ export default function CreateJobPage1({
   const [startTime, setStartTime] = useState<Dayjs>(dayjs());
   const [timezone, setTimezone] = useState<string>("");
   const [jobPrivacy, setJobPrivacy] = useState<FormData["jobPrivacy"]>("PUBLIC");
+  const [reputationGate, setReputationGate] = useState<boolean>(false);
 
   const buildJobCategoryOptions = () => {
     const options = jobTypeCategories?.map((category) => ({ label: initialCap(category.name), value: category.id.toString() })) || [];
@@ -48,7 +51,8 @@ export default function CreateJobPage1({
       jobDate,
       startTime,
       timezone,
-      jobPrivacy
+      jobPrivacy,
+      reputationGate: false
     };
 
     let isValid:boolean = false;
@@ -62,7 +66,7 @@ export default function CreateJobPage1({
     if (formData.jobType !== "") {
       isValid = true;
     }
-    if (formData.payout !== "") {
+    if (formData.payout !== "" || typeof formData.payout === "number" && formData.payout < 0) {
       isValid = true;
     }
     if (formData.payType !== "") {
@@ -154,6 +158,13 @@ export default function CreateJobPage1({
         onChangeInput={(value) => setJobPrivacy(value as FormData["jobPrivacy"])}
         options={[{ label: "Public Listing", value: "PUBLIC" }, { label: "List job for friends only", value: "FRIENDS" }, { label: "List job for your Org only", value: "ORG" }]}
       />
+
+      <FormCheckbox
+        checked={reputationGate}
+        onChangeInput={(change, value) => setReputationGate(value)}
+      >
+        <label className="text-gray-700">Reputation Gate Job <span className="text-gray-500 text-sm italic">(Reputation 6+ only)</span></label>
+      </FormCheckbox>
 
       <Button
         label="Next"

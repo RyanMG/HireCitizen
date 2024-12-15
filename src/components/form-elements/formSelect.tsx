@@ -10,17 +10,13 @@ interface IFormOption {
 
 interface IFormInputProps {
   label?: string;
-  formValue: string | undefined
-  onChangeInput?: (text: string) => void
-  disabled?: boolean
+  onChangeInput: (text: string) => void
   options: IFormOption[]
 }
 
 export default function FormSelect({
   label,
-  formValue,
   onChangeInput,
-  disabled = false,
   options
 }: IFormInputProps) {
   const [selectedOption, setSelectedOption] = useState<IFormOption | null>(null);
@@ -71,7 +67,10 @@ export default function FormSelect({
           })
         }}
         defaultValue={selectedOption}
-        onChange={setSelectedOption}
+        onChange={(option) => {
+          setSelectedOption(option);
+          onChangeInput(option?.value || "0");
+        }}
         options={options}
       />
     </div>

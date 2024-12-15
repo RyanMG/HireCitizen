@@ -19,7 +19,9 @@ const defaultFormData:FormData = {
   jobDate: dayjs(),
   startTime: dayjs(),
   timezone: "",
-  jobPrivacy: "PUBLIC"
+  jobPrivacy: "PUBLIC",
+  reputationGate: false,
+  crewRoles: []
 };
 
 export default function CreateJob() {
@@ -32,9 +34,19 @@ export default function CreateJob() {
     queryFn: () => getJobTypeCategories()
   });
 
+  const submitForm = () => {
+    console.log(formData);
+  }
+
   return (
     <div className="flex flex-col p-4">
-      <PageHeader title="Create A Job" />
+      <PageHeader
+        showBackButton={page === 2}
+        title="Create A Job"
+        pageBackFn={() => {
+          setPage(1);
+        }}
+      />
       {isLoading && <Loading />}
       {error && <div>Error</div>}
 
@@ -47,10 +59,9 @@ export default function CreateJob() {
           jobTypeCategories={jobTypeCategories} />
       ) : (
         <CreateJobPage2
-          returnFormData={(pageTwoFormData) => {
-            setFormData(pageTwoFormData);
-          }}
-          formData={formData} />
+          formData={formData}
+          submitForm={submitForm}
+        />
       )}
 
     </div>

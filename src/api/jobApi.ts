@@ -1,4 +1,4 @@
-import { Job, JobTypeCategory } from "@/types/Job";
+import { CrewRole, Job, JobTypeCategory } from "@/types/Job";
 
 interface ISearchJobsProps {
   searchText: string,
@@ -32,7 +32,7 @@ export async function searchJobs({
 
 export async function getJob({ jobId }: { jobId: number }): Promise<Job> {
   try {
-    const res: Job = await fetch(`http://localhost:3030/api/jobs/${jobId}`)
+    const res: Job = await fetch(`http://localhost:3030/api/jobs/job/${jobId}`)
       .then((res) => res.json());
 
     return res;
@@ -49,6 +49,18 @@ export async function getJobTypeCategories(): Promise<JobTypeCategory[]> {
 
     return res;
 
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getCrewRoleOptions(): Promise<CrewRole[]> {
+  try {
+    const res: CrewRole[] = await fetch(`http://localhost:3030/api/jobs/crew-roles`)
+      .then((res) => res.json());
+
+    return res;
   } catch (error) {
     console.error(error);
     throw error;
