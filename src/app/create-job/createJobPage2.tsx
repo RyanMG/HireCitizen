@@ -10,7 +10,7 @@ import CloseElementIcon from "@/components/closeElementIcon";
 
 interface ICreateJobPage2Props {
   formData: FormData,
-  submitForm: (formData: FormData) => void
+  setFormData: (formData: FormData) => void
 }
 
 type CrewOption = {
@@ -24,6 +24,16 @@ const CrewRoleAssignmentRow = ({
 }: { role: CrewRole, removeRole: (id: number) => void }) => {
   const [count, setCount] = useState(role.count);
 
+  const increaseCount = () => {
+    setCount(count + 1);
+    role.count++;
+  }
+
+  const decreaseCount = () => {
+    setCount(count - 1);
+    role.count--;
+  }
+
   return (
     <div className="flex flex-row justify-start items-center">
       <CloseElementIcon
@@ -34,9 +44,9 @@ const CrewRoleAssignmentRow = ({
         <div className="text-base text-gray-700 font-semibold">{role.name}</div>
       </div>
       <div className="flex flex-row items-center pl-2 pr-2">
-        <div className={`select-none cursor-pointer text-lg text-gray-700 font-semibold border border-gray-700 rounded-md px-2 ${count === 1 ? "bg-gray-500" : "bg-gray-300"}`} onClick={() => count > 1 && setCount(count - 1)}>-</div>
+        <div className={`select-none cursor-pointer text-lg text-gray-700 font-semibold border border-gray-700 rounded-md px-2 ${count === 1 ? "bg-gray-500" : "bg-gray-300"}`} onClick={decreaseCount}>-</div>
         <div className="select-none text-base text-gray-700 font-semibold pl-2 pr-2">{count}</div>
-        <div className={`select-none cursor-pointer text-lg text-gray-700 font-semibold border border-gray-700 rounded-md bg-gray-300 px-2`} onClick={() => setCount(count + 1)}>+</div>
+        <div className={`select-none cursor-pointer text-lg text-gray-700 font-semibold border border-gray-700 rounded-md bg-gray-300 px-2`} onClick={increaseCount}>+</div>
       </div>
     </div>
   )
@@ -44,7 +54,7 @@ const CrewRoleAssignmentRow = ({
 
 export default function CreateJobPage2({
   formData,
-  submitForm
+  setFormData,
 }: ICreateJobPage2Props) {
   const [selectedRoles, setSelectedRoles] = useState<CrewRole[]>([]);
   const [rolesToPick, setRolesToPick] = useState<CrewOption[]>([]);
@@ -60,7 +70,7 @@ export default function CreateJobPage2({
       return;
     }
 
-    submitForm({
+    setFormData({
       ...formData,
       crewRoles: selectedRoles
     });

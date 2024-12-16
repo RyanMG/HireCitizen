@@ -9,8 +9,9 @@ export type FormData = {
   payType: string
   jobDate: Dayjs
   startTime: Dayjs
+  estimatedTime: number | ""
   timezone: string
   jobPrivacy: "PUBLIC" | "FRIENDS" | "ORG"
   reputationGate: boolean
-  crewRoles: CrewRole[]
+  crewRoles?: CrewRole[]
 }

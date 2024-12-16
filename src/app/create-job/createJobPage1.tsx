@@ -26,6 +26,7 @@ export default function CreateJobPage1({
   const [payType, setPayType] = useState<string>("");
   const [jobDate, setJobDate] = useState<Dayjs>(dayjs());
   const [startTime, setStartTime] = useState<Dayjs>(dayjs());
+  const [estimatedTime, setEstimatedTime] = useState<number|"">("");
   const [timezone, setTimezone] = useState<string>("");
   const [jobPrivacy, setJobPrivacy] = useState<FormData["jobPrivacy"]>("PUBLIC");
   const [reputationGate, setReputationGate] = useState<boolean>(false);
@@ -50,31 +51,38 @@ export default function CreateJobPage1({
       payType,
       jobDate,
       startTime,
+      estimatedTime,
       timezone,
       jobPrivacy,
       reputationGate: false
     };
 
-    let isValid:boolean = false;
+    let isValid:boolean = true;
 
-    if (formData.jobTitle !== "") {
-      isValid = true;
+    if (formData.jobTitle === "") {
+      isValid = false;
     }
-    if (formData.jobDescription !== "") {
-      isValid = true;
+    if (formData.jobDescription === "") {
+      isValid = false;
     }
-    if (formData.jobType !== "") {
-      isValid = true;
-    }
-    if (formData.payout !== "" || typeof formData.payout === "number" && formData.payout < 0) {
-      isValid = true;
-    }
-    if (formData.payType !== "") {
-      isValid = true;
+    if (formData.jobType === "") {
+      isValid = false;
     }
 
-    if (formData.timezone !== "") {
-      isValid = true;
+    if (formData.payout === "" || typeof formData.payout === "number" && formData.payout < 0) {
+      isValid = false;
+    }
+
+    if (formData.payType === "") {
+      isValid = false;
+    }
+
+    if (formData.estimatedTime === "" || typeof formData.estimatedTime === "number" && formData.estimatedTime < 0) {
+      isValid = false;
+    }
+
+    if (formData.timezone === "") {
+      isValid = false;
     }
 
     if (isValid) {
@@ -92,7 +100,6 @@ export default function CreateJobPage1({
 
       <FormSelect
         label="Job Type"
-        formValue={jobType}
         onChangeInput={(value) => setJobType(value)}
         options={buildJobCategoryOptions()}
       />
@@ -119,11 +126,29 @@ export default function CreateJobPage1({
 
         <FormSelect
           label=""
-          formValue={timezone}
           onChangeInput={(value) => setTimezone(value)}
           options={buildTimezoneOptions()}
         />
       </div>
+
+      <FormInput
+          label="Estimated Time For Job"
+          type="number"
+          width="50"
+          formValue={estimatedTime}
+          onChangeInput={(value) => {
+            if (value == "") {
+              setEstimatedTime("");
+              return;
+            }
+
+            const newValue = Number(value);
+            if (isNaN(newValue)) {
+              setEstimatedTime(0)
+            }
+            setEstimatedTime(newValue)
+          }}
+        />
 
       <div className="flex flex-row gap-4">
         <FormInput
@@ -146,7 +171,6 @@ export default function CreateJobPage1({
         />
         <FormSelect
           label=""
-          formValue={payType}
           onChangeInput={(value) => setPayType(value)}
           options={[{ label: "Per Person", value: "PERSON" }, { label: "Total", value: "TOTAL" }]}
         />
@@ -154,7 +178,6 @@ export default function CreateJobPage1({
 
       <FormSelect
         label="Job Privacy"
-        formValue={jobPrivacy}
         onChangeInput={(value) => setJobPrivacy(value as FormData["jobPrivacy"])}
         options={[{ label: "Public Listing", value: "PUBLIC" }, { label: "List job for friends only", value: "FRIENDS" }, { label: "List job for your Org only", value: "ORG" }]}
       />

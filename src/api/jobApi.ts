@@ -1,4 +1,5 @@
 import { CrewRole, Job, JobTypeCategory } from "@/types/Job";
+import { FormData } from "@/types/Forms";
 
 interface ISearchJobsProps {
   searchText: string,
@@ -61,6 +62,26 @@ export async function getCrewRoleOptions(): Promise<CrewRole[]> {
       .then((res) => res.json());
 
     return res;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function saveNewJob(job: FormData): Promise<Job> {
+  try {
+    const res: Job = await fetch(`http://localhost:3030/api/jobs/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(job)
+    })
+      .then((res) => res.json());
+
+    return res;
+
   } catch (error) {
     console.error(error);
     throw error;

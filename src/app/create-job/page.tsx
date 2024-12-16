@@ -2,10 +2,10 @@
 
 import PageHeader from "@/components/pageHeader";
 import Loading from "@/components/loading";
-import { useQuery } from "@tanstack/react-query";
-import { getJobTypeCategories } from "@/api/jobApi";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getJobTypeCategories, saveNewJob } from "@/api/jobApi";
 import CreateJobPage1 from "./createJobPage1";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormData } from "@/types/Forms";
 import dayjs from "dayjs";
 import CreateJobPage2 from "./createJobPage2";
@@ -18,6 +18,7 @@ const defaultFormData:FormData = {
   payType: "",
   jobDate: dayjs(),
   startTime: dayjs(),
+  estimatedTime: 0,
   timezone: "",
   jobPrivacy: "PUBLIC",
   reputationGate: false,
@@ -34,9 +35,33 @@ export default function CreateJob() {
     queryFn: () => getJobTypeCategories()
   });
 
-  const submitForm = () => {
-    console.log(formData);
-  }
+  const saveMutation = useMutation({
+    mutationFn: () => {
+      const newJob = {
+        owner_id: 1,
+        jobTitle: formData.jobTitle,
+        jobDescription: formData.jobDescription,
+        job_type: formData.jobType,
+        status: 'PENDING',
+        created: new Date(),
+        updated: new Date(),
+        // @ts-ignore
+        job_start: `${formData.jobDate.$M + 1}-${formData.jobDate.$D}-${formData.jobDate.$y}T${formData.startTime.$H}.${formData.startTime.$m}.${formData.startTime.$s}:${formData.startTime.$ms}Z`,
+        estimated_time: formData.estimatedTime,
+        amount_paid: formData.payout,
+        pay_type: formData.payType,
+        language_id: 1,
+      }
+      return saveNewJob(newJob);
+    }
+  });
+
+  useEffect(() => {
+    if (formData.crewRoles && formData.crewRoles.length > 0) {
+      console.log('saving form data');
+      saveMutation.mutate();
+    }
+  }, [formData]);
 
   return (
     <div className="flex flex-col p-4">
@@ -60,7 +85,7 @@ export default function CreateJob() {
       ) : (
         <CreateJobPage2
           formData={formData}
-          submitForm={submitForm}
+          setFormData={setFormData}
         />
       )}
 
