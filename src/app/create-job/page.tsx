@@ -26,7 +26,6 @@ const defaultFormData:FormData = {
 };
 
 export default function CreateJob() {
-
   const [formData, setFormData] = useState<FormData>(defaultFormData);
   const [page, setPage] = useState<number>(1);
 
@@ -37,21 +36,19 @@ export default function CreateJob() {
 
   const saveMutation = useMutation({
     mutationFn: () => {
+      const jobStart = formData.jobDate.toDate().getTime();
       const newJob = {
-        owner_id: 1,
-        jobTitle: formData.jobTitle,
-        jobDescription: formData.jobDescription,
-        job_type: formData.jobType,
-        status: 'PENDING',
-        created: new Date(),
-        updated: new Date(),
-        // @ts-ignore
-        job_start: `${formData.jobDate.$M + 1}-${formData.jobDate.$D}-${formData.jobDate.$y}T${formData.startTime.$H}.${formData.startTime.$m}.${formData.startTime.$s}:${formData.startTime.$ms}Z`,
-        estimated_time: formData.estimatedTime,
-        amount_paid: formData.payout,
-        pay_type: formData.payType,
-        language_id: 1,
-      }
+        title: formData.jobTitle,
+        description: formData.jobDescription,
+        jobType: formData.jobType,
+        jobStart,
+        estimatedTime: formData.estimatedTime,
+        amountPaid: formData.payout,
+        payType: formData.payType,
+        reputationGate: formData.reputationGate,
+        jobPrivacy: formData.jobPrivacy,
+        crewRoles: formData.crewRoles || []
+      } as unknown as FormData;
       return saveNewJob(newJob);
     }
   });
