@@ -1,5 +1,5 @@
 import { JobType } from "@/types/Job";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
 
 function MiningIcon():ReactElement {
   return (

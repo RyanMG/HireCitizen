@@ -19,7 +19,7 @@ export default function JobList() {
 
   const [jobSearchTerm, setJobSearchTerm] = useState<string>(searchQuery || "");
   const [searchValue, setSearchValue] = useState<string>(searchQuery || "");
-  const [filters, setFilters] = useState<string[]>(filtersQuery ? filtersQuery.split(',') : []);
+  const [filters] = useState<string[]>(filtersQuery ? filtersQuery.split(',') : []);
 
   const { data: jobs, isLoading, error } = useQuery({
     queryKey: [`search-jobs`, jobSearchTerm],

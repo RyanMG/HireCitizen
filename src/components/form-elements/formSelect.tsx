@@ -32,7 +32,7 @@ export default function FormSelect({
       <Select
         className={`${label !== "" ? "pt-4 pb-1" : ""} pl-3 pr-3 bg-transparent outline-none text-gray-700`}
         styles={{
-          control: (baseStyles, state) => ({
+          control: (baseStyles) => ({
             ...baseStyles,
             backgroundColor: 'transparent',
             border: 'none',
@@ -45,11 +45,11 @@ export default function FormSelect({
               border: "none"
             },
           }),
-          dropdownIndicator: (baseStyles, state) => ({
+          dropdownIndicator: (baseStyles) => ({
             ...baseStyles,
             color: "#999999"
           }),
-          menu: (baseStyles, state) => ({
+          menu: (baseStyles) => ({
             ...baseStyles,
             backgroundColor: "#DDDDDD",
             width: "95%",
@@ -57,7 +57,7 @@ export default function FormSelect({
             borderWidth: "1px",
             zIndex: 1000
           }),
-          option: (baseStyles, state) => ({
+          option: (baseStyles) => ({
             ...baseStyles,
             backgroundColor: "#DDDDDD",
             color: "#444444",

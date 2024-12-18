@@ -59,7 +59,7 @@ export default function CreateJobPage2({
   const [selectedRoles, setSelectedRoles] = useState<CrewRole[]>([]);
   const [rolesToPick, setRolesToPick] = useState<CrewOption[]>([]);
 
-  const { data: crewRolesData, isLoading, error } = useQuery({
+  const { data: crewRolesData } = useQuery({
     queryKey: [`crew-roles`],
     queryFn: () => getCrewRoleOptions()
   });
