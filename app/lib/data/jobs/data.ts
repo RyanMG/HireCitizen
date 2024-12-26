@@ -2,7 +2,6 @@
 
 import { neon } from "@neondatabase/serverless";
 import { Job, JobType } from "@definitions/job";
-import { User } from "next-auth";
 import { Person, PersonLanguage } from "../../definitions/person";
 
 const JOB_SEARCH_RESULTS_PER_PAGE = 10;
