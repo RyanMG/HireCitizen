@@ -1,7 +1,6 @@
 import { searchJobsPaginated } from "@/app/lib/data/jobs/data";
 import JobSearchResult from "@ui/job-list/jobSearchResult";
 
-
 export default async function JobResultList(props: {
   searchTerm: string;
   currentPage: number;
