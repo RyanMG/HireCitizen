@@ -1,0 +1,2 @@
+pnpm lint
+pnpm e2e:headless
