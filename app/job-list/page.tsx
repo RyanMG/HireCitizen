@@ -1,8 +1,11 @@
 import PageHeader from "@components/pageHeader";
 import Searchbar from "@components/searchbar";
 import { Suspense } from "react";
+import { neon } from '@neondatabase/serverless';
 
-export default function JobList() {
+export default async function JobList() {
+  const sql = neon(process.env.DATABASE_URL!);
+  const jobs = await sql`SELECT * FROM language`;
 
   return (
     <div className="flex flex-col p-4 pr-7 h-full">
@@ -11,19 +14,9 @@ export default function JobList() {
         <Searchbar />
       </Suspense>
       <div className="flex flex-col gap-4 flex-1">
-
-        {/* {isLoading &&
-          <div className="flex flex-col items-center justify-center h-full">
-            <Loading />
-          </div>
-        }
-        {error && <div className="text-red-500">{error.message}</div>}
-
-        <div className="flex flex-row flex-wrap">
-          {jobs && jobs.map((job) => (
-            <JobSearchResult jobData={job} key={job.id} />
-          ))}
-        </div> */}
+        {jobs.map((job) => (
+          <div key={job.id}>{job.name}</div>
+        ))}
 
       </div>
     </div>
