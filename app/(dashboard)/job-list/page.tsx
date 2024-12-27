@@ -2,6 +2,7 @@ import PageHeader from "@components/pageHeader";
 import Searchbar from "@components/searchbar";
 import { Suspense } from "react";
 import JobResultList from "@ui/job-list/jobResultList";
+import ResultsLoading from "@/app/ui/components/resultsLoading";
 
 export default async function JobList(props: {
   searchParams?: Promise<{
@@ -20,7 +21,7 @@ export default async function JobList(props: {
         <Searchbar />
       </Suspense>
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<ResultsLoading />}>
         <JobResultList searchTerm={query} currentPage={currentPage} />
       </Suspense>
     </div>
