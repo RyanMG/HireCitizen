@@ -4,7 +4,7 @@ import { neon } from "@neondatabase/serverless";
 import { Job, JobType } from "@definitions/job";
 import { Person, PersonLanguage } from "../../definitions/person";
 
-const JOB_SEARCH_RESULTS_PER_PAGE = 10;
+const JOB_SEARCH_RESULTS_PER_PAGE = 8;
 
 export async function fetchDefaultJobsPaginated() {
   try {
