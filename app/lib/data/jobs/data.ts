@@ -1,24 +1,15 @@
 'use server';
 
 import { neon } from "@neondatabase/serverless";
-import { Job, JobType } from "@definitions/job";
-import { Person, PersonLanguage } from "../../definitions/person";
+import { Job, JobType, JobTypeCategory } from "@definitions/job";
+import { Person, PersonLanguage } from "@definitions/person";
+import { Timezone } from "@definitions/misc";
 
 const JOB_SEARCH_RESULTS_PER_PAGE = 8;
 
-export async function fetchDefaultJobsPaginated() {
-  try {
-    const sql = neon(process.env.DATABASE_URL!);
-    const data = await sql`SELECT * FROM job` as Job[];
-
-    return data;
-
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
-  }
-}
-
+/**
+ * Search jobs by a search term.
+ */
 export async function searchJobsPaginated(searchTerm: string = "", currentPage: number = 1) {
   const sql = neon(process.env.DATABASE_URL!);
   const pageOffset = (currentPage - 1) * JOB_SEARCH_RESULTS_PER_PAGE;
@@ -67,4 +58,20 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
     }));
 
   return jobs;
+}
+/**
+ * Get the job type categories.
+ */
+export async function getJobTypeCategories() {
+  const sql = neon(process.env.DATABASE_URL!);
+  const data = await sql`SELECT * FROM job_type` as JobTypeCategory[];
+  return data;
+}
+/**
+ * Get the timezones.
+ */
+export async function getTimezones() {
+  const sql = neon(process.env.DATABASE_URL!);
+  const data = await sql`SELECT * FROM time_zones` as Timezone[];
+  return data;
 }

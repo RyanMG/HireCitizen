@@ -3,15 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import Button from '@mui/material/Button';
 
-function BtnWrapper({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex justify-center pt-4">
-      <button className="bg-gray-300 text-dark-blue px-4 py-2 rounded-md">{children}</button>
-    </div>
-  );
-}
-
+/**
+ * Load more button.
+ */
 export function LoadMoreBtn() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -24,14 +20,19 @@ export function LoadMoreBtn() {
   };
 
   return (
-    <BtnWrapper>
-      <Link href={createPageURL(currentPage + 1)}>
-        Load More
-      </Link>
-    </BtnWrapper>
+    <div className="flex justify-center mt-4">
+      <Button variant="contained">
+        <Link href={createPageURL(currentPage + 1)}>
+          Load More
+        </Link>
+      </Button>
+    </div>
   );
 }
 
+/**
+ * Load previous button.
+ */
 export function LoadPrevBtn() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -44,10 +45,12 @@ export function LoadPrevBtn() {
   };
 
   return (
-    <BtnWrapper>
-      <Link href={createPageURL(currentPage - 1)}>
-        Load Prev
-      </Link>
-    </BtnWrapper>
+    <div className="flex justify-center mt-4">
+      <Button variant="contained">
+        <Link href={createPageURL(currentPage - 1)}>
+          Load Prev
+        </Link>
+      </Button>
+    </div>
   );
 }

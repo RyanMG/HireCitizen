@@ -5,9 +5,6 @@ import "@ui/global.css";
 import Sidebar from "@ui/sidebar/sidebar";
 import Notification from "@ui/notifications/notifications";
 
-// import { LocalizationProvider } from '@mui/x-date-pickers';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,19 +33,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-blue`}
       >
-        {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
-          <main className="flex flex-col">
+        <main className="flex flex-col">
 
-            <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-              <Sidebar />
-              <section className="flex-grow">
-                {children}
-              </section>
-              <Notification />
-            </div>
+          <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+            <Sidebar />
+            <section className="flex-grow">
+              {children}
+            </section>
+            <Notification />
+          </div>
 
-          </main>
-        {/* </LocalizationProvider> */}
+        </main>
       </body>
     </html>
   );
