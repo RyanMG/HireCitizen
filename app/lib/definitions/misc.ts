@@ -3,3 +3,8 @@ export type Timezone = {
   name: string;
   utc_offset: number;
 }
+
+export type FormOption = {
+  label: string
+  value: string
+}
