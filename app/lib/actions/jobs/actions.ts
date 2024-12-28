@@ -3,7 +3,7 @@
 import { neon } from "@neondatabase/serverless";
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
-import {auth} from 'auth';
+import { auth } from 'auth';
 
 const CreateJobFormSchema = z.object({
   id: z.string(),
