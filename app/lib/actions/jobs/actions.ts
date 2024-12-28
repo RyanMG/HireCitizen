@@ -40,18 +40,18 @@ const CreateJobFormSchema = z.object({
 
 const CreateNewJob = CreateJobFormSchema.omit({ id: true, owner_id: true, jobStatus: true,language_id: true, createdAt: true, updatedAt: true });
 
-export type State = {
+export type CreateJobFormState = {
   errors?: {
-    jobTitle?: string,
-    jobType?: string,
-    jobDescription?: string,
-    jobDate?: string,
-    jobTimezone?: string,
-    jobEstimatedTime?: string,
-    jobPayout?: string,
-    jobPayedVia?: string,
-    jobPrivacy?: string,
-    jobReputationGate?: string,
+    jobTitle?: string[],
+    jobType?: string[],
+    jobDescription?: string[],
+    jobDate?: string[],
+    jobTimezone?: string[],
+    jobEstimatedTime?: string[],
+    jobPayout?: string[],
+    jobPayedVia?: string[],
+    jobPrivacy?: string[],
+    jobReputationGate?: string[]
   };
   message?: string | null;
   prevState?: {
@@ -71,10 +71,7 @@ export type State = {
 /**
  * Create an new job
  */
-export async function createNewJob(prevState: State, formData: FormData) {
-  console.log('jobDate',formData.get('jobDate'));
-  console.log('jobTimezone',formData.get('jobTimezone'));
-  console.log('jobPayedVia',formData.get('jobPayedVia'));
+export async function createNewJob(prevState: CreateJobFormState | Promise<{message:string}> | null, formData: FormData) {
 
   const validatedFields = CreateNewJob.safeParse({
     jobTitle: formData.get('jobTitle'),
@@ -105,7 +102,7 @@ export async function createNewJob(prevState: State, formData: FormData) {
         jobPrivacy: formData.get('jobPrivacy'),
         jobReputationGate: formData.get('jobReputationGate')
       }
-    }
+    } as unknown as CreateJobFormState;
   }
   const session = await auth()
   let owner_id, language_id;

@@ -6,14 +6,14 @@ import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 
 import { FormOption } from "@definitions/misc";
-import { State, createNewJob } from "@lib/actions/jobs/actions";
+import { CreateJobFormState, createNewJob } from "@lib/actions/jobs/actions";
 
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useActionState } from "react";
+import { useActionState, ReactNode } from "react";
 
-const JobInputBlock = ({ error, children, halfWidth }: { error: string[], children: React.ReactNode, halfWidth?: boolean }) => {
+const JobInputBlock = ({ error, children, halfWidth }: { error: string[], children: ReactNode, halfWidth?: boolean }): ReactNode => {
   return (
     <div className={`flex flex-col gap-1 ${halfWidth ? 'w-1/2' : ''}`}>
       {children}
@@ -32,9 +32,9 @@ export default function JobForm(props: {
   jobTypeCategories: FormOption[],
   timeZones: FormOption[]
 }) {
-  const initialState: State = { message: null, errors: {}, prevState: {} };
+  const initialState: CreateJobFormState = { message: null, errors: {}, prevState: {} };
   const [state, formAction] = useActionState(createNewJob, initialState);
-console.log('timezones',props.timeZones);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form action={formAction} aria-describedby="form-error" className="flex flex-col gap-4 bg-gray-300 p-4 rounded-lg mt-4 mb-4 h-full overflow-auto">
