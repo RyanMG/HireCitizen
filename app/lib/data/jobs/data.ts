@@ -73,7 +73,7 @@ export async function getJobTypeCategories(): Promise<JobTypeCategory[] | {messa
     const data = await sql`SELECT * FROM job_type` as JobTypeCategory[];
     return data;
 
-  } catch(error) {
+  } catch {
     return { message: 'Database Error: Failed to get job categories.' };
   }
 
@@ -87,7 +87,7 @@ export async function getTimezones(): Promise<Timezone[] | {message:string}> {
     const data = await sql`SELECT * FROM time_zones` as Timezone[];
     return data;
 
-  } catch(error) {
+  } catch {
     return { message: 'Database Error: Failed to get time zones data.' };
   }
 }
