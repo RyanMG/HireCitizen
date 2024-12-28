@@ -22,6 +22,7 @@
     "paths": {
       "@/*": ["./*"],
       "@lib/*": ["./app/lib/*"],
+      "@query/*": ["./app/lib/query/*"],
       "@definitions/*": ["./app/lib/definitions/*"],
       "@ui/*": ["./app/ui/*"],
       "@components/*": ["./app/ui/components/*"]

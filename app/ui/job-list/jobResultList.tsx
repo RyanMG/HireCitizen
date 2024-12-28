@@ -1,4 +1,4 @@
-import { searchJobsPaginated } from "@/app/lib/data/jobs/data";
+import { searchJobsPaginated } from "@/app/lib/query/job/data";
 import JobSearchResult from "@ui/job-list/jobSearchResult";
 import { LoadPrevBtn, LoadMoreBtn } from "../components/loadMoreBtn";
 

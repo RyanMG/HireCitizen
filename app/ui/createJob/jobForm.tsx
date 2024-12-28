@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 
 import { FormOption } from "@definitions/misc";
-import { CreateJobFormState, createNewJob } from "@lib/actions/jobs/actions";
+import { CreateJobFormState, createNewJob } from "@query/job/actions";
 
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
