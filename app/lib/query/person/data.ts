@@ -12,7 +12,12 @@ export const getPersonByEmail = async (email: string): Promise<Person | null> =>
       l.code as language_code, l.name as language_name
       FROM person p
       LEFT JOIN language l ON p.language_id = l.id
-      WHERE p.email=${email};`
+      WHERE p.email=${email};
+    `
+
+    if (personQuery.length === 0) {
+      return null;
+    }
 
     const {language_code, language_name, ...rest } = personQuery[0];
     return {

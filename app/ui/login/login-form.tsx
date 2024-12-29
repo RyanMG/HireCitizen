@@ -7,7 +7,7 @@ function LoginButton({ provider, label, imagePath }: { provider: string, label: 
       <form
         action={async () => {
           "use server"
-          await signIn(provider, { redirectTo: "/" })
+          await signIn(provider, { redirectTo: "/login/new-user" })
         }}
       >
         <button type="submit">
@@ -22,7 +22,6 @@ function LoginButton({ provider, label, imagePath }: { provider: string, label: 
 }
 
 export default function LoginForm() {
-
   return (
     <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
       <h1 className={"mb-3 text-2xl"}>

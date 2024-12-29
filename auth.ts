@@ -7,12 +7,16 @@ import { getPersonByEmail } from '@query/person/data';
 import { Person } from '@definitions/person';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  pages: {
-    error: "/(auth)/login/error",
-    newUser: '/(auth)/login/new-user'
-  },
   providers: [
-    Google,
+    Google({
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
     Discord
   ],
   callbacks: {
@@ -28,7 +32,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (activeUser) {
             token.id = activeUser.id;
-            token.language_code = activeUser.language.code;
             return token;
           }
 
@@ -46,7 +49,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     async session({ session, token }) {
       session.user.id = token.id as string;
+
+      if (!session.activeUser) {
+        try {
+          session.activeUser = await getPersonByEmail(token.email as string);
+
+        } catch (error) {
+          console.error('HANDLE ME! ERROR GETTING ACTIVE USER FOR SESSION', error);
+        }
+      }
+
       return session
-    },
+    }
   }
 });
