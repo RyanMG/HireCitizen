@@ -1,27 +1,18 @@
-import { auth } from "@/auth";
-import NewUserProfileForm from "@ui/login/newUserProfileForm";
-import PageHeader from "@/app/ui/components/pageHeader";
-import { getTimezones } from "@/app/lib/query/job/data";
-import { Timezone } from "@/app/lib/definitions/misc";
+import EditUserFormWrapper from "@ui/profile/editUserFormWrapper";
+import PageHeader from "@components/pageHeader";
+import { Suspense } from "react";
+import ResultsLoading from "@components/resultsLoading";
 
-export default async function EditUser() {
-  const session = await auth();
-
-  const timezones: Timezone[] | { message: string } = await getTimezones();
-
-  if ('message' in timezones) {
-    return <p className="flex flex-col items-center justify-center flex-1 text-white">{timezones.message}</p>;
-  }
-
-  // if (session?.activeUser?.account_status === 'ACTIVE') {
-  //   redirect('/');
-  // }
+export default function EditUser() {
 
   return (
     <div className="flex flex-col h-screen p-3">
       <PageHeader title="Edit Profile" />
-      <div className="border border-gray-700 my-3"/>
-      <NewUserProfileForm session={session} timezones={timezones}/>
+      <div className="flex bg-gray-300 border border-gray-700 rounded-lg p-6 mt-4">
+        <Suspense fallback={<ResultsLoading />}>
+          <EditUserFormWrapper />
+        </Suspense>
+      </div>
     </div>
   );
 }

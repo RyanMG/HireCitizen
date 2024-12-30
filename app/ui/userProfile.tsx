@@ -1,7 +1,7 @@
-import Button from '@mui/material/Button';
 import { auth } from 'auth';
-import Image from 'next/image';
 import Link from 'next/link';
+import ProfileImage from '@ui/profile/profileImage';
+import ProfileActionButtons from '@ui/profile/profileActionBtns';
 
 export default async function UserProfile() {
   const session = await auth();
@@ -12,13 +12,7 @@ export default async function UserProfile() {
       <div className="flex flex-row gap-4">
 
         <div>
-          <Image
-            src={activeUser?.profile_image || ''}
-            alt={activeUser?.moniker || ''}
-            width={100}
-            height={100}
-            className="rounded-xl border border-gray-300"
-          />
+          <ProfileImage session={session} />
         </div>
 
         <div className="flex flex-col gap-2 flex-1">
@@ -31,13 +25,7 @@ export default async function UserProfile() {
           )}
         </div>
 
-        <div>
-          <Button variant="outlined" color="primary">
-            <Link href="/profile/edit">
-              Edit
-            </Link>
-          </Button>
-        </div>
+        <ProfileActionButtons />
       </div>
     </>
   );
