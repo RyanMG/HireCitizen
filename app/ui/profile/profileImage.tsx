@@ -10,7 +10,7 @@ export default function ProfileImage({ session }: { session: Session | null }) {
           alt="Spectrum Profile Image"
           width={100}
           height={100}
-          className="rounded-lg border border-gray-700"
+          className="rounded-lg border border-white"
           priority
         />
       }

@@ -54,13 +54,14 @@ export default function EditUserProfileForm({
               const result = await scrapeRSIDetails(session?.activeUser?.rsi_url || '');
               if (result &&'error' in result) {
                 setRsiUrlError(result.error);
+                return;
               }
             }}
           >
             Verify
           </Button>
         </div>
-        {rsiUrlError && <p className="text-red-500 text-sm">{rsiUrlError}</p>}
+        {rsiUrlError && <p className="text-red-500 text-xs">{rsiUrlError}</p>}
       </FormWithErrorBlock>
 
       <div className="flex flex-row gap-2">
@@ -99,7 +100,7 @@ export default function EditUserProfileForm({
             name="timezone"
             label="Timezone"
             size="small"
-            defaultValue={session?.activeUser?.timezone}
+            defaultValue={session?.activeUser?.timezone || 1}
           >
             {timezones
               .sort((a, b) => a.utc_offset - b.utc_offset)
@@ -127,25 +128,30 @@ export default function EditUserProfileForm({
         </FormWithErrorBlock>
       </div>
 
-      <FormWithErrorBlock error={state?.errors?.email || []}>
-        <TextField
-          id="email"
-          name="email"
-          label="Email Address"
-          size="small"
-          defaultValue={session?.activeUser?.email}
-        />
-      </FormWithErrorBlock>
+      <div className="flex flex-col border border-gray-600 bg-gray-400 rounded-md p-2 gap-4">
+        <p className="text-gray-800 text-xs italic mb-2">
+          Email address and phone number are optional. Used if you want to receive notifications or reminders about upcoming jobs.
+        </p>
+        <FormWithErrorBlock error={state?.errors?.email || []}>
+          <TextField
+            id="email"
+            name="email"
+            label="Email Address"
+            size="small"
+            defaultValue={session?.activeUser?.email}
+          />
+        </FormWithErrorBlock>
 
-      <FormWithErrorBlock error={state?.errors?.phone || []}>
-        <TextField
-          id="phone"
-          name="phone"
-          label="Phone Number"
-          size="small"
-          defaultValue={session?.activeUser?.phone}
-        />
-      </FormWithErrorBlock>
+        <FormWithErrorBlock error={state?.errors?.phone || []}>
+          <TextField
+            id="phone"
+            name="phone"
+            label="Phone Number"
+            size="small"
+            defaultValue={session?.activeUser?.phone}
+          />
+        </FormWithErrorBlock>
+      </div>
 
       <div className="flex justify-end gap-2">
         <Button type="submit" variant="contained" color="primary" className="w-1/2">

@@ -1,8 +1,11 @@
-import { signOut } from "@/auth";
+import { removePersonByEmail } from "@/app/lib/query/person/actions";
+import { auth, signOut } from "@/auth";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 
-export default function SignOutPage() {
+export default async function SignOutPage() {
+  const session = await auth();
+
   return (
     <div className="flex flex-col gap-4 items-center justify-center h-screen">
       <div className="border border-gray-700 rounded-lg bg-gray-300 p-6">
@@ -20,6 +23,15 @@ export default function SignOutPage() {
           <form
             action={async () => {
               'use server';
+
+              if (session?.activeUser) {
+                const resp = await removePersonByEmail(session?.activeUser?.email as string);
+                if (resp?.error) {
+                  console.error(resp.error);
+                }
+                session.activeUser = null;
+              }
+
               await signOut({ redirectTo: "/" });
             }}
           >

@@ -112,3 +112,18 @@ export const updatePerson = async (state: GetUserRSIUrlFormState | Promise<{mess
     };
   }
 }
+
+/**
+ * Remove a person by email - used when signing out
+ */
+export const removePersonByEmail = async (email: string): Promise<{ error: string } | undefined> => {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    await sql`DELETE FROM person WHERE email = ${email}`;
+
+  } catch (error) {
+    return {
+      error: `Error removing person: ${error}`
+    }
+  }
+}

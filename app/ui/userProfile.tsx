@@ -6,6 +6,7 @@ import ProfileActionButtons from '@ui/profile/profileActionBtns';
 export default async function UserProfile() {
   const session = await auth();
   const activeUser = session?.activeUser;
+  console.log("activeUser", activeUser);
 
   return (
     <>
