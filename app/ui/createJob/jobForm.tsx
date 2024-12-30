@@ -11,22 +11,8 @@ import { CreateJobFormState, createNewJob } from "@query/job/actions";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useActionState, ReactNode } from "react";
-
-const JobInputBlock = ({ error, children, halfWidth }: { error: string[], children: ReactNode, halfWidth?: boolean }): ReactNode => {
-  return (
-    <div className={`flex flex-col gap-1 ${halfWidth ? 'w-1/2' : ''}`}>
-      {children}
-      <div id="customer-error" aria-live="polite" aria-atomic="true">
-        {error && error.map((error: string) => (
-          <p className="text-sm text-red-500" key={error}>
-            {error}
-          </p>
-        ))}
-      </div>
-    </div>
-  );
-}
+import { useActionState } from "react";
+import FormWithErrorBlock from "../components/formWIthErrorBlock";
 
 export default function JobForm(props: {
   jobTypeCategories: FormOption[],
@@ -39,7 +25,7 @@ export default function JobForm(props: {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form action={formAction} aria-describedby="form-error" className="flex flex-col gap-4 bg-gray-300 p-4 rounded-lg mt-4 mb-4 h-full overflow-auto">
 
-        <JobInputBlock error={state.errors?.jobTitle || []}>
+        <FormWithErrorBlock error={state.errors?.jobTitle || []}>
           <TextField
             name="jobTitle"
             id="jobTitle"
@@ -48,9 +34,9 @@ export default function JobForm(props: {
             variant="filled"
             aria-describedby="job-title-error"
           />
-        </JobInputBlock>
+        </FormWithErrorBlock>
 
-        <JobInputBlock error={state.errors?.jobType || []}>
+        <FormWithErrorBlock error={state.errors?.jobType || []}>
           <TextField
             id="jobType"
             name="jobType"
@@ -66,9 +52,9 @@ export default function JobForm(props: {
               </MenuItem>
             ))}
           </TextField>
-        </JobInputBlock>
+        </FormWithErrorBlock>
 
-        <JobInputBlock error={state.errors?.jobDescription || []}>
+        <FormWithErrorBlock error={state.errors?.jobDescription || []}>
           <TextField
             id="jobDescription"
             name="jobDescription"
@@ -78,10 +64,10 @@ export default function JobForm(props: {
             multiline
             rows={3}
           />
-        </JobInputBlock>
+        </FormWithErrorBlock>
 
         <div className="flex flex-row gap-4">
-          <JobInputBlock halfWidth error={state.errors?.jobDate || []}>
+          <FormWithErrorBlock halfWidth error={state.errors?.jobDate || []}>
             <DateTimePicker
               label="Start Time"
               referenceDate={dayjs()}
@@ -94,9 +80,9 @@ export default function JobForm(props: {
               }
             }}
           />
-          </JobInputBlock>
+          </FormWithErrorBlock>
 
-          <JobInputBlock halfWidth error={state.errors?.jobTimezone || []}>
+          <FormWithErrorBlock halfWidth error={state.errors?.jobTimezone || []}>
             <TextField
               id="jobTimezone"
               name="jobTimezone"
@@ -112,11 +98,11 @@ export default function JobForm(props: {
                 </MenuItem>
               ))}
             </TextField>
-          </JobInputBlock>
+          </FormWithErrorBlock>
 
         </div>
 
-        <JobInputBlock error={state.errors?.jobEstimatedTime || []}>
+        <FormWithErrorBlock error={state.errors?.jobEstimatedTime || []}>
           <TextField
             select
             size="small"
@@ -137,10 +123,10 @@ export default function JobForm(props: {
             <MenuItem value="270">4.5 Hours</MenuItem>
             <MenuItem value="300">5 Hours</MenuItem>
           </TextField>
-        </JobInputBlock>
+        </FormWithErrorBlock>
 
         <div className="flex flex-row gap-4">
-          <JobInputBlock halfWidth error={state.errors?.jobPayout || []}>
+          <FormWithErrorBlock halfWidth error={state.errors?.jobPayout || []}>
             <TextField
               size="small"
               id="jobPayout"
@@ -149,9 +135,9 @@ export default function JobForm(props: {
               variant="filled"
               type="number"
             />
-          </JobInputBlock>
+          </FormWithErrorBlock>
 
-          <JobInputBlock halfWidth error={state.errors?.jobPayedVia || []}>
+          <FormWithErrorBlock halfWidth error={state.errors?.jobPayedVia || []}>
             <TextField
               id="jobPayedVia"
               name="jobPayedVia"
@@ -165,10 +151,10 @@ export default function JobForm(props: {
               <MenuItem value="PERSON">Per Person</MenuItem>
               <MenuItem value="TOTAL">Total</MenuItem>
             </TextField>
-          </JobInputBlock>
+          </FormWithErrorBlock>
         </div>
 
-        <JobInputBlock error={state.errors?.jobPrivacy || []}>
+        <FormWithErrorBlock error={state.errors?.jobPrivacy || []}>
           <TextField
             size="small"
             id="jobPrivacy"
@@ -182,7 +168,7 @@ export default function JobForm(props: {
             <MenuItem value="FRIENDS">Friends</MenuItem>
             <MenuItem value="ORG">Org</MenuItem>
           </TextField>
-        </JobInputBlock>
+        </FormWithErrorBlock>
 
         <label className="flex flex-row items-center">
           <Checkbox id="jobReputationGate" name="jobReputationGate" />

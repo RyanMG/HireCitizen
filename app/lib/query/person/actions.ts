@@ -3,7 +3,8 @@
 import { Person } from "@definitions/person";
 import { neon } from "@neondatabase/serverless";
 import { User } from "next-auth";
-import { parse } from 'node-html-parser';
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import z from "zod";
 
@@ -27,7 +28,7 @@ const PersonSchema = z.object({
 /**
  * Create a new person from auth sign in
  */
-export const createNewPerson = async (user: User): Promise<Person | null> => {
+export const createNewPersonFromAuth = async (user: User): Promise<Person | null> => {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const person = await sql`
@@ -57,6 +58,13 @@ export const createNewPerson = async (user: User): Promise<Person | null> => {
 export type GetUserRSIUrlFormState = {
   errors?: {
     rsi_url?: string[];
+    handle?: string[];
+    moniker?: string[];
+    profileImage?: string[];
+    email?: string[];
+    phone?: string[];
+    timezone?: string[];
+    language_id?: string[];
   };
   message?: string | null;
   userDetails?: {
@@ -67,10 +75,17 @@ export type GetUserRSIUrlFormState = {
   };
 };
 
-export const getRSIUserDetails = async (state: GetUserRSIUrlFormState | Promise<{message:string}> | null, formData: FormData): Promise<GetUserRSIUrlFormState | null> => {
-  const personSchema = PersonSchema.omit({ id: true, handle: true, moniker: true, email: true, phone: true, timezone: true, language_id: true, account_status: true, reputation: true, profile_image: true });
+export const updatePerson = async (state: GetUserRSIUrlFormState | Promise<{message:string}> | null, formData: FormData): Promise<GetUserRSIUrlFormState | null> => {
+  const personSchema = PersonSchema.omit({ id: true, account_status: true, reputation: true });
   const validatedFields = personSchema.safeParse({
-    rsi_url: formData.get('rsi_url')
+    rsi_url: formData.get('rsi_url'),
+    profile_image: formData.get('profile_image'),
+    handle: formData.get('handle'),
+    moniker: formData.get('moniker'),
+    email: formData.get('email'),
+    phone: formData.get('phone'),
+    timezone: formData.get('timezone'),
+    language_id: formData.get('language_id'),
   });
 
   if (!validatedFields.success) {
@@ -79,34 +94,21 @@ export const getRSIUserDetails = async (state: GetUserRSIUrlFormState | Promise<
       message: 'URL is required'
     };
   }
-  const profileResponse: GetUserRSIUrlFormState['userDetails'] = {
-    profileImage: "",
-    handle: "",
-    moniker: "",
-  };
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    await sql`
+      INSERT INTO person (handle, moniker, email, phone, rsi_url, timezone_id, account_status, reputation, profile_image, language_id)
+      VALUES (${validatedFields.data.handle}, ${validatedFields.data.moniker}, ${validatedFields.data.email}, ${validatedFields.data.phone}, ${validatedFields.data.rsi_url}, ${validatedFields.data.timezone}, 'ACTIVE', 5, ${validatedFields.data.profile_image}, ${validatedFields.data.language_id})
+    `;
 
-  const handle = validatedFields.data.rsi_url.split('/').pop();
-  const response = await fetch(`https://robertsspaceindustries.com/citizens/${handle}`);
-  const data = await response.text();
-  const dom = parse(data);
-  const citizenId = dom.querySelector('p.citizen-record strong');
-  if (!citizenId) {
+    revalidatePath('/profile');
+    redirect('/profile');
+
+  } catch (error) {
+    console.error('Error updating person:', error);
     return {
-      errors: {
-        rsi_url: ['Invalid URL']
-      },
-      message: 'Invalid URL'
+      errors: {},
+      message: 'Error updating person.'
     };
   }
-
-  const profileImage = dom.querySelector('div.thumb img');
-  const moniker = dom.querySelector('div.info .entry:first-child .value');
-
-  profileResponse.handle = handle;
-  profileResponse.moniker = moniker?.textContent || '';
-  profileResponse.profileImage = profileImage?.attrs.src || '';
-
-  return {
-    userDetails: profileResponse
-  };
 }

@@ -2,7 +2,7 @@ import NextAuth, { User } from 'next-auth';
 import Google from "next-auth/providers/google"
 import Discord from "next-auth/providers/discord"
 
-import { createNewPerson } from '@query/person/actions';
+import { createNewPersonFromAuth } from '@query/person/actions';
 import { getPersonByEmail } from '@query/person/data';
 import { Person } from '@definitions/person';
 
@@ -27,7 +27,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           let activeUser: Person | null = await getPersonByEmail(token.email as string);
           if (!activeUser) {
             // Create new user
-            activeUser = await createNewPerson(user as User);
+            activeUser = await createNewPersonFromAuth(user as User);
           }
 
           if (activeUser) {

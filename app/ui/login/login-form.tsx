@@ -7,7 +7,7 @@ function LoginButton({ provider, label, imagePath }: { provider: string, label: 
       <form
         action={async () => {
           "use server"
-          await signIn(provider, { redirectTo: "/login/new-user" })
+          await signIn(provider, { redirectTo: "/profile" })
         }}
       >
         <button type="submit">
