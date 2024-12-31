@@ -1,3 +1,5 @@
+import { Timezone } from "./misc";
+
 export type Person = {
   id: number;
   handle: string;
@@ -5,7 +7,7 @@ export type Person = {
   email: string;
   phone: string;
   rsi_url: string;
-  timezone: string;
+  timezone: Timezone;
   account_status: string;
   profile_image: string;
   language: PersonLanguage;

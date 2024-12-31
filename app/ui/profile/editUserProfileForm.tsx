@@ -124,7 +124,7 @@ export default function EditUserProfileForm({
             name="timezone"
             label="Timezone"
             size="small"
-            defaultValue={session?.activeUser?.timezone || 1}
+            defaultValue={session?.activeUser?.timezone.id || 1}
           >
             {timezones
               .sort((a, b) => a.utc_offset - b.utc_offset)

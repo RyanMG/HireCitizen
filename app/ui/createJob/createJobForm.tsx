@@ -1,3 +1,5 @@
+'use server';
+
 import { getJobTypeCategories, getTimezones } from "@/app/lib/query/job/data";
 import JobForm from '@ui/createJob/jobForm';
 import { FormOption } from "@definitions/misc";

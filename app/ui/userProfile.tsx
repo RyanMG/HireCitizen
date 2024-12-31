@@ -1,3 +1,5 @@
+'use server';
+
 import { auth } from 'auth';
 import Link from 'next/link';
 import ProfileImage from '@ui/profile/profileImage';
@@ -10,7 +12,6 @@ export default async function UserProfile() {
   return (
     <>
       <div className="flex flex-row gap-4">
-
         <div>
           <ProfileImage image={activeUser?.profile_image || null} />
         </div>
@@ -26,6 +27,10 @@ export default async function UserProfile() {
         </div>
 
         <ProfileActionButtons />
+      </div>
+      <div className="flex flex-row mt-4 gap-6">
+        <p className="text-gray-300"><span className="text-gray-500 italic">Timezone:</span> <span className="font-bold">{activeUser?.timezone.name}</span></p>
+        <p className="text-gray-300"><span className="text-gray-500 italic">Language:</span> <span className="font-bold">{activeUser?.language.name}</span></p>
       </div>
     </>
   );

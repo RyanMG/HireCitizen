@@ -12,9 +12,11 @@ export const getPersonByEmail = async (email: string): Promise<Person | null> =>
     const sql = neon(process.env.DATABASE_URL!);
     const personQuery = await sql`
       SELECT p.*,
-      l.code as language_code, l.name as language_name, l.id as language_id
+      l.code as language_code, l.name as language_name, l.id as language_id,
+      tz.name as timezone_name, tz.utc_offset as timezone_offset
       FROM person p
       LEFT JOIN language l ON p.language_id = l.id
+      LEFT JOIN time_zones tz on p.timezone_id = tz.id
       WHERE p.email=${email};
     `
 
@@ -22,13 +24,18 @@ export const getPersonByEmail = async (email: string): Promise<Person | null> =>
       return null;
     }
 
-    const {language_code, language_name, language_id, ...rest } = personQuery[0];
+    const {language_code, language_name, language_id, timezone_offset, timezone_name, timezone_id, ...rest } = personQuery[0];
     return {
       ...rest,
       language: {
         code: language_code,
         name: language_name,
         id: language_id
+      },
+      timezone: {
+        utc_offset: timezone_offset,
+        name: timezone_name,
+        id: timezone_id
       }
     } as Person;
 

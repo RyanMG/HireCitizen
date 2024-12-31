@@ -1,6 +1,7 @@
 "use client";
 
 import CloseElementIcon from "@ui/components/iconBtns/closeIcon";
+import clsx from "clsx";
 import { useState } from "react";
 
 export default function NotificationSnipe() {
@@ -10,7 +11,7 @@ export default function NotificationSnipe() {
   };
 
   return (
-    <>
+    <div className="z-100">
       {/* Notification icon */}
       <div className={`fixed bottom-6 right-5 bg-dark-blue border-2 border-dark-blue z-50 rounded-full ${notificationsShown ? "hidden" : "flex"}`} onClick={onNotificationClick}>
         <div className="border border-gray-300 rounded-full p-1">
@@ -21,17 +22,29 @@ export default function NotificationSnipe() {
       </div>
 
       {/* Notification pop over */}
-      <div className={`fixed right-0 top-0 h-full transition ease-in-out duration-300 ${notificationsShown ? "translate-x-0" : "translate-x-64"}`}>
-        <div className={`w-60 bg-light-blue absolute bottom-5 right-2 top-5 rounded-xl p-4`}>
+      <div>
+        <div className={clsx(
+          "absolute top-0 left-0 h-full bg-black",
+          {
+            "bg-opacity-50 w-full": notificationsShown,
+            "bg-opacity-0 w-0": !notificationsShown
+          }
+        )}/>
+        <div className={`fixed right-0 top-0 h-full transition ease-in-out duration-300 ${notificationsShown ? "translate-x-0" : "translate-x-64"}`}>
+          <div className={`w-60 bg-light-blue border border-gray-300 absolute bottom-5 right-2 top-5 rounded-xl p-4`}>
 
-          <div className="flex flex-row justify-between border-b-2 border-gray-300 pb-2">
-            <div className="text-white text-lg font-bold">Notifications</div>
-            <CloseElementIcon onClickFn={onNotificationClick} iconFillColor="#e8eaed" />
+            <div className="flex flex-row justify-between border-b-2 border-gray-300 pb-2">
+              <div className="text-white text-lg font-bold">Notifications</div>
+              <CloseElementIcon onClickFn={onNotificationClick} iconFillColor="#e8eaed" />
+            </div>
+
+            <div className="flex flex-col justify-center items-start mt-4">
+              <p className="text-white text-sm">No new notifications. Get back to work!</p>
+            </div>
+
           </div>
-
         </div>
       </div>
-
-    </>
+    </div>
   );
  }
