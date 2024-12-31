@@ -11,17 +11,21 @@ import z from "zod";
 // eslint-disable-next-line
 const PersonSchema = z.object({
   id: z.number(),
-  handle: z.string(),
-  moniker: z.string(),
+  handle: z.string({
+    required_error: 'Handle is required'
+  }),
+  moniker: z.string({
+    required_error: 'Moniker is required'
+  }),
   email: z.string(),
   phone: z.string(),
   rsi_url: z.string().url({
     message: 'Invalid URL'
   }),
-  timezone: z.number(),
+  timezone: z.coerce.number(),
   account_status: z.string(),
   profile_image: z.string(),
-  language_id: z.number(),
+  language_id: z.coerce.number(),
   reputation: z.number(),
 });
 
@@ -33,7 +37,7 @@ export const createNewPersonFromAuth = async (user: User): Promise<Person | null
     const sql = neon(process.env.DATABASE_URL!);
     const person = await sql`
       INSERT INTO person (handle, moniker, email, phone, rsi_url, timezone_id, account_status, reputation, profile_image, language_id)
-      VALUES ('', '', ${user.email}, '', '', 27, 'PENDING', 0, ${user.image}, 1)
+      VALUES ('', '', ${user.email}, '', '', 1, 'PENDING', 0, ${user.image}, 1)
       RETURNING *;
     `;
 
@@ -77,15 +81,17 @@ export type GetUserRSIUrlFormState = {
 
 export const updatePerson = async (state: GetUserRSIUrlFormState | Promise<{message:string}> | null, formData: FormData): Promise<GetUserRSIUrlFormState | null> => {
   const personSchema = PersonSchema.omit({ id: true, account_status: true, reputation: true });
+  const personId = formData.get('id');
+
   const validatedFields = personSchema.safeParse({
     rsi_url: formData.get('rsi_url'),
-    profile_image: formData.get('profile_image'),
     handle: formData.get('handle'),
     moniker: formData.get('moniker'),
+    profile_image: formData.get('profile_image'),
     email: formData.get('email'),
     phone: formData.get('phone'),
     timezone: formData.get('timezone'),
-    language_id: formData.get('language_id'),
+    language_id: formData.get('language_id')
   });
 
   if (!validatedFields.success) {
@@ -94,15 +100,22 @@ export const updatePerson = async (state: GetUserRSIUrlFormState | Promise<{mess
       message: 'URL is required'
     };
   }
+
   try {
     const sql = neon(process.env.DATABASE_URL!);
     await sql`
-      INSERT INTO person (handle, moniker, email, phone, rsi_url, timezone_id, account_status, reputation, profile_image, language_id)
-      VALUES (${validatedFields.data.handle}, ${validatedFields.data.moniker}, ${validatedFields.data.email}, ${validatedFields.data.phone}, ${validatedFields.data.rsi_url}, ${validatedFields.data.timezone}, 'ACTIVE', 5, ${validatedFields.data.profile_image}, ${validatedFields.data.language_id})
+      UPDATE person
+      SET handle = ${validatedFields.data.handle},
+      moniker = ${validatedFields.data.moniker},
+      email = ${validatedFields.data.email},
+      phone = ${validatedFields.data.phone},
+      rsi_url = ${validatedFields.data.rsi_url},
+      timezone_id = ${validatedFields.data.timezone},
+      language_id = ${validatedFields.data.language_id},
+      profile_image = ${validatedFields.data.profile_image},
+      account_status = 'ACTIVE'
+      WHERE id = ${personId}
     `;
-
-    revalidatePath('/profile');
-    redirect('/profile');
 
   } catch (error) {
     console.error('Error updating person:', error);
@@ -111,6 +124,9 @@ export const updatePerson = async (state: GetUserRSIUrlFormState | Promise<{mess
       message: 'Error updating person.'
     };
   }
+
+  revalidatePath('/profile');
+  redirect('/profile');
 }
 
 /**

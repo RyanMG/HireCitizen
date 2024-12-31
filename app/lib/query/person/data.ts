@@ -1,3 +1,5 @@
+'use server';
+
 import { neon } from "@neondatabase/serverless";
 import { Person } from "@definitions/person";
 import { parse } from 'node-html-parser';
@@ -10,7 +12,7 @@ export const getPersonByEmail = async (email: string): Promise<Person | null> =>
     const sql = neon(process.env.DATABASE_URL!);
     const personQuery = await sql`
       SELECT p.*,
-      l.code as language_code, l.name as language_name
+      l.code as language_code, l.name as language_name, l.id as language_id
       FROM person p
       LEFT JOIN language l ON p.language_id = l.id
       WHERE p.email=${email};
@@ -20,12 +22,13 @@ export const getPersonByEmail = async (email: string): Promise<Person | null> =>
       return null;
     }
 
-    const {language_code, language_name, ...rest } = personQuery[0];
+    const {language_code, language_name, language_id, ...rest } = personQuery[0];
     return {
       ...rest,
       language: {
         code: language_code,
-        name: language_name
+        name: language_name,
+        id: language_id
       }
     } as Person;
 
@@ -50,7 +53,7 @@ export const scrapeRSIDetails = async (rsi_url: string): Promise<RsiUserDetails 
     moniker: "",
   };
 
-  const isValidFormat = rsi_url.match(/^https?:\/\/robertsspaceindustries\.com\/citizens\/[a-zA-Z0-9_-]+$/);
+  const isValidFormat = rsi_url.match(/^https:\/\/robertsspaceindustries\.com\/citizens\/[a-zA-Z0-9_-]{3,16}$/);
   if (!isValidFormat) {
     return {
       error: 'Invalid URL format'
@@ -59,7 +62,11 @@ export const scrapeRSIDetails = async (rsi_url: string): Promise<RsiUserDetails 
 
   const handle = rsi_url.split('/').pop();
 
-  const response = await fetch(`https://robertsspaceindustries.com/citizens/${handle}`);
+  const response = await fetch(`https://robertsspaceindustries.com/citizens/${handle}`, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+    }
+  });
   const data = await response.text();
   const dom = parse(data);
 
@@ -73,10 +80,14 @@ export const scrapeRSIDetails = async (rsi_url: string): Promise<RsiUserDetails 
 
   const profileImage = dom.querySelector('div.thumb img');
   const moniker = dom.querySelector('div.info .entry:first-child .value');
+  // URL can be all lower case. The version from the HTML will be as the user entered it
+  const handle_proper = dom.querySelector('div.info .entry:nth-child(2) .value');
 
-  profileResponse.handle = handle || '';
+  // @TODO - scrape out ORG details
+
+  profileResponse.handle = handle_proper?.textContent || handle || '';
   profileResponse.moniker = moniker?.textContent || '';
-  profileResponse.profileImage = profileImage?.attrs.src || '';
+  profileResponse.profileImage = `https://robertsspaceindustries.com/${profileImage?.attrs.src}` || '';
 
   return profileResponse;
 }

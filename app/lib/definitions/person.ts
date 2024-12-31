@@ -15,4 +15,5 @@ export type Person = {
 export type PersonLanguage = {
   code: string;
   name: string;
+  id: number;
 }

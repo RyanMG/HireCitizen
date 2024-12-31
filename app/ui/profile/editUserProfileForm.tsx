@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
 import { Session } from "next-auth";
-import { useActionState, useState } from "react";
+import { useActionState, useState, useRef } from "react";
 
 import FormWithErrorBlock from "@components/formWIthErrorBlock";
 import ProfileImage from "@ui/profile/profileImage";
@@ -27,13 +27,19 @@ export default function EditUserProfileForm({
   const [state, formAction] = useActionState(updatePerson, initialState);
 
   const [formSaving, setFormSaving] = useState<boolean>(false);
-
+  const [rsiFieldsDisabled, setRsiFieldsDisabled] = useState<boolean>(true);
   const [rsiUrlError, setRsiUrlError] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string>(session?.activeUser?.profile_image || "");
+
+  const urlInputRef = useRef<HTMLInputElement>(null);
+  const handleInputRef = useRef<HTMLInputElement>(null);
+  const monikerInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <form action={formAction} onSubmit={() => {
        setFormSaving(true);
     }} className="flex flex-col gap-4 w-full">
+      <input type="hidden" name="id" value={session?.activeUser?.id} />
 
       <FormWithErrorBlock error={state?.errors?.rsi_url || []}>
         <div className="flex flex-row gap-2">
@@ -44,6 +50,8 @@ export default function EditUserProfileForm({
             placeholder="https://robertsspaceindustries.com/citizens/XXXXX"
             defaultValue={session?.activeUser?.rsi_url}
             size="small"
+            variant="filled"
+            inputRef={urlInputRef}
             className="flex-1"
           />
           <Button
@@ -51,11 +59,21 @@ export default function EditUserProfileForm({
             variant="contained"
             color="primary"
             onClick={async () => {
-              const result = await scrapeRSIDetails(session?.activeUser?.rsi_url || '');
+              const result = await scrapeRSIDetails(urlInputRef.current?.value || '');
+
               if (result &&'error' in result) {
                 setRsiUrlError(result.error);
                 return;
               }
+              if (handleInputRef.current) {
+                handleInputRef.current.value = result?.handle || '';
+              }
+
+              if (monikerInputRef.current) {
+                monikerInputRef.current.value = result?.moniker || '';
+              }
+              setProfileImage(result?.profileImage || "");
+              setRsiFieldsDisabled(false);
             }}
           >
             Verify
@@ -71,7 +89,10 @@ export default function EditUserProfileForm({
             name="handle"
             label="Account Handle"
             size="small"
-            disabled={state?.userDetails?.rsi_url === "" || !state?.userDetails?.rsi_url}
+            variant="filled"
+            inputRef={handleInputRef}
+            disabled={rsiFieldsDisabled}
+            focused={!rsiFieldsDisabled}
             defaultValue={session?.activeUser?.handle}
           />
         </FormWithErrorBlock>
@@ -82,14 +103,17 @@ export default function EditUserProfileForm({
             name="moniker"
             label="Spectrum Moniker"
             size="small"
-            disabled={state?.userDetails?.rsi_url === "" || !state?.userDetails?.rsi_url}
+            variant="filled"
+            inputRef={monikerInputRef}
+            disabled={rsiFieldsDisabled}
+            focused={!rsiFieldsDisabled}
             defaultValue={session?.activeUser?.moniker}
           />
         </FormWithErrorBlock>
       </div>
 
       <FormWithErrorBlock error={state?.errors?.profileImage || []}>
-        <ProfileImage session={session} />
+        <ProfileImage image={profileImage}/>
       </FormWithErrorBlock>
 
       <div className="flex flex-row gap-2">
@@ -119,9 +143,9 @@ export default function EditUserProfileForm({
             name="language_id"
             label="Language"
             size="small"
-            defaultValue={session?.activeUser?.language?.code}
+            defaultValue={session?.activeUser?.language?.id}
           >
-            <MenuItem key={1} value={'EN'}>
+            <MenuItem key={1} value={1}>
               English
             </MenuItem>
           </TextField>
@@ -154,10 +178,10 @@ export default function EditUserProfileForm({
       </div>
 
       <div className="flex justify-end gap-2">
-        <Button type="submit" variant="contained" color="primary" className="w-1/2">
+        <Button type="submit" variant="contained" color="primary" className="w-1/2" disabled={rsiFieldsDisabled || formSaving}>
           {formSaving ? "Saving..." : "Save"}
         </Button>
-        <Button variant="outlined" color="primary" className="w-1/2" onClick={() => {
+        <Button variant="outlined" color="primary" className="w-1/2" disabled={formSaving} onClick={() => {
           redirect("/profile");
         }}>
           Cancel
