@@ -32,7 +32,7 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
     const data = await sql`
       SELECT DISTINCT ON (j.id) j.id, j.title, j.description, j.created_at,
       p.id AS person_id, p.moniker,
-      jt.id AS jobtype_id, jt.name AS job_type_name,
+      jt.id AS jobtype_id, jt.name AS job_type_name
       FROM job j
       LEFT JOIN person p ON j.owner_id = p.id
       LEFT JOIN job_type jt ON j.job_type_id = jt.id

@@ -54,7 +54,7 @@ export default function IconButton({
   const [isSelected, setIsSelected] = useState<boolean>(selected);
 
   return (
-    <button className="p-1" onClick={async (e) => {
+    <button className="p-2" onClick={async (e) => {
       e.preventDefault();
       e.stopPropagation();
       let resp;
@@ -80,7 +80,7 @@ export default function IconButton({
       <svg
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
-        className={isHovering || isSelected ? "fill-yellow-600" : "fill-gray-900"} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+        className={isHovering || isSelected ? "fill-yellow-600" : "fill-white"} xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px"
       >
         {type === "star" && <StarIcon selected={isSelected} />}
         {type === "flag" && <FlagIcon selected={isSelected} />}

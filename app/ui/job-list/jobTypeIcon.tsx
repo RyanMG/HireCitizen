@@ -1,4 +1,5 @@
 import { JobType } from "@definitions/job";
+import clsx from "clsx";
 import { ReactElement } from "react";
 
 function MiningIcon():ReactElement {
@@ -63,13 +64,19 @@ function ExplorationIcon():ReactElement {
 
 interface IJobTypeIconProps {
   jobType: JobType
+  size?: 'small' | 'medium' | 'large'
 }
 
-export default function JobTypeIcon({ jobType }: IJobTypeIconProps) {
+export default function JobTypeIcon({ jobType, size = 'medium' }: IJobTypeIconProps) {
   const jobName = jobType.name?.toLowerCase() || "";
-
   return (
-    <div className="flex flex-row items-center justify-center bg-gray-200 rounded-lg border border-dark-blue p-2 h-12 w-12">
+    <div className={clsx("flex flex-row items-center justify-center bg-gray-200 rounded-lg border border-dark-blue p-2",
+      {
+        'h-12 w-12': size === 'small',
+        'h-16 w-16': size === 'medium',
+        'h-20 w-20': size === 'large',
+      }
+    )}>
       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#777777">
         {jobName === "mining" && <MiningIcon />}
         {jobName === "cargo" && <CargoIcon />}

@@ -14,7 +14,7 @@ export default async function JobResultList(props: { searchParams: Promise<{ que
   }
 
   return (
-    <div className="overflow-auto">
+    <div className="overflow-auto flex flex-col lg:flex-row flex-wrap">
       {jobs.map((job) => (
         <JobSearchResult jobData={job} key={job.id} />
       ))}
