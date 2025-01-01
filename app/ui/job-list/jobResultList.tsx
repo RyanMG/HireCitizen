@@ -2,11 +2,12 @@ import { searchJobsPaginated } from "@/app/lib/query/job/data";
 import JobSearchResult from "@ui/job-list/jobSearchResult";
 import { LoadPrevBtn, LoadMoreBtn } from "../components/loadMoreBtn";
 
-export default async function JobResultList(props: {
-  searchTerm: string;
-  currentPage: number;
-}) {
-  const jobs = await searchJobsPaginated(props.searchTerm, props.currentPage);
+export default async function JobResultList(props: { searchParams: Promise<{ query?: string; page?: string }> | undefined }) {
+  const searchParams = await props.searchParams;
+  const searchTerm = searchParams?.query || '';
+  const currentPage = Number(searchParams?.page) || 1;
+
+  const jobs = await searchJobsPaginated(searchTerm, currentPage);
 
   if ('message' in jobs) {
     return <p className="flex flex-col items-center justify-center flex-1 text-white">{jobs.message}</p>;
@@ -17,7 +18,7 @@ export default async function JobResultList(props: {
       {jobs.map((job) => (
         <JobSearchResult jobData={job} key={job.id} />
       ))}
-      {props.currentPage > 1 && <LoadPrevBtn />}
+      {currentPage > 1 && <LoadPrevBtn />}
       {jobs.length === 8 && <LoadMoreBtn />}
     </div>
   )

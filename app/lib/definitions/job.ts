@@ -8,7 +8,7 @@ export type JobType = {
 export type JobTypeCategory = {
   id: number;
   name: string;
-  description: string;
+  description?: string;
 };
 
 export type Job = {
@@ -17,17 +17,17 @@ export type Job = {
   title: string;
   description: string;
   jobType: JobType;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  jobStart: string;
-  estimatedTime: string;
-  amountPaid: number;
-  payType: string;
-  language: PersonLanguage;
-  isBookmarked: boolean;
-  isFlagged: boolean;
-  crewRoles: CrewRole[];
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  jobStart?: string;
+  estimatedTime?: string;
+  amountPaid?: number;
+  payType?: string;
+  language?: PersonLanguage;
+  isBookmarked?: boolean;
+  isFlagged?: boolean;
+  crewRoles?: CrewRole[];
 }
 
 export type CrewRole = {

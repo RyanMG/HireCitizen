@@ -1,4 +1,7 @@
+'use client'
+
 import BackElementIcon from "@components/iconBtns/backIcon";
+import { useRouter } from "next/navigation";
 
 interface IPageHeaderProps {
   title: string,
@@ -11,12 +14,16 @@ export default function PageHeader({
   showBackButton = false,
   pageBackFn
 }: IPageHeaderProps) {
+  const router = useRouter();
+
   return (
     <div className="flex flex-row justify-start items-center w-full border-b-2 border-gray-500 pb-2">
       {showBackButton && <BackElementIcon
         onClickFn={() => {
           if (pageBackFn) {
             pageBackFn();
+          } else {
+            router.back();
           }
         }}
       />}

@@ -144,3 +144,49 @@ export async function createNewJob(prevState: CreateJobFormState | Promise<{mess
 
   redirect('/');
 }
+
+export async function toggleJobFlag(jobId: number, selected: boolean): Promise<{message: string} | {error: string}> {
+  const session = await auth()
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return { error: 'No user logged in.' };
+  }
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    if (selected) {
+      await sql`INSERT INTO job_flag (job_id, person_id) VALUES (${jobId}, ${userId}) ON CONFLICT DO NOTHING`;
+    } else {
+      await sql`DELETE FROM job_flag WHERE job_id = ${jobId} AND person_id = ${userId}`;
+    }
+    return {
+      message: 'Job flagged.'
+    }
+
+  } catch {
+    return { error: 'Database Error: Failed to add job flag.' };
+  }
+}
+
+export async function toggleJobBookmark(jobId: number, selected: boolean): Promise<{message: string} | {error: string} | undefined> {
+  const session = await auth()
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return { error: 'No user logged in.' };
+  }
+
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    if (selected) {
+      await sql`INSERT INTO job_bookmark (job_id, person_id) VALUES (${jobId}, ${userId}) ON CONFLICT DO NOTHING`;
+    } else {
+      await sql`DELETE FROM job_bookmark WHERE job_id = ${jobId} AND person_id = ${userId}`;
+    }
+    return {
+      message: 'Job bookmarked.'
+    }
+  } catch {
+    return { error: 'Database Error: Failed to add job bookmark.' };
+  }
+}

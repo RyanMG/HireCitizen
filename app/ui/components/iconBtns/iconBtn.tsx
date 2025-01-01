@@ -1,11 +1,13 @@
 'use client'
 
 import { ReactElement, useState } from "react";
+import { toggleJobBookmark, toggleJobFlag } from "@lib/query/job/actions";
+import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
 
 interface IIconButtonProps {
   type: "star" | "flag" | "bookmark";
   selected: boolean;
-  onClickFn?: () => void;
+  jobId: number;
 }
 
 const StarIcon = ({selected}: {selected: boolean}):ReactElement => {
@@ -47,20 +49,37 @@ const BookmarkIcon = ({selected}: {selected: boolean}):ReactElement => {
 export default function IconButton({
   type,
   selected,
-  onClickFn
+  jobId
 }: IIconButtonProps) {
   const [isHovering, setIsHovering] = useState<boolean>(false);
+  const [isSelected, setIsSelected] = useState<boolean>(selected);
 
   return (
-    <button className="p-1" onClick={onClickFn}>
+    <button className="p-1" onClick={async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      switch (type) {
+        case "star":
+          break;
+        case "flag":
+          await toggleJobFlag(jobId, isSelected);
+          setIsSelected(!isSelected);
+          break;
+        case "bookmark":
+          await toggleJobBookmark(jobId, isSelected);
+          setIsSelected(!isSelected);
+          break;
+      }
+      revalidatePath('/profile');
+    }}>
       <svg
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
-        className={isHovering || selected ? "fill-yellow-600" : "fill-gray-900"} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+        className={isHovering || isSelected ? "fill-yellow-600" : "fill-gray-900"} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
       >
-        {type === "star" && <StarIcon selected={selected} />}
-        {type === "flag" && <FlagIcon selected={selected} />}
-        {type === "bookmark" && <BookmarkIcon selected={selected} />}
+        {type === "star" && <StarIcon selected={isSelected} />}
+        {type === "flag" && <FlagIcon selected={isSelected} />}
+        {type === "bookmark" && <BookmarkIcon selected={isSelected} />}
       </svg>
     </button>
   )
