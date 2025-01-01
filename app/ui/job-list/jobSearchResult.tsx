@@ -1,6 +1,5 @@
 import { Job } from "@definitions/job";
 import JobTypeIcon from "@ui/job-list/jobTypeIcon";
-import IconButton from "@ui/components/iconBtns/iconBtn";
 import Link from "next/link";
 
 interface IJobSearchResultProps {
@@ -20,19 +19,6 @@ export default function JobSearchResult({ jobData }: IJobSearchResultProps) {
           <h2 className="text-lg text-dark-blue font-semibold">{jobData.title}</h2>
           <h3 className="text-sm text-gray-600 font-semibold font-italic">{jobData.owner.moniker}</h3>
           {jobData.createdAt && <p className="text-sm text-gray-600">Job created: {new Date(jobData.createdAt).toLocaleDateString()}</p>}
-        </div>
-
-        <div className="flex flex-col">
-          <IconButton
-            type={"bookmark"}
-            selected={jobData.isBookmarked || false}
-            jobId={jobData.id}
-          />
-          <IconButton
-            type={"flag"}
-            selected={jobData.isFlagged || false}
-            jobId={jobData.id}
-          />
         </div>
       </div>
     </Link>

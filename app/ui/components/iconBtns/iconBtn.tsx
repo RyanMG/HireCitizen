@@ -2,7 +2,6 @@
 
 import { ReactElement, useState } from "react";
 import { toggleJobBookmark, toggleJobFlag } from "@lib/query/job/actions";
-import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
 
 interface IIconButtonProps {
   type: "star" | "flag" | "bookmark";
@@ -58,19 +57,25 @@ export default function IconButton({
     <button className="p-1" onClick={async (e) => {
       e.preventDefault();
       e.stopPropagation();
+      let resp;
       switch (type) {
         case "star":
           break;
         case "flag":
-          await toggleJobFlag(jobId, isSelected);
-          setIsSelected(!isSelected);
+          resp = await toggleJobFlag(jobId, !isSelected);
           break;
         case "bookmark":
-          await toggleJobBookmark(jobId, isSelected);
-          setIsSelected(!isSelected);
+          resp = await toggleJobBookmark(jobId, !isSelected);
           break;
       }
-      revalidatePath('/profile');
+      if (resp && 'message' in resp) {
+        console.log(resp.message);
+        setIsSelected(!isSelected);
+      }
+      if (resp && 'error' in resp) {
+        console.error(resp.error);
+      }
+
     }}>
       <svg
         onMouseEnter={() => setIsHovering(true)}

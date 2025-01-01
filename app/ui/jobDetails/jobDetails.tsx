@@ -1,5 +1,6 @@
 import { Job } from "@/app/lib/definitions/job";
 import { getJobById } from "@/app/lib/query/job/data";
+import IconButton from "@ui/components/iconBtns/iconBtn";
 
 export default async function JobDetails(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -29,7 +30,7 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
   // reputation_gate: false,
   // language_id: 1,
   // job_privacy: 'PUBLIC'
-
+  console.log(job);
   return (
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-xl my-4 p-4">
       <h1 className="text-white text-2xl font-bold mb-4">{job.title}</h1>
@@ -38,7 +39,18 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
         <p className="text-white text-lg">{job.description}</p>
       </div>
       <p className="text-white text-lg">{job.amountPaid} aUEC / {job.payType}</p>
-
+      <div className="flex flex-col">
+          <IconButton
+            type={"bookmark"}
+            selected={job.isBookmarked || false}
+            jobId={job.id}
+          />
+          <IconButton
+            type={"flag"}
+            selected={job.isFlagged || false}
+            jobId={job.id}
+          />
+        </div>
     </div>
   )
 }

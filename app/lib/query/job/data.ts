@@ -20,21 +20,26 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
     const pageOffset = (currentPage - 1) * JOB_SEARCH_RESULTS_PER_PAGE;
     const queryLike = `%${searchTerm}%`;
 
+    /**
+      Get all jobs that:
+      - The user is not the owner of the job
+      - The job is active
+      - The job is public
+        - OR the job is friends only and the user is friends with the owner
+        - OR the job is organization only and the owner is in the user's organization
+      - The owner is not blocked by the user and the user is not blocked by the owner
+     */
     const data = await sql`
       SELECT DISTINCT ON (j.id) j.id, j.title, j.description, j.created_at,
       p.id AS person_id, p.moniker,
       jt.id AS jobtype_id, jt.name AS job_type_name,
-      jb.id IS NOT NULL as is_bookmarked,
-      jf.id IS NOT NULL as is_flagged
       FROM job j
       LEFT JOIN person p ON j.owner_id = p.id
       LEFT JOIN job_type jt ON j.job_type_id = jt.id
-      LEFT JOIN job_bookmark jb ON j.id = jb.job_id AND jb.person_id = ${userId}
-      LEFT JOIN job_flag jf ON j.id = jf.job_id AND jf.person_id = ${userId}
       LEFT JOIN friends f ON (f.person_1_id = ${userId} AND f.person_2_id = j.owner_id) OR (f.person_2_id = ${userId} AND f.person_1_id = j.owner_id)
       LEFT JOIN player_org_person_join pop1 ON (pop1.person_id = ${userId})
       LEFT JOIN player_org_person_join pop2 ON (pop2.person_id = j.owner_id AND pop2.player_org_id = pop1.player_org_id)
-      LEFT JOIN person_blocked pbl ON (pbl.person_id = ${userId} AND pbl.blocked_person_id = j.owner_id)
+      LEFT JOIN person_blocked pbl ON (pbl.person_id = ${userId} AND pbl.blocked_person_id = j.owner_id) OR (pbl.person_id = j.owner_id AND pbl.blocked_person_id = ${userId})
       WHERE j.title ILIKE ${queryLike}
       AND j.owner_id != ${userId}
       AND j.status = 'ACTIVE'
@@ -75,17 +80,24 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
  * Get a single job by its id.
  */
 export async function getJobById(jobId: string): Promise<Job | {message:string}> {
+  const session = await auth();
+  const userId = session?.activeUser?.id;
+
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const data = await sql`
       SELECT j.*,
       p.id AS person_id, p.moniker,
       jt.id as jobtype_id, jt.name AS job_type_name, jt.description AS job_type_description,
-      l.code AS language_code, l.name AS language_name
+      l.code AS language_code, l.name AS language_name,
+      jb.id IS NOT NULL as is_bookmarked,
+      jf.id IS NOT NULL as is_flagged
       FROM job j
       LEFT JOIN person p ON j.owner_id = p.id
       LEFT JOIN job_type jt ON j.job_type_id = jt.id
       LEFT JOIN language l ON j.language_id = l.id
+      LEFT JOIN job_bookmark jb ON j.id = jb.job_id AND jb.person_id = ${userId}
+      LEFT JOIN job_flag jf ON j.id = jf.job_id AND jf.person_id = ${userId}
       WHERE j.id = ${jobId};`
 
       const row = data[0];
@@ -118,9 +130,11 @@ export async function getJobById(jobId: string): Promise<Job | {message:string}>
           name: row.language_name
         } as PersonLanguage
       } as Job;
+
     return job;
 
-  } catch {
+  } catch (error) {
+    console.error(error);
     return { message: `Database Error: Failed to get job ${jobId}`};
   }
 }

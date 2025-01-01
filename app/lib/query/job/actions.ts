@@ -168,7 +168,7 @@ export async function toggleJobFlag(jobId: number, selected: boolean): Promise<{
   }
 }
 
-export async function toggleJobBookmark(jobId: number, selected: boolean): Promise<{message: string} | {error: string} | undefined> {
+export async function toggleJobBookmark(jobId: number, selected: boolean): Promise<{message: string} | {error: string}> {
   const session = await auth()
   const userId = session?.user?.id;
 
