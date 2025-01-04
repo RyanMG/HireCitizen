@@ -1,7 +1,7 @@
 import { Timezone } from "./misc";
 
 export type Person = {
-  id: number;
+  id: string;
   handle: string;
   moniker: string;
   email: string;

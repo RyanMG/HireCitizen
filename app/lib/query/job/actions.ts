@@ -145,7 +145,7 @@ export async function createNewJob(prevState: CreateJobFormState | Promise<{mess
   redirect('/');
 }
 
-export async function toggleJobFlag(jobId: number, selected: boolean): Promise<{message: string} | {error: string}> {
+export async function toggleJobFlag(jobId: string, selected: boolean): Promise<{message: string} | {error: string}> {
   const session = await auth()
   const userId = session?.user?.id;
 
@@ -168,7 +168,7 @@ export async function toggleJobFlag(jobId: number, selected: boolean): Promise<{
   }
 }
 
-export async function toggleJobBookmark(jobId: number, selected: boolean): Promise<{message: string} | {error: string}> {
+export async function toggleJobBookmark(jobId: string, selected: boolean): Promise<{message: string} | {error: string}> {
   const session = await auth()
   const userId = session?.user?.id;
 

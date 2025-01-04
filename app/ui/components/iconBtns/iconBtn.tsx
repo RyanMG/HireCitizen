@@ -6,7 +6,7 @@ import { toggleJobBookmark, toggleJobFlag } from "@lib/query/job/actions";
 interface IIconButtonProps {
   type: "star" | "flag" | "bookmark";
   selected: boolean;
-  jobId: number;
+  jobId: string;
 }
 
 const StarIcon = ({selected}: {selected: boolean}):ReactElement => {

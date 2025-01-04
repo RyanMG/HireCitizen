@@ -12,7 +12,7 @@ export type JobTypeCategory = {
 };
 
 export type Job = {
-  id: number;
+  id: string;
   owner: Person;
   title: string;
   description: string;
@@ -21,7 +21,7 @@ export type Job = {
   createdAt?: string;
   updatedAt?: string;
   jobStart?: string;
-  estimatedTime?: string;
+  estimatedTime?: number;
   amountPaid?: number;
   payType?: string;
   language?: PersonLanguage;
@@ -35,4 +35,12 @@ export type CrewRole = {
   name: string;
   description: string;
   count: number;
+}
+
+export type JobApplicant = {
+  id: number;
+  jobId: string;
+  personId: string;
+  crewRoleId: number;
+  acceptedStatus: string;
 }

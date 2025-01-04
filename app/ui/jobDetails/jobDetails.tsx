@@ -1,13 +1,41 @@
-import { Job } from "@/app/lib/definitions/job";
-import { getJobById } from "@/app/lib/query/job/data";
+'use server';
+
+import { Job } from "@definitions/job";
+import { getJobById } from "@query/job/data";
+import { getJobApplicationStatus } from "@query/jobRoles/data";
+import CrewRoleList from "./crewRoleList";
 import IconButton from "@ui/components/iconBtns/iconBtn";
-import Button from "@mui/material/Button";
+import { auth } from "@/auth";
+
+import DayJs from "dayjs";
 import Link from "next/link";
+
+/**
+ * Formats the estimated time to a human readable format.
+ */
+const getEstimatedTime = (estimatedTime: number | undefined) => {
+  if (estimatedTime) {
+    const hours = Math.round(estimatedTime / 60);
+    return hours > 1 ? `${hours} hours` : hours === 1 ? '1 hour' : `${hours} minutes`;
+  }
+  return '1 hour';
+}
+
+const getJobStart = (jobStart: string | undefined) => {
+  console.log('jobStart', jobStart);
+  if (jobStart) {
+    return `${DayJs(jobStart).format('ddd MMM DD, YYYY')} - ${DayJs(jobStart).format('h:mm a')}`;
+  }
+  return 'No job start time provided.';
+}
 
 export default async function JobDetails(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const jobId = params.id;
+  const session = await auth();
+  const userId = session?.activeUser?.id || '';
   const job: Job | { message: string } = await getJobById(jobId);
+  const applications = await getJobApplicationStatus(jobId, userId);
 
   if ('message' in job) {
     return (
@@ -48,22 +76,16 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
       <div className="flex flex-row justify-between py-2">
         <div className="flex flex-col">
           <p className="text-gray-400 text-sm italic">Job Start Date</p>
-          <p className="text-white text-lg">{job.jobStart ? new Date(job.jobStart).toLocaleDateString() : ''} - {job.jobStart ? new Date(job.jobStart).toLocaleTimeString() : ''}</p>
+          <p className="text-white text-lg">{getJobStart(job.jobStart)}</p>
         </div>
 
         <div className="flex flex-col">
           <p className="text-gray-400 text-sm italic">Estimated Time to Complete</p>
-          <p className="text-white text-lg">{job.estimatedTime} hours</p>
+          <p className="text-white text-lg">{getEstimatedTime(job.estimatedTime)} </p>
         </div>
       </div>
 
-      <h2 className="text-gray-400 text-lg font-bold mt-4 border-t border-gray-700 pt-4">Job Roles Available</h2>
-      <div className="flex flex-col pt-4">
-        <div className="flex flex-row justify-between bg-blue rounded-lg p-2 items-center">
-          <p className="text-white">General / Any Role <span className="text-gray-400 text-sm pl-2">(2 spots)</span></p>
-          <Button variant="contained" size="small">Apply</Button>
-        </div>
-      </div>
+      <CrewRoleList job={job} applications={applications} userId={userId} />
     </div>
   )
 }
