@@ -1,5 +1,5 @@
 import { searchJobsPaginated } from "@/app/lib/query/job/data";
-import JobSearchResult from "@ui/job-list/jobSearchResult";
+import JobSearchResult from "@ui/jobList/jobSearchResult";
 import { LoadPrevBtn, LoadMoreBtn } from "../components/loadMoreBtn";
 
 export default async function JobResultList(props: { searchParams: Promise<{ query?: string; page?: string }> | undefined }) {

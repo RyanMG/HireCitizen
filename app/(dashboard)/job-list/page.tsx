@@ -1,10 +1,10 @@
 import PageHeader from "@components/pageHeader";
 import Searchbar from "@components/searchbar";
 import { Suspense } from "react";
-import JobResultList from "@ui/job-list/jobResultList";
+import JobResultList from "@ui/jobList/jobResultList";
 import ResultsLoading from "@/app/ui/components/resultsLoading";
 
-export default async function JobList(props: {
+export default function JobList(props: {
   searchParams?: Promise<{
     query?: string;
     page?: string;

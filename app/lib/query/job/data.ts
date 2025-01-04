@@ -182,3 +182,18 @@ export async function getTimezones(): Promise<Timezone[] | {message:string}> {
     return { message: 'Database Error: Failed to get time zones data.' };
   }
 }
+
+export async function getActiveJobs(): Promise<Job[] | {error:string}> {
+  const session = await auth();
+  const userId = session?.activeUser?.id;
+
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    const data = await sql`SELECT * FROM job WHERE owner_id = ${userId} AND status = 'ACTIVE'` as Job[];
+    return data;
+
+  } catch (error) {
+    console.error(error);
+    return { error: 'Database Error: Failed to get active jobs.' };
+  }
+}

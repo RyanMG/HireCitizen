@@ -1,5 +1,5 @@
 import { Job } from "@definitions/job";
-import JobTypeIcon from "@ui/job-list/jobTypeIcon";
+import JobTypeIcon from "@ui/jobList/jobTypeIcon";
 import Link from "next/link";
 
 interface IJobSearchResultProps {
