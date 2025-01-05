@@ -4,6 +4,7 @@ import { neon } from "@neondatabase/serverless";
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { auth } from 'auth';
+import { revalidatePath } from "next/cache";
 
 const CreateJobFormSchema = z.object({
   id: z.string(),
@@ -118,7 +119,7 @@ export async function createNewJob(prevState: CreateJobFormState | Promise<{mess
     const sql = neon(process.env.DATABASE_URL!);
 
     await sql`
-      INSERT INTO invoices (owner_id, language_id, title, job_type_id, description, status, job_start, jobTimezone, estimated_time, amount_paid, pay_type, job_privacy reputation_gate, created_at, updated_at)
+      INSERT INTO job (owner_id, language_id, title, job_type_id, description, status, job_start, jobTimezone, estimated_time, amount_paid, pay_type, job_privacy reputation_gate, created_at, updated_at)
       VALUES (
         ${owner_id},
         ${language_id},
@@ -144,7 +145,25 @@ export async function createNewJob(prevState: CreateJobFormState | Promise<{mess
 
   redirect('/');
 }
+/**
+ * Delete a job
+ */
+export async function deleteJob(jobId: string): Promise<{message: string|null} | {error: string|null}> {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    await sql`DELETE FROM job WHERE id = ${jobId}`;
 
+  } catch (error) {
+    console.error(error);
+    return { error: 'Database Error: Failed to delete job.' };
+  }
+
+  revalidatePath('/my-jobs');
+  return { message: 'Job deleted.' };
+}
+/**
+ * Toggle a job flag
+ */
 export async function toggleJobFlag(jobId: string, selected: boolean): Promise<{message: string} | {error: string}> {
   const session = await auth()
   const userId = session?.user?.id;
@@ -167,7 +186,9 @@ export async function toggleJobFlag(jobId: string, selected: boolean): Promise<{
     return { error: 'Database Error: Failed to add job flag.' };
   }
 }
-
+/**
+ * Toggle a job bookmark
+ */
 export async function toggleJobBookmark(jobId: string, selected: boolean): Promise<{message: string} | {error: string}> {
   const session = await auth()
   const userId = session?.user?.id;

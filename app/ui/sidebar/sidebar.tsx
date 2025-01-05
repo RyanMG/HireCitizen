@@ -1,3 +1,5 @@
+'use server';
+
 import SideBarLink from '@ui/sidebar/sidebarLink';
 import HireCitizenLogo from './hcLogo';
 import Link from 'next/link';
