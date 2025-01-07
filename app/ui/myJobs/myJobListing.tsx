@@ -1,12 +1,22 @@
 import { getActiveJobs } from "@/app/lib/query/job/data";
 import ActiveJobCard from "./activeJobCard";
 
+/*
+ * No jobs found block
+ */
 const NoJobsFound = ({ text }: { text: string }) => {
   return (
     <div className="flex flex-col pt-10 items-center justify-center flex-1">
       <p className="border border-white rounded-md p-4 text-white">{text}</p>
     </div>
   );
+}
+
+/*
+ * Section header for a job status section
+ */
+const SectionHeader = ({ title }: { title: string }) => {
+  return <h2 className="text-xl text-gray-500 font-bold border-b border-gray-500 pb-2">{title}</h2>;
 }
 
 export default async function MyJobListing({
@@ -28,9 +38,41 @@ export default async function MyJobListing({
     return <NoJobsFound text="No jobs found" />;
   }
 
+  const jobDisplay = jobs.reduce((acc, job) => {
+    const status = job.status?.toLowerCase() || '';
+    if (!acc[status]) {
+      acc[status] = [];
+    }
+    acc[status].push(<ActiveJobCard job={job} key={job.id} />);
+    return acc;
+  }, {} as { [key: string]: React.ReactNode[] });
+
   return (
     <>
-      {jobs.map(job => <ActiveJobCard job={job} key={job.id} />)}
+      {jobDisplay.pending && jobDisplay.pending.length > 0 &&
+        <div>
+          <SectionHeader title="Pending" />
+          {jobDisplay.pending}
+        </div>
+      }
+      {jobDisplay.active && jobDisplay.active.length > 0 &&
+        <div>
+          <SectionHeader title="Active" />
+          {jobDisplay.active}
+        </div>
+      }
+      {jobDisplay.finished && jobDisplay.finished.length > 0 &&
+        <div>
+          <SectionHeader title="Finished" />
+          {jobDisplay.finished}
+        </div>
+      }
+      {jobDisplay.cancelled && jobDisplay.cancelled.length > 0 &&
+        <div>
+          <SectionHeader title="Cancelled" />
+          {jobDisplay.cancelled}
+        </div>
+      }
     </>
   )
 }

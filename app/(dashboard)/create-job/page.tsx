@@ -7,7 +7,7 @@ export default function CreateJob() {
   return (
     <div className="flex flex-col p-4 h-full">
       <PageHeader
-        title="Create A Job"
+        title="Create a Job"
       />
 
       <Suspense fallback={<ResultsLoading />}>

@@ -36,17 +36,8 @@ export default function MyJobFilters() {
    */
   useEffect(() => {
     const filters = searchParams.get('jobStatus')?.split(',') || [];
-
-    if (filters.length === 0) {
-      setFilterState([JOB_PENDING, JOB_ACTIVE]);
-      const params = new URLSearchParams(searchParams);
-      params.set('jobStatus', JOB_PENDING + ',' + JOB_ACTIVE)
-      replace(`${pathname}?${params.toString()}`);
-      return;
-    }
-
     setFilterState(filters);
-  }, []);
+  }, [searchParams]);
 
   /**
    * Click handler
