@@ -15,15 +15,25 @@ import { useActionState } from "react";
 import FormWithErrorBlock from "../components/formWIthErrorBlock";
 
 export default function JobForm(props: {
-  jobTypeCategories: FormOption[],
-  timeZones: FormOption[]
+  jobTypeCategories: FormOption[]
 }) {
   const initialState: CreateJobFormState = { message: null, errors: {}, prevState: {} };
   const [state, formAction] = useActionState(createNewJob, initialState);
+  const {
+    prevState,
+  } = state;
+
+  console.log('prev', prevState);
+  const now = dayjs();
+  const defaultJobDate = dayjs(`${now.month() + 1}-${now.date()}-${now.year()} 18:00:00.000`).add(1, 'day');
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <form action={formAction} aria-describedby="form-error" className="flex flex-col gap-4 bg-gray-300 p-4 rounded-lg mt-4 mb-4 h-full overflow-auto">
+      <form
+        action={formAction}
+        aria-describedby="form-error"
+        className="flex flex-col gap-4 bg-gray-300 p-4 rounded-lg mt-4 mb-4 h-full overflow-auto"
+      >
 
         <FormWithErrorBlock error={state.errors?.jobTitle || []}>
           <TextField
@@ -32,6 +42,7 @@ export default function JobForm(props: {
             size="small"
             label="Job Title"
             variant="filled"
+            defaultValue={prevState?.jobTitle}
             aria-describedby="job-title-error"
           />
         </FormWithErrorBlock>
@@ -44,7 +55,7 @@ export default function JobForm(props: {
             variant="filled"
             size="small"
             label="Job Type"
-            defaultValue=""
+            defaultValue={prevState?.jobType ||  ""}
           >
             {props.jobTypeCategories.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -63,6 +74,7 @@ export default function JobForm(props: {
             variant="filled"
             multiline
             rows={3}
+            defaultValue={prevState?.jobDescription ||  ""}
           />
         </FormWithErrorBlock>
 
@@ -72,84 +84,37 @@ export default function JobForm(props: {
               label="Start Time"
               referenceDate={dayjs()}
               slotProps={{
-              textField: {
-                id: "jobDate",
-                name: "jobDate",
-                variant: 'filled',
-                size: 'small'
-              }
-            }}
-          />
-          </FormWithErrorBlock>
-
-          <FormWithErrorBlock halfWidth error={state.errors?.jobTimezone || []}>
-            <TextField
-              id="jobTimezone"
-              name="jobTimezone"
-              size="small"
-              select
-              variant="filled"
-              label="Timezone"
-              defaultValue={props.timeZones.find(tz => tz.label === 'UTC')?.value}
-            >
-              {props.timeZones.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </FormWithErrorBlock>
-
-        </div>
-
-        <FormWithErrorBlock error={state.errors?.jobEstimatedTime || []}>
-          <TextField
-            select
-            size="small"
-            id="jobEstimatedTime"
-            name="jobEstimatedTime"
-            label="Estimated Time For Job"
-            variant="filled"
-            defaultValue=""
-          >
-            <MenuItem value="30">30 Minutes</MenuItem>
-            <MenuItem value="60">1 Hour</MenuItem>
-            <MenuItem value="90">1.5 Hours</MenuItem>
-            <MenuItem value="120">2 Hours</MenuItem>
-            <MenuItem value="150">2.5 Hours</MenuItem>
-            <MenuItem value="180">3 Hours</MenuItem>
-            <MenuItem value="210">3.5 Hours</MenuItem>
-            <MenuItem value="240">4 Hours</MenuItem>
-            <MenuItem value="270">4.5 Hours</MenuItem>
-            <MenuItem value="300">5 Hours</MenuItem>
-          </TextField>
-        </FormWithErrorBlock>
-
-        <div className="flex flex-row gap-4">
-          <FormWithErrorBlock halfWidth error={state.errors?.jobPayout || []}>
-            <TextField
-              size="small"
-              id="jobPayout"
-              name="jobPayout"
-              label="Payout"
-              variant="filled"
-              type="number"
+                textField: {
+                  id: "jobDate",
+                  name: "jobDate",
+                  variant: 'filled',
+                  size: 'small',
+                  defaultValue: prevState?.jobDate ? dayjs(prevState.jobDate) : defaultJobDate
+                }
+              }}
             />
           </FormWithErrorBlock>
 
-          <FormWithErrorBlock halfWidth error={state.errors?.jobPayedVia || []}>
+          <FormWithErrorBlock halfWidth error={state.errors?.jobEstimatedTime || []}>
             <TextField
-              id="jobPayedVia"
-              name="jobPayedVia"
-              size="small"
               select
+              size="small"
+              id="jobEstimatedTime"
+              name="jobEstimatedTime"
+              label="Estimated Time For Job"
               variant="filled"
-              label="Payed Via"
-              defaultValue=""
+              defaultValue={prevState?.jobEstimatedTime ||  ""}
             >
-              <MenuItem value="SPLIT">Split Revenue</MenuItem>
-              <MenuItem value="PERSON">Per Person</MenuItem>
-              <MenuItem value="TOTAL">Total</MenuItem>
+              <MenuItem value="30">30 Minutes</MenuItem>
+              <MenuItem value="60">1 Hour</MenuItem>
+              <MenuItem value="90">1.5 Hours</MenuItem>
+              <MenuItem value="120">2 Hours</MenuItem>
+              <MenuItem value="150">2.5 Hours</MenuItem>
+              <MenuItem value="180">3 Hours</MenuItem>
+              <MenuItem value="210">3.5 Hours</MenuItem>
+              <MenuItem value="240">4 Hours</MenuItem>
+              <MenuItem value="270">4.5 Hours</MenuItem>
+              <MenuItem value="300">5 Hours</MenuItem>
             </TextField>
           </FormWithErrorBlock>
         </div>
@@ -162,7 +127,7 @@ export default function JobForm(props: {
             select
             variant="filled"
             label="Job Privacy"
-            defaultValue="PUBLIC"
+            defaultValue={prevState?.jobPrivacy ||  "PUBLIC"}
           >
             <MenuItem value="PUBLIC">Public</MenuItem>
             <MenuItem value="FRIENDS">Friends</MenuItem>
@@ -171,7 +136,7 @@ export default function JobForm(props: {
         </FormWithErrorBlock>
 
         <label className="flex flex-row items-center">
-          <Checkbox id="jobReputationGate" name="jobReputationGate" />
+          <Checkbox id="jobReputationGate" name="jobReputationGate" defaultChecked={Boolean(prevState?.jobReputationGate)} />
           <div className="text-gray-700">Reputation Gate Job <span className="text-gray-500 text-sm italic">(Reputation 6+ only)</span></div>
         </label>
 

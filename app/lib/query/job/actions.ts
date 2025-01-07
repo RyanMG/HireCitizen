@@ -13,24 +13,20 @@ const CreateJobFormSchema = z.object({
   jobTitle: z.string().trim().min(5, {
     message: 'Please provide a valid job title.',
   }),
-  jobType: z.number({
-    invalid_type_error: 'Please select a valid job type.',
-  }),
+  jobType: z.coerce
+    .number()
+    .gt(0, { message: 'Please select a valid job type.' }
+  ),
   jobDescription: z.string().trim().min(10, {
     message: 'Please provide a valid job description.',
   }),
   jobStatus: z.enum(['PENDING', 'ACTIVE', 'FINISHED', 'CANCELLED']),
-  jobDate: z.string().date(),
-  jobTimezone: z.coerce.number(),
+  jobDate: z.string().datetime({
+    message: 'Please provide a valid job date.',
+  }),
   jobEstimatedTime: z.coerce
     .number()
-    .int({ message: 'Please enter a valid number.' }),
-  jobPayout: z.coerce
-    .number()
-    .gt(0, { message: 'Please enter an amount greater than 0.' }),
-  jobPayedVia: z.enum(['SPLIT', 'PERSON', 'TOTAL'], {
-    message: 'Please select a valid option.',
-  }),
+    .gt(0, { message: 'Please enter a valid number.' }),
   jobPrivacy: z.enum(['PUBLIC', 'FRIENDS', 'ORG'], {
     invalid_type_error: 'Please select a valid option.',
   }),
@@ -39,18 +35,13 @@ const CreateJobFormSchema = z.object({
   updatedAt: z.date()
 });
 
-const CreateNewJob = CreateJobFormSchema.omit({ id: true, owner_id: true, jobStatus: true,language_id: true, createdAt: true, updatedAt: true });
-
 export type CreateJobFormState = {
   errors?: {
     jobTitle?: string[],
     jobType?: string[],
     jobDescription?: string[],
     jobDate?: string[],
-    jobTimezone?: string[],
     jobEstimatedTime?: string[],
-    jobPayout?: string[],
-    jobPayedVia?: string[],
     jobPrivacy?: string[],
     jobReputationGate?: string[]
   };
@@ -60,10 +51,7 @@ export type CreateJobFormState = {
     jobType?: string,
     jobDescription?: string,
     jobDate?: string,
-    jobTimezone?: string,
     jobEstimatedTime?: string,
-    jobPayout?: string,
-    jobPayedVia?: string,
     jobPrivacy?: string,
     jobReputationGate?: boolean,
   };
@@ -73,16 +61,15 @@ export type CreateJobFormState = {
  * Create an new job
  */
 export async function createNewJob(prevState: CreateJobFormState | Promise<{message:string}> | null, formData: FormData) {
+  const CreateNewJob = CreateJobFormSchema.omit({ id: true, owner_id: true, jobStatus: true,language_id: true, createdAt: true, updatedAt: true });
+  const jobDateFormatted = new Date(formData.get('jobDate') as string);
 
   const validatedFields = CreateNewJob.safeParse({
     jobTitle: formData.get('jobTitle'),
     jobType: formData.get('jobType'),
     jobDescription: formData.get('jobDescription'),
-    jobDate: formData.get('jobDate'),
-    jobTimezone: formData.get('jobTimezone'),
+    jobDate: jobDateFormatted.toISOString(),
     jobEstimatedTime: formData.get('jobEstimatedTime'),
-    jobPayout: formData.get('jobPayout'),
-    jobPayedVia: formData.get('jobPayedVia'),
     jobPrivacy: formData.get('jobPrivacy'),
     jobReputationGate: formData.get('jobReputationGate')
   })
@@ -96,30 +83,29 @@ export async function createNewJob(prevState: CreateJobFormState | Promise<{mess
         jobType: formData.get('jobType'),
         jobDescription: formData.get('jobDescription'),
         jobDate: formData.get('jobDate'),
-        jobTimezone: formData.get('jobTimezone'),
         jobEstimatedTime: formData.get('jobEstimatedTime'),
-        jobPayout: formData.get('jobPayout'),
-        jobPayedVia: formData.get('jobPayedVia'),
         jobPrivacy: formData.get('jobPrivacy'),
-        jobReputationGate: formData.get('jobReputationGate')
+        jobReputationGate: Boolean(formData.get('jobReputationGate'))
       }
     } as unknown as CreateJobFormState;
   }
   const session = await auth()
   let owner_id, language_id;
-  if (session?.user) {
-    owner_id = session.user.id;
-    language_id = 1; //session.user.language;
+
+  if (session?.activeUser) {
+    owner_id = session.activeUser.id;
+    language_id = session.activeUser.language.id;
   }
-  const { jobTitle, jobType, jobDescription, jobDate, jobTimezone, jobEstimatedTime, jobPayout, jobPayedVia, jobPrivacy, jobReputationGate } = validatedFields.data;
+
+  const { jobTitle, jobType, jobDescription, jobDate, jobEstimatedTime, jobPrivacy, jobReputationGate } = validatedFields.data;
   const dateNow = new Date().toISOString().split('T')[0];
-  const status = 'PENDING'; // @TODO compare to current date
+  const status = 'PENDING';
 
   try {
     const sql = neon(process.env.DATABASE_URL!);
 
     await sql`
-      INSERT INTO job (owner_id, language_id, title, job_type_id, description, status, job_start, jobTimezone, estimated_time, amount_paid, pay_type, job_privacy reputation_gate, created_at, updated_at)
+      INSERT INTO job (owner_id, language_id, title, job_type_id, description, status, job_start, estimated_time, job_privacy reputation_gate, created_at, updated_at)
       VALUES (
         ${owner_id},
         ${language_id},
@@ -128,10 +114,7 @@ export async function createNewJob(prevState: CreateJobFormState | Promise<{mess
         ${jobDescription},
         ${status},
         ${jobDate},
-        ${jobTimezone},
         ${jobEstimatedTime},
-        ${jobPayout},
-        ${jobPayedVia},
         ${jobPrivacy},
         ${jobReputationGate},
         ${dateNow},

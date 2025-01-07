@@ -11,8 +11,6 @@ export default function ActiveJobCard({ job }: {job: Job}) {
   const [state, deleteJobAction] = useActionState(deleteJob.bind(null, job.id), {message: null, error: null});
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  console.log(state);
-
   return (
     <div className="bg-dark-blue border border-gray-400 rounded-xl my-4 p-4">
       <div className="flex flex-row justify-between">
@@ -24,10 +22,10 @@ export default function ActiveJobCard({ job }: {job: Job}) {
           <Button href={`/my-jobs/${job.id}/edit`} label="Edit Job" theme="primary" />
           <div className="my-1" />
           <Button label="Delete Job" theme="destory" onClick={() => {
-            console.log('delete job');
             setDialogOpen(true);
           }} />
         </div>
+        {'error' in state && <p className="text-red-500">{state.error}</p>}
       </div>
 
       {dialogOpen && (
