@@ -183,7 +183,7 @@ export async function getTimezones(): Promise<Timezone[] | {message:string}> {
   }
 }
 
-export async function getActiveJobs(jobStatusList: string[]): Promise<Job[] | {error:string}> {
+export async function getMyJobs(jobStatusList: string[]): Promise<Job[] | {error:string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
 

@@ -1,4 +1,4 @@
-import { getActiveJobs } from "@/app/lib/query/job/data";
+import { getMyJobs } from "@/app/lib/query/job/data";
 import ActiveJobCard from "./activeJobCard";
 
 /*
@@ -28,7 +28,7 @@ export default async function MyJobListing({
     return <NoJobsFound text="Select a job status to view jobs" />;
   }
 
-  const jobs = await getActiveJobs(jobStatusList);
+  const jobs = await getMyJobs(jobStatusList);
 
   if ('error' in jobs) {
     return <div>{jobs.error}</div>;

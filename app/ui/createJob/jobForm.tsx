@@ -13,17 +13,39 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useActionState } from "react";
 import FormWithErrorBlock from "../components/formWIthErrorBlock";
+import { Job } from "@/app/lib/definitions/job";
 
 const getJobStartDate = (prevState: CreateJobFormState['prevState']) => {
   const now = dayjs();
   return prevState?.jobDate ? dayjs(prevState.jobDate) : dayjs(`${now.month() + 1}-${now.date()}-${now.year()} 18:00:00.000`).add(1, 'day');
 }
 
-export default function JobForm(props: {
-  jobTypeCategories: FormOption[]
-}) {
+const buildInitialFormState = (job?: Job): CreateJobFormState => {
   const initialState: CreateJobFormState = { saveResponse: null, errors: {}, prevState: {} };
+
+  if (job) {
+    initialState.prevState = {
+      jobTitle: job.title,
+      jobType: job.jobType.id.toString(),
+      jobDescription: job.description,
+      jobDate: job.jobStart,
+      jobEstimatedTime: job.estimatedTime?.toString(),
+      jobPrivacy: job.jobPrivacy,
+      jobReputationGate: job.jobReputationGate
+    } as CreateJobFormState['prevState'];
+  }
+
+  return initialState;
+}
+
+export default function JobForm(props: {
+  jobTypeCategories: FormOption[],
+  job?: Job
+}) {
+
+  const initialState:CreateJobFormState = buildInitialFormState(props.job);
   const [state, formAction] = useActionState(createNewJob, initialState);
+
   const {
     prevState,
   } = state;

@@ -1,6 +1,7 @@
 import { Person, PersonLanguage } from "./person";
 
 export type JobType = {
+  id: number;
   name: "mining" | "cargo" | "construction" | "security" | "salvage" | "event" | "bountyHunting" | "rolePlay" | "repair" | "exploration";
   description: string;
 };
@@ -22,8 +23,8 @@ export type Job = {
   updatedAt?: string;
   jobStart?: string;
   estimatedTime?: number;
-  amountPaid?: number;
-  payType?: string;
+  jobPrivacy?: string;
+  jobReputationGate?: string;
   language?: PersonLanguage;
   isBookmarked?: boolean;
   isFlagged?: boolean;

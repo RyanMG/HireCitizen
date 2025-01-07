@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation";
 interface IPageHeaderProps {
   title: string,
   showBackButton?: boolean,
-  pageBackFn?: () => void
+  pageBackPath?: string
 }
 
 export default function PageHeader({
   title,
   showBackButton = false,
-  pageBackFn
+  pageBackPath
 }: IPageHeaderProps) {
   const router = useRouter();
 
@@ -20,8 +20,8 @@ export default function PageHeader({
     <div className="flex flex-row justify-start items-center w-full border-b-2 border-gray-500 pb-2">
       {showBackButton && <BackElementIcon
         onClickFn={() => {
-          if (pageBackFn) {
-            pageBackFn();
+          if (pageBackPath) {
+            router.push(pageBackPath);
           } else {
             router.back();
           }
