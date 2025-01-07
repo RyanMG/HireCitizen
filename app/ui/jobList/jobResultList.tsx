@@ -9,7 +9,6 @@ export default async function JobResultList(props: {
   }> | undefined
 }) {
   const searchParams = await props.searchParams;
-  console.log('searchParams', searchParams);
   const searchTerm = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
 

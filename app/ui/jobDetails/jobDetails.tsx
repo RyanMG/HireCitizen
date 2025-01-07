@@ -22,7 +22,6 @@ const getEstimatedTime = (estimatedTime: number | undefined) => {
 }
 
 const getJobStart = (jobStart: string | undefined) => {
-  console.log('jobStart', jobStart);
   if (jobStart) {
     return `${DayJs(jobStart).format('ddd MMM DD, YYYY')} - ${DayJs(jobStart).format('h:mm a')}`;
   }

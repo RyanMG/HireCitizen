@@ -11,12 +11,14 @@ interface ISideBarLinkProps {
 }
 
 export default function SideBarLink({link, text, children}:ISideBarLinkProps): React.ReactNode {
-	const pathname = usePathname();
+  const pathname = usePathname();
+  const linkRoot = link?.split('?')[0];
+
   const textStyling = clsx(
     "group-hover:text-gray-300 text-lg",
     {
-      "text-white": pathname === link,
-      "text-gray-500": pathname !== link
+      "text-white": pathname === linkRoot,
+      "text-gray-500": pathname !== linkRoot
     }
   );
 
@@ -26,8 +28,8 @@ export default function SideBarLink({link, text, children}:ISideBarLinkProps): R
         className={clsx(
           "group-hover:fill-gray-300",
           {
-            "fill-white": pathname === link,
-            "fill-gray-500": pathname !== link
+            "fill-white": pathname === linkRoot,
+            "fill-gray-500": pathname !== linkRoot
           }
         )}
         xmlns="http://www.w3.org/2000/svg"

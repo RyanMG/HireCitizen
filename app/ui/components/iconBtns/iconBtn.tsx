@@ -69,7 +69,6 @@ export default function IconButton({
           break;
       }
       if (resp && 'message' in resp) {
-        console.log(resp.message);
         setIsSelected(!isSelected);
       }
       if (resp && 'error' in resp) {
