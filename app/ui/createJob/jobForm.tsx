@@ -14,18 +14,19 @@ import dayjs from "dayjs";
 import { useActionState } from "react";
 import FormWithErrorBlock from "../components/formWIthErrorBlock";
 
+const getJobStartDate = (prevState: CreateJobFormState['prevState']) => {
+  const now = dayjs();
+  return prevState?.jobDate ? dayjs(prevState.jobDate) : dayjs(`${now.month() + 1}-${now.date()}-${now.year()} 18:00:00.000`).add(1, 'day');
+}
+
 export default function JobForm(props: {
   jobTypeCategories: FormOption[]
 }) {
-  const initialState: CreateJobFormState = { message: null, errors: {}, prevState: {} };
+  const initialState: CreateJobFormState = { saveResponse: null, errors: {}, prevState: {} };
   const [state, formAction] = useActionState(createNewJob, initialState);
   const {
     prevState,
   } = state;
-
-  console.log('prev', prevState);
-  const now = dayjs();
-  const defaultJobDate = dayjs(`${now.month() + 1}-${now.date()}-${now.year()} 18:00:00.000`).add(1, 'day');
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -55,13 +56,15 @@ export default function JobForm(props: {
             variant="filled"
             size="small"
             label="Job Type"
-            defaultValue={prevState?.jobType ||  ""}
+            key={prevState?.jobType || ""}
+            defaultValue={prevState?.jobType || ""}
           >
-            {props.jobTypeCategories.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
+            {props.jobTypeCategories
+              .map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
           </TextField>
         </FormWithErrorBlock>
 
@@ -82,14 +85,13 @@ export default function JobForm(props: {
           <FormWithErrorBlock halfWidth error={state.errors?.jobDate || []}>
             <DateTimePicker
               label="Start Time"
-              referenceDate={dayjs()}
+              defaultValue={getJobStartDate(prevState)}
               slotProps={{
                 textField: {
                   id: "jobDate",
                   name: "jobDate",
                   variant: 'filled',
-                  size: 'small',
-                  defaultValue: prevState?.jobDate ? dayjs(prevState.jobDate) : defaultJobDate
+                  size: 'small'
                 }
               }}
             />
@@ -103,7 +105,8 @@ export default function JobForm(props: {
               name="jobEstimatedTime"
               label="Estimated Time For Job"
               variant="filled"
-              defaultValue={prevState?.jobEstimatedTime ||  ""}
+              key={prevState?.jobEstimatedTime || ""}
+              defaultValue={prevState?.jobEstimatedTime || ""}
             >
               <MenuItem value="30">30 Minutes</MenuItem>
               <MenuItem value="60">1 Hour</MenuItem>
@@ -147,6 +150,7 @@ export default function JobForm(props: {
         >
           Submit
         </Button>
+        {'saveResponse' in state && <p className="text-red-500">{state.saveResponse}</p>}
       </form>
     </LocalizationProvider>
   );

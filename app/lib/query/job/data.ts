@@ -183,14 +183,17 @@ export async function getTimezones(): Promise<Timezone[] | {message:string}> {
   }
 }
 
-export async function getActiveJobs(): Promise<Job[] | {error:string}> {
+export async function getActiveJobs(jobStatusList: string[]): Promise<Job[] | {error:string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
 
   try {
     const sql = neon(process.env.DATABASE_URL!);
-    const data = await sql`SELECT * FROM job WHERE owner_id = ${userId} AND status = 'ACTIVE'` as Job[];
-    return data;
+    if (jobStatusList.length === 0 || jobStatusList.length > 4) {
+      return { error: 'Invalid job status list.' };
+    }
+
+    return await sql`SELECT * FROM job WHERE owner_id = ${userId} AND status = ANY(${jobStatusList});` as Job[];
 
   } catch (error) {
     console.error(error);

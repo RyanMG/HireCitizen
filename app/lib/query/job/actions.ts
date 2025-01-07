@@ -45,7 +45,7 @@ export type CreateJobFormState = {
     jobPrivacy?: string[],
     jobReputationGate?: string[]
   };
-  message?: string | null;
+  saveResponse?: string | null;
   prevState?: {
     jobTitle?: string,
     jobType?: string,
@@ -60,7 +60,7 @@ export type CreateJobFormState = {
 /**
  * Create an new job
  */
-export async function createNewJob(prevState: CreateJobFormState | Promise<{message:string}> | null, formData: FormData) {
+export async function createNewJob(prevState: CreateJobFormState | null, formData: FormData) {
   const CreateNewJob = CreateJobFormSchema.omit({ id: true, owner_id: true, jobStatus: true,language_id: true, createdAt: true, updatedAt: true });
   const jobDateFormatted = new Date(formData.get('jobDate') as string);
 
@@ -71,8 +71,8 @@ export async function createNewJob(prevState: CreateJobFormState | Promise<{mess
     jobDate: jobDateFormatted.toISOString(),
     jobEstimatedTime: formData.get('jobEstimatedTime'),
     jobPrivacy: formData.get('jobPrivacy'),
-    jobReputationGate: formData.get('jobReputationGate')
-  })
+    jobReputationGate: Boolean(formData.get('jobReputationGate'))
+  });
 
   if (!validatedFields.success) {
     return {
@@ -105,7 +105,7 @@ export async function createNewJob(prevState: CreateJobFormState | Promise<{mess
     const sql = neon(process.env.DATABASE_URL!);
 
     await sql`
-      INSERT INTO job (owner_id, language_id, title, job_type_id, description, status, job_start, estimated_time, job_privacy reputation_gate, created_at, updated_at)
+      INSERT INTO job (owner_id, language_id, title, job_type_id, description, status, job_start, estimated_time, job_privacy, reputation_gate, created_at, updated_at)
       VALUES (
         ${owner_id},
         ${language_id},
@@ -122,11 +122,13 @@ export async function createNewJob(prevState: CreateJobFormState | Promise<{mess
       )
     `;
 
-  } catch {
-    return { message: 'Database Error: Failed to Create New Job.' };
+  } catch (error) {
+    console.error(error);
+    return { saveResponse: 'Database Error: Failed to Create New Job.' };
   }
 
-  redirect('/');
+  revalidatePath('/my-jobs');
+  redirect('/my-jobs');
 }
 /**
  * Delete a job

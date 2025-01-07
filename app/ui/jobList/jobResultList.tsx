@@ -2,8 +2,14 @@ import { searchJobsPaginated } from "@/app/lib/query/job/data";
 import JobSearchResult from "@ui/jobList/jobSearchResult";
 import { LoadPrevBtn, LoadMoreBtn } from "../components/loadMoreBtn";
 
-export default async function JobResultList(props: { searchParams: Promise<{ query?: string; page?: string }> | undefined }) {
+export default async function JobResultList(props: {
+  searchParams: Promise<{
+    query?: string
+    page?: string
+  }> | undefined
+}) {
   const searchParams = await props.searchParams;
+  console.log('searchParams', searchParams);
   const searchTerm = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
 
