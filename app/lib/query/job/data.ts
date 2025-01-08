@@ -120,12 +120,12 @@ export async function getJobById(jobId: string): Promise<Job | {message:string}>
       updatedAt: job.updated_at,
       jobStart: job.job_start,
       estimatedTime: job.estimated_time,
-      amountPaid: job.amount_paid,
-      payType: job.pay_type,
       isBookmarked: job.is_bookmarked,
       isFlagged: job.is_flagged,
+      jobReputationGate: job.reputation_gate,
+      jobPrivacy: job.job_privacy,
       owner: {
-        id: job.user_id,
+        id: job.owner_id,
         moniker: job.moniker
       } as Person,
       jobType: {
