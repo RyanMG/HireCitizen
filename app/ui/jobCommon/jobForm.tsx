@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 
-import { FormOption } from "@definitions/misc";
 import { CreateJobFormState, createNewJob } from "@query/job/actions";
 
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -13,38 +12,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useActionState } from "react";
 import FormWithErrorBlock from "../components/formWIthErrorBlock";
-import { Job } from "@/app/lib/definitions/job";
-
-const getJobStartDate = (prevState: CreateJobFormState['prevState']) => {
-  const now = dayjs();
-  return prevState?.jobDate ? dayjs(prevState.jobDate) : dayjs(`${now.month() + 1}-${now.date()}-${now.year()} 18:00:00.000`).add(1, 'day');
-}
-
-const buildInitialFormState = (job?: Job): CreateJobFormState => {
-  const initialState: CreateJobFormState = { saveResponse: null, errors: {}, prevState: {} };
-
-  if (job) {
-    initialState.prevState = {
-      jobTitle: job.title,
-      jobType: job.jobType.id.toString(),
-      jobDescription: job.description,
-      jobDate: job.jobStart,
-      jobEstimatedTime: job.estimatedTime?.toString(),
-      jobPrivacy: job.jobPrivacy,
-      jobReputationGate: job.jobReputationGate
-    } as CreateJobFormState['prevState'];
-  }
-
-  return initialState;
-}
+import { JobTypeCategory } from "@/app/lib/definitions/job";
+import { initialCap } from "@/app/lib/utils/textUtils";
 
 export default function JobForm(props: {
-  jobTypeCategories: FormOption[],
-  job?: Job
+  jobTypeCategories: JobTypeCategory[],
+  initialState: CreateJobFormState,
+  jobStartDate: string
 }) {
 
-  const initialState:CreateJobFormState = buildInitialFormState(props.job);
-  const [state, formAction] = useActionState(createNewJob, initialState);
+  const [state, formAction] = useActionState(createNewJob, props.initialState);
 
   const {
     prevState,
@@ -82,9 +59,10 @@ export default function JobForm(props: {
             defaultValue={prevState?.jobType || ""}
           >
             {props.jobTypeCategories
-              .map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((category) => (
+                <MenuItem key={category.id.toString()} value={category.id.toString()}>
+                  {initialCap(category.name)}
                 </MenuItem>
               ))}
           </TextField>
@@ -107,7 +85,7 @@ export default function JobForm(props: {
           <FormWithErrorBlock halfWidth error={state.errors?.jobDate || []}>
             <DateTimePicker
               label="Start Time"
-              defaultValue={getJobStartDate(prevState)}
+              defaultValue={dayjs(props.jobStartDate)}
               slotProps={{
                 textField: {
                   id: "jobDate",

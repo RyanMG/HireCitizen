@@ -1,9 +1,9 @@
 'use server';
 
-import { initialCap } from "@/app/lib/utils/textUtils";
-import JobForm from "../createJob/jobForm";
+import JobForm from "@ui/jobCommon/jobForm";
 import { getJobById, getJobTypeCategories } from "@/app/lib/query/job/data";
-import { FormOption } from "@/app/lib/definitions/misc";
+import dayjs from "dayjs";
+import { CreateJobFormState } from "@/app/lib/query/job/actions";
 
 export default async function EditJobForm(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -18,16 +18,27 @@ export default async function EditJobForm(props: { params: Promise<{ id: string 
     return <p className="flex flex-col items-center justify-center flex-1 text-white">{job.message}</p>;
   }
 
-  const buildJobCategoryOptions = () => {
-    const options = jobTypeCategories
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map((category) => ({ label: initialCap(category.name), value: category.id.toString() })) || [];
-    return options as FormOption[];
+  const buildInitialFormState = (): CreateJobFormState => {
+    const initialState: CreateJobFormState = { saveResponse: null, errors: {}, prevState: {} };
+
+    if (job) {
+      initialState.prevState = {
+        jobTitle: job.title,
+        jobType: job.jobType.id.toString(),
+        jobDescription: job.description,
+        jobDate: job.jobStart,
+        jobEstimatedTime: job.estimatedTime?.toString(),
+        jobPrivacy: job.jobPrivacy,
+        jobReputationGate: job.jobReputationGate
+      } as CreateJobFormState['prevState'];
+    }
+
+    return initialState;
   }
 
   return (
     <>
-      <JobForm jobTypeCategories={buildJobCategoryOptions()} job={job} />
+      <JobForm jobTypeCategories={jobTypeCategories} initialState={buildInitialFormState()} jobStartDate={job.jobStart || dayjs().toLocaleString()} />
     </>
   )
 }
