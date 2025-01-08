@@ -1,5 +1,5 @@
 import ResultsLoading from "@components/resultsLoading";
-import CreateJobForm from "@/app/ui/createJob/createJobForm";
+import CreateJobFormWrapper from "@ui/createJob/createJobFormWrapper";
 import PageHeader from "@components/pageHeader";
 import { Suspense } from "react";
 
@@ -11,7 +11,7 @@ export default function CreateJob() {
       />
 
       <Suspense fallback={<ResultsLoading />}>
-        <CreateJobForm />
+        <CreateJobFormWrapper />
       </Suspense>
 
     </div>

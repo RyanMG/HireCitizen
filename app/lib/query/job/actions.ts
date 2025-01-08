@@ -77,7 +77,7 @@ export async function createNewJob(prevState: CreateJobFormState | null, formDat
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create New Job.',
+      message: 'Missing fields. Failed to create new job.',
       prevState: {
         jobTitle: formData.get('jobTitle'),
         jobType: formData.get('jobType'),
@@ -98,7 +98,7 @@ export async function createNewJob(prevState: CreateJobFormState | null, formDat
   }
 
   const { jobTitle, jobType, jobDescription, jobDate, jobEstimatedTime, jobPrivacy, jobReputationGate } = validatedFields.data;
-  const dateNow = new Date().toISOString().split('T')[0];
+  const dateNow = new Date().toISOString();
   const status = 'PENDING';
 
   try {
@@ -130,6 +130,68 @@ export async function createNewJob(prevState: CreateJobFormState | null, formDat
   revalidatePath('/my-jobs');
   redirect('/my-jobs');
 }
+
+/**
+ * Edit a job
+ */
+export async function editJob(jobId: string, prevState: CreateJobFormState | null, formData: FormData) {
+  const EditJob = CreateJobFormSchema.omit({ id: true, owner_id: true, jobStatus: true, language_id: true, createdAt: true, updatedAt: true });
+  const jobDateFormatted = new Date(formData.get('jobDate') as string);
+
+  const validatedFields = EditJob.safeParse({
+    jobTitle: formData.get('jobTitle'),
+    jobType: formData.get('jobType'),
+    jobDescription: formData.get('jobDescription'),
+    jobDate: jobDateFormatted.toISOString(),
+    jobEstimatedTime: formData.get('jobEstimatedTime'),
+    jobPrivacy: formData.get('jobPrivacy'),
+    jobReputationGate: Boolean(formData.get('jobReputationGate'))
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing fields. Failed to update job.',
+      prevState: {
+        jobTitle: formData.get('jobTitle'),
+        jobType: formData.get('jobType'),
+        jobDescription: formData.get('jobDescription'),
+        jobDate: formData.get('jobDate'),
+        jobEstimatedTime: formData.get('jobEstimatedTime'),
+        jobPrivacy: formData.get('jobPrivacy'),
+        jobReputationGate: Boolean(formData.get('jobReputationGate'))
+      }
+    } as unknown as CreateJobFormState;
+  }
+
+  const { jobTitle, jobType, jobDescription, jobDate, jobEstimatedTime, jobPrivacy, jobReputationGate } = validatedFields.data;
+
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+
+    await sql`
+      UPDATE job
+      SET
+        title = ${jobTitle},
+        job_type_id = ${jobType},
+        description = ${jobDescription},
+        job_start = ${jobDate},
+        estimated_time = ${jobEstimatedTime},
+        job_privacy = ${jobPrivacy},
+        reputation_gate = ${jobReputationGate},
+        updated_at = ${new Date().toISOString()}
+      WHERE id = ${jobId}
+    `;
+
+  } catch (error) {
+    console.error(error);
+    return { saveResponse: 'Database Error: Failed to update job.' };
+  }
+
+  revalidatePath('/my-jobs');
+  redirect('/my-jobs');
+}
+
 /**
  * Delete a job
  */

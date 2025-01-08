@@ -1,11 +1,11 @@
 'use server';
 
-import JobForm from "@ui/jobCommon/jobForm";
-import { getJobById, getJobTypeCategories } from "@/app/lib/query/job/data";
+import { getJobById, getJobTypeCategories } from "@query/job/data";
+import { CreateJobFormState } from "@query/job/actions";
 import dayjs from "dayjs";
-import { CreateJobFormState } from "@/app/lib/query/job/actions";
+import EditJobForm from "@ui/editJob/editJobForm";
 
-export default async function EditJobForm(props: { params: Promise<{ id: string }> }) {
+export default async function EditJobFormWrapper(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const job = await getJobById(params.id);
   const jobTypeCategories = await getJobTypeCategories();
@@ -38,7 +38,8 @@ export default async function EditJobForm(props: { params: Promise<{ id: string 
 
   return (
     <>
-      <JobForm jobTypeCategories={jobTypeCategories} initialState={buildInitialFormState()} jobStartDate={job.jobStart || dayjs().toLocaleString()} />
+      <EditJobForm jobTypeCategories={jobTypeCategories} initialState={buildInitialFormState()} jobStartDate={job.jobStart || dayjs().toLocaleString()} jobId={job.id} />
     </>
-  )
+  );
 }
+

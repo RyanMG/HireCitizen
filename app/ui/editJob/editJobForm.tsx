@@ -4,21 +4,23 @@ import JobForm from '@ui/jobCommon/jobForm';
 import { Button } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { useActionState } from "react";
-import { createNewJob, CreateJobFormState } from '@/app/lib/query/job/actions';
+import { CreateJobFormState, editJob } from '@/app/lib/query/job/actions';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { JobTypeCategory } from '@/app/lib/definitions/job';
 
-export default function CreateJobForm({
+export default function EditJobForm({
   jobTypeCategories,
   initialState,
-  jobStartDate
+  jobStartDate,
+  jobId
 }: {
   jobTypeCategories: JobTypeCategory[],
   initialState: CreateJobFormState,
-  jobStartDate: string
+  jobStartDate: string,
+  jobId: string
 }) {
-
-  const [state, formAction] = useActionState(createNewJob, initialState);
+  const editJobAction = editJob.bind(null, jobId);
+  const [state, formAction] = useActionState(editJobAction, initialState);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

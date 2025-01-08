@@ -1,6 +1,6 @@
 import PageHeader from "@components/pageHeader";
 import ResultsLoading from "@components/resultsLoading";
-import EditJobForm from "@/app/ui/myJobs/editJobForm";
+import EditJobFormWrapper from "@ui/editJob/editJobFormWrapper";
 import { Suspense } from "react";
 
 export default function EditJob(props: { params: Promise<{ id: string }> }) {
@@ -12,7 +12,7 @@ export default function EditJob(props: { params: Promise<{ id: string }> }) {
         pageBackPath={'/my-jobs?jobStatus=PENDING%2CACTIVE'}
       />
       <Suspense fallback={<ResultsLoading />}>
-        <EditJobForm params={props.params} />
+        <EditJobFormWrapper params={props.params} />
       </Suspense>
     </div>
   )
