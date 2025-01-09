@@ -4,10 +4,10 @@ import JobForm from '@ui/jobCommon/jobForm';
 import { Button } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { useActionState, useState } from "react";
-import { CreateJobFormState, editJob } from '@/app/lib/query/job/actions';
+import { CreateJobFormState, editJob, saveJobRoles } from '@/app/lib/query/job/actions';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { JobTypeCategory } from '@/app/lib/definitions/job';
-import AddJobRolesModal from '../jobCommon/addJobRolesModal';
+import { CrewRole, JobTypeCategory } from '@/app/lib/definitions/job';
+import AddJobRolesModal from '@ui/jobCommon/addJobRolesModal';
 
 export default function EditJobForm({
   jobTypeCategories,
@@ -32,6 +32,16 @@ export default function EditJobForm({
 
   const showAddJobRolesModal = () => {
     setRolesModalOpen(true);
+  }
+
+  const saveUpdatedJobRoles = async (selectedRoles: CrewRole[]) => {
+    const saveResp = await saveJobRoles(jobId, selectedRoles);
+    if ('error' in saveResp) {
+      // @TODO handle error
+      return;
+    }
+
+    console.log('saveResp', saveResp.message);
   }
 
   return (
@@ -75,8 +85,9 @@ export default function EditJobForm({
         onClickClose={() => {
           setRolesModalOpen(false);
         }}
-        onClickSave={() => {
+        onClickSave={(selectedRoles: CrewRole[]) => {
           setRolesModalOpen(false);
+          saveUpdatedJobRoles(selectedRoles);
         }}
       />
     </>

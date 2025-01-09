@@ -19,10 +19,6 @@ export default function CrewRoleList(props: {
   const [hasApplied, setHasApplied] = useState<boolean>(false);
   const [applications, setApplications] = useState<JobApplicant[]>(initialApplications || []);
 
-  if (!userId) {
-    return null;
-  }
-
   useEffect(() => {
     if (hasApplied) {
       getJobApplicationStatus(job.id, userId).then((updatedApplications) => {
@@ -30,6 +26,10 @@ export default function CrewRoleList(props: {
       });
     }
   }, [hasApplied, job.id, userId]);
+
+  if (!userId) {
+    return null;
+  }
 
   return (
     <>

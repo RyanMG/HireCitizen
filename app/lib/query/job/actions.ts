@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { auth } from 'auth';
 import { revalidatePath } from "next/cache";
+import { CrewRole } from "../../definitions/job";
 
 const JobFormSchema = z.object({
   id: z.string(),
@@ -192,6 +193,22 @@ export async function editJob(jobId: string, prevState: CreateJobFormState | nul
 
   revalidatePath(JOB_SAVE_REVALIDATE_PATH);
   redirect(JOB_SAVE_REDIRECT_PATH);
+}
+/**
+ * Save user-defined roles associated with a job
+ */
+export async function saveJobRoles(jobId: string, selectedRoles: CrewRole[]) {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    for await (const role of selectedRoles) {
+      await sql`INSERT INTO job_crew_role_join (job_id, crew_role_id, crew_role_count) VALUES (${jobId}, ${role.id}, ${role.count})`;
+    }
+    return { message: 'Job roles saved.' };
+
+  } catch (error) {
+    console.error(error);
+    return { error: 'Database Error: Failed to save job roles.' };
+  }
 }
 
 /**

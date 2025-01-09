@@ -11,7 +11,7 @@ import ResultsLoading from "../components/resultsLoading";
 interface AddJobRolesModalProps {
   open: boolean,
   onClickClose: () => void,
-  onClickSave: () => void,
+  onClickSave: (selectedRoles: CrewRole[]) => void,
   jobType: JobTypeCategory | null
 }
 
@@ -60,7 +60,6 @@ export default function AddJobRolesModal({
     }
     onClickClose();
   }
-
   /**
    * Move role from picker to selected roles
    */
@@ -77,7 +76,6 @@ export default function AddJobRolesModal({
     }
     setRolesToPick(rolesToPick.filter((role) => role.value !== id));
   }
-
   /**
    * Move role from selected roles to picker
    */
@@ -91,7 +89,6 @@ export default function AddJobRolesModal({
       }
     ].sort((a, b) => Number(a.value) - Number(b.value)));
   }
-
   /**
    * Build crew role options
    */
@@ -100,6 +97,12 @@ export default function AddJobRolesModal({
       { label: initialCap(role.name), value: role.id.toString() } as CrewRoleOption
     )) || [];
     return options
+  }
+  /**
+   * Update a given role's count
+   */
+  const updateRole = (id: number, count: number) => {
+    setSelectedRoles(selectedRoles.map((role) => role.id === id ? { ...role, count } : role));
   }
 
   return (
@@ -139,13 +142,14 @@ export default function AddJobRolesModal({
                     key={role.id}
                     role={role}
                     removeRole={(id: number) => moveRoleFromSelectedRolesToPicker(id)}
+                    updateRole={(id: number, count: number) => updateRole(id, count)}
                   />
                 })}
               </div>
 
               <div className="flex flex-row gap-4">
                 <Button variant="contained" color="secondary" className="w-1/2" onClick={onClickClose}>Close</Button>
-                <Button variant="contained" color="primary" className="w-1/2" disabled={saveDisabled} onClick={onClickSave}>Save Roles</Button>
+                <Button variant="contained" color="primary" className="w-1/2" disabled={saveDisabled} onClick={() => onClickSave(selectedRoles)}>Save Roles</Button>
               </div>
             </>
           }

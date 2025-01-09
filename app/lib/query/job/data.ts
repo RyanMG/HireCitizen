@@ -19,7 +19,7 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
     const sql = neon(process.env.DATABASE_URL!);
     const pageOffset = (currentPage - 1) * JOB_SEARCH_RESULTS_PER_PAGE;
     const queryLike = `%${searchTerm}%`;
-    let jobData: Record<string, any>[] = [];
+    let jobData = [];
 
     if (!userId) {
       /**

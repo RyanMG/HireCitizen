@@ -4,7 +4,7 @@ import { ReactElement } from "react";
 
 function MiningIcon():ReactElement {
   return (
-    <path d="M240-200h240v-40H240v40Zm30-360h180q12 0 21-9t9-21q0-12-9-21t-21-9H270q-12 0-21 9t-9 21q0 12 9 21t21 9Zm0-100h180q12 0 21-9t9-21q0-12-9-21t-21-9H270q-12 0-21 9t-9 21q0 12 9 21t21 9Zm370 140v-80h80v-80h-80v-80h80q33 0 56.5 23.5T800-680h80q17 0 28.5 11.5T920-640q0 17-11.5 28.5T880-600h-80q0 33-23.5 56.5T720-520h-80ZM480-320h-80v-200h160v-240H240q-33 0-56.5 23.5T160-680v80q0 33 23.5 56.5T240-520h80v200h-80v-120q-66 0-113-47T80-600v-80q0-66 47-113t113-47h320q33 0 56.5 23.5T640-760v240q0 33-23.5 56.5T560-440h-80v120ZM220-120q-25 0-42.5-17.5T160-180v-80q0-25 17.5-42.5T220-320h280q25 0 42.5 17.5T560-260v80q0 25-17.5 42.5T500-120H220Zm140-520Zm120 440H240h240Z"/>
+    <path d="M80-80h800L640-400l-200-80-120-160H80v560Zm80-80v-64l80 26 361-120 119 158H160Zm80-122-80-27v-75l80 26 158-52 96 43-254 85Zm500-118 180-80v-160l-180-40-100 80v120l100 80Zm-500-42-80-27v-91h120l65 83-105 35Zm512-51-32-25v-44l40-32 80 18v44l-88 39ZM480-640l200-80v-200l-200-40-120 80v160l120 80Zm9-90-49-33v-74l57-38 103 21v80l-111 44Z"/>
   )
 }
 
@@ -62,6 +62,30 @@ function ExplorationIcon():ReactElement {
   )
 }
 
+function DataRunningIcon():ReactElement {
+  return (
+    <path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z"/>
+  )
+}
+
+function MercenaryIcon():ReactElement {
+  return (
+    <path d="M280-880h400v314q0 23-10 41t-28 29l-142 84 28 92h152l-124 88 48 152-124-94-124 94 48-152-124-88h152l28-92-142-84q-18-11-28-29t-10-41v-314Zm80 80v234l80 48v-282h-80Zm240 0h-80v282l80-48v-234ZM480-647Zm-40-12Zm80 0Z"/>
+  )
+}
+
+function RacingIcon():ReactElement {
+  return (
+    <path d="M418-340q24 24 62 23.5t56-27.5l224-336-336 224q-27 18-28.5 55t22.5 61Zm62-460q59 0 113.5 16.5T696-734l-76 48q-33-17-68.5-25.5T480-720q-133 0-226.5 93.5T160-400q0 42 11.5 83t32.5 77h552q23-38 33.5-79t10.5-85q0-36-8.5-70T766-540l48-76q30 47 47.5 100T880-406q1 57-13 109t-41 99q-11 18-30 28t-40 10H204q-21 0-40-10t-30-28q-26-45-40-95.5T80-400q0-83 31.5-155.5t86-127Q252-737 325-768.5T480-800Zm7 313Z"/>
+  )
+}
+
+function TransportIcon():ReactElement {
+  return (
+    <path d="M160-280v-480H80v-80h160v480h600v80H160Zm80 200q-33 0-56.5-23.5T160-160q0-33 23.5-56.5T240-240q33 0 56.5 23.5T320-160q0 33-23.5 56.5T240-80Zm40-320v-240h240v240H280Zm80-80h80v-80h-80v80Zm200 80v-240h240v240H560Zm80-80h80v-80h-80v80ZM760-80q-33 0-56.5-23.5T680-160q0-33 23.5-56.5T760-240q33 0 56.5 23.5T840-160q0 33-23.5 56.5T760-80ZM360-480h80-80Zm280 0h80-80Z"/>
+  )
+}
+
 interface IJobTypeIconProps {
   jobType: JobType
   size?: 'small' | 'medium' | 'large'
@@ -77,18 +101,23 @@ export default function JobTypeIcon({ jobType, size = 'medium' }: IJobTypeIconPr
         'h-20 w-20': size === 'large',
       }
     )}>
-      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#777777">
-        {jobName === "mining" && <MiningIcon />}
+      <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#777777">
+        {jobName === "bounty hunting" && <BountyHuntingIcon />}
         {jobName === "cargo" && <CargoIcon />}
         {jobName === "construction" && <ConstructionIcon />}
-        {jobName === "security" && <SecurityIcon />}
-        {jobName === "salvage" && <SalvageIcon />}
+        {jobName === "data running" && <DataRunningIcon />}
         {jobName === "event" && <EventIcon />}
-        {jobName === "bountyHunting" && <BountyHuntingIcon />}
-        {jobName === "roleplay" && <RolePlayIcon />}
-        {jobName === "repair" && <RepairIcon />}
         {jobName === "exploration" && <ExplorationIcon />}
+        {jobName === "mercenary" && <MercenaryIcon />}
+        {jobName === "mining" && <MiningIcon />}
+        {jobName === "racing" && <RacingIcon />}
+        {jobName === "repair" && <RepairIcon />}
+        {jobName === "roleplay" && <RolePlayIcon />}
+        {jobName === "salvage" && <SalvageIcon />}
+        {jobName === "security" && <SecurityIcon />}
+        {jobName === "transport" && <TransportIcon />}
       </svg>
     </div>
   );
 }
+

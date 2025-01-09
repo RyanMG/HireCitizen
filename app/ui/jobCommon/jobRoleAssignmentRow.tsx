@@ -7,22 +7,24 @@ import { CrewRole } from "@definitions/job";
 interface IJobRoleAssignmentRowProps {
   role: CrewRole;
   removeRole: (id: number) => void;
+  updateRole: (id: number, count: number) => void;
 }
 
 export default function JobRoleAssignmentRow({
   role,
-  removeRole
+  removeRole,
+  updateRole
 }: IJobRoleAssignmentRowProps) {
   const [count, setCount] = useState(role.count);
 
   const increaseCount = () => {
     setCount(count + 1);
-    role.count++;
+    updateRole(role.id, count + 1);
   }
 
   const decreaseCount = () => {
     setCount(count - 1);
-    role.count--;
+    updateRole(role.id, count - 1);
   }
 
   return (
