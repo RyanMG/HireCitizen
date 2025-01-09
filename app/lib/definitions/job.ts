@@ -38,6 +38,11 @@ export type CrewRole = {
   count: number;
 }
 
+export type CrewRoleOption = {
+  label: string;
+  value: string;
+}
+
 export type JobApplicant = {
   id: number;
   jobId: string;

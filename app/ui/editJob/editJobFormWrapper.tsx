@@ -1,21 +1,22 @@
 'use server';
 
-import { getJobById, getJobTypeCategories } from "@query/job/data";
+import { getCrewRoles, getJobById, getJobTypeCategories } from "@query/job/data";
 import { CreateJobFormState } from "@query/job/actions";
 import dayjs from "dayjs";
 import EditJobForm from "@ui/editJob/editJobForm";
+import DataFetchErrorSnack from "../components/dataFetchErrorSnack";
 
 export default async function EditJobFormWrapper(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const job = await getJobById(params.id);
-  const jobTypeCategories = await getJobTypeCategories();
+  const [job, jobTypeCategories, crewRoles] = await Promise.all([
+    getJobById(params.id),
+    getJobTypeCategories(),
+    getCrewRoles()
+  ]);
 
-  if ('message' in jobTypeCategories) {
-    return <p className="flex flex-col items-center justify-center flex-1 text-white">{jobTypeCategories.message}</p>;
-  }
-
-  if ('message' in job) {
-    return <p className="flex flex-col items-center justify-center flex-1 text-white">{job.message}</p>;
+  if ('error' in jobTypeCategories || 'error' in crewRoles || 'error' in job) {
+    const messages: string[] = ['error' in jobTypeCategories ? jobTypeCategories.error : '', 'error' in crewRoles ? crewRoles.error : '', 'error' in job ? job.error : ''].filter(Boolean) as string[];
+    return <DataFetchErrorSnack messages={messages} />
   }
 
   const buildInitialFormState = (): CreateJobFormState => {
@@ -38,7 +39,13 @@ export default async function EditJobFormWrapper(props: { params: Promise<{ id: 
 
   return (
     <>
-      <EditJobForm jobTypeCategories={jobTypeCategories} initialState={buildInitialFormState()} jobStartDate={job.jobStart || dayjs().toLocaleString()} jobId={job.id} />
+      <EditJobForm
+        jobTypeCategories={jobTypeCategories}
+        crewRoles={crewRoles}
+        initialState={buildInitialFormState()}
+        jobStartDate={job.jobStart || dayjs().toLocaleString()}
+        jobId={job.id}
+      />
     </>
   );
 }

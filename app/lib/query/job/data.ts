@@ -11,7 +11,7 @@ const JOB_SEARCH_RESULTS_PER_PAGE = 8;
 /**
  * Search jobs by a search term.
  */
-export async function searchJobsPaginated(searchTerm: string = "", currentPage: number = 1): Promise<Job[] | {message:string}> {
+export async function searchJobsPaginated(searchTerm: string = "", currentPage: number = 1): Promise<Job[] | {error:string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
 
@@ -73,13 +73,13 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
 
   } catch (error) {
     console.error(error);
-    return { message: `Database Error: Failed to get jobs from search ${searchTerm}`};
+    return { error: `Database Error: Failed to get jobs from search ${searchTerm}`};
   }
 }
 /**
  * Get a single job by its id.
  */
-export async function getJobById(jobId: string): Promise<Job | {message:string}> {
+export async function getJobById(jobId: string): Promise<Job | {error:string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
 
@@ -152,22 +152,36 @@ export async function getJobById(jobId: string): Promise<Job | {message:string}>
 
   } catch (error) {
     console.error(error);
-    return { message: `Database Error: Failed to get job ${jobId}`};
+    return { error: `Database Error: Failed to get job ${jobId}`};
   }
 }
 /**
  * Get the job type categories.
  */
-export async function getJobTypeCategories(): Promise<JobTypeCategory[] | {message:string}> {
+export async function getJobTypeCategories(): Promise<JobTypeCategory[] | {error:string}> {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const data = await sql`SELECT * FROM job_type` as JobTypeCategory[];
     return data;
 
   } catch {
-    return { message: 'Database Error: Failed to get job categories.' };
+    return { error: 'Database Error: Failed to get job categories.' };
   }
 
+}
+/**
+ *
+ */
+export async function getCrewRoles(): Promise<CrewRole[] | {error:string}> {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    const data = await sql`SELECT * FROM crew_roles` as CrewRole[];
+    return data;
+
+  } catch (error) {
+    console.error(error);
+    return { error: 'Database Error: Failed to get crew roles.' };
+  }
 }
 /**
  * Get the timezones.

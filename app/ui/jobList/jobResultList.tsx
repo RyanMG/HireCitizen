@@ -1,6 +1,7 @@
 import { searchJobsPaginated } from "@/app/lib/query/job/data";
 import JobSearchResult from "@ui/jobList/jobSearchResult";
 import { LoadPrevBtn, LoadMoreBtn } from "../components/loadMoreBtn";
+import DataFetchErrorSnack from "../components/dataFetchErrorSnack";
 
 export default async function JobResultList(props: {
   searchParams: Promise<{
@@ -14,8 +15,8 @@ export default async function JobResultList(props: {
 
   const jobs = await searchJobsPaginated(searchTerm, currentPage);
 
-  if ('message' in jobs) {
-    return <p className="flex flex-col items-center justify-center flex-1 text-white">{jobs.message}</p>;
+  if ('error' in jobs) {
+    return <DataFetchErrorSnack messages={[jobs.error]} />
   }
 
   return (

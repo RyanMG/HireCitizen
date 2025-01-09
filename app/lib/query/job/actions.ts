@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { auth } from 'auth';
 import { revalidatePath } from "next/cache";
 
-const CreateJobFormSchema = z.object({
+const JobFormSchema = z.object({
   id: z.string(),
   owner_id: z.number(),
   language_id: z.number(),
@@ -57,11 +57,13 @@ export type CreateJobFormState = {
   };
 };
 
+const JOB_SAVE_REDIRECT_PATH = '/my-jobs?jobStatus=PENDING';
+const JOB_SAVE_REVALIDATE_PATH = '/my-jobs';
 /**
  * Create an new job
  */
 export async function createNewJob(prevState: CreateJobFormState | null, formData: FormData) {
-  const CreateNewJob = CreateJobFormSchema.omit({ id: true, owner_id: true, jobStatus: true,language_id: true, createdAt: true, updatedAt: true });
+  const CreateNewJob = JobFormSchema.omit({ id: true, owner_id: true, jobStatus: true,language_id: true, createdAt: true, updatedAt: true });
   const jobDateFormatted = new Date(formData.get('jobDate') as string);
 
   const validatedFields = CreateNewJob.safeParse({
@@ -127,15 +129,15 @@ export async function createNewJob(prevState: CreateJobFormState | null, formDat
     return { saveResponse: 'Database Error: Failed to Create New Job.' };
   }
 
-  revalidatePath('/my-jobs');
-  redirect('/my-jobs');
+  revalidatePath(JOB_SAVE_REVALIDATE_PATH);
+  redirect(JOB_SAVE_REDIRECT_PATH);
 }
 
 /**
  * Edit a job
  */
 export async function editJob(jobId: string, prevState: CreateJobFormState | null, formData: FormData) {
-  const EditJob = CreateJobFormSchema.omit({ id: true, owner_id: true, jobStatus: true, language_id: true, createdAt: true, updatedAt: true });
+  const EditJob = JobFormSchema.omit({ id: true, owner_id: true, jobStatus: true, language_id: true, createdAt: true, updatedAt: true });
   const jobDateFormatted = new Date(formData.get('jobDate') as string);
 
   const validatedFields = EditJob.safeParse({
@@ -188,8 +190,8 @@ export async function editJob(jobId: string, prevState: CreateJobFormState | nul
     return { saveResponse: 'Database Error: Failed to update job.' };
   }
 
-  revalidatePath('/my-jobs');
-  redirect('/my-jobs');
+  revalidatePath(JOB_SAVE_REVALIDATE_PATH);
+  redirect(JOB_SAVE_REDIRECT_PATH);
 }
 
 /**
@@ -205,7 +207,7 @@ export async function deleteJob(jobId: string): Promise<{message: string|null} |
     return { error: 'Database Error: Failed to delete job.' };
   }
 
-  revalidatePath('/my-jobs');
+  revalidatePath(JOB_SAVE_REVALIDATE_PATH);
   return { message: 'Job deleted.' };
 }
 /**

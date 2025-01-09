@@ -1,16 +1,21 @@
 'use server';
 
-import { getJobTypeCategories } from "@/app/lib/query/job/data";
+import { getCrewRoles, getJobTypeCategories } from "@/app/lib/query/job/data";
 
 import { CreateJobFormState } from "@/app/lib/query/job/actions";
 import dayjs from "dayjs";
 import CreateJobForm from "./createJobForm";
+import DataFetchErrorSnack from "@components/dataFetchErrorSnack";
 
 export default async function CreateJobFormWrapper() {
-  const jobTypeCategories = await getJobTypeCategories();
+  const [jobTypeCategories, crewRoles] = await Promise.all([
+    getJobTypeCategories(),
+    getCrewRoles()
+  ]);
 
-  if ('message' in jobTypeCategories) {
-    return <p className="flex flex-col items-center justify-center flex-1 text-white">{jobTypeCategories.message}</p>;
+  if ('error' in jobTypeCategories || 'error' in crewRoles) {
+    const messages: string[] = ['error' in jobTypeCategories ? jobTypeCategories.error : '', 'error' in crewRoles ? crewRoles.error : ''].filter(Boolean) as string[];
+    return <DataFetchErrorSnack messages={messages} />
   }
 
   const getJobStartDate = () => {
@@ -24,7 +29,12 @@ export default async function CreateJobFormWrapper() {
 
   return (
     <>
-      <CreateJobForm jobTypeCategories={jobTypeCategories} initialState={buildInitialFormState()} jobStartDate={getJobStartDate()} />
+      <CreateJobForm
+        jobTypeCategories={jobTypeCategories}
+        crewRoles={crewRoles}
+        initialState={buildInitialFormState()}
+        jobStartDate={getJobStartDate()}
+      />
     </>
   );
 }

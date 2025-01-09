@@ -6,6 +6,7 @@ import { getJobApplicationStatus } from "@query/jobRoles/data";
 import CrewRoleList from "./crewRoleList";
 import IconButton from "@ui/components/iconBtns/iconBtn";
 import { auth } from "@/auth";
+import DataFetchErrorSnackbar from "@ui/components/dataFetchErrorSnack";
 
 import DayJs from "dayjs";
 import Link from "next/link";
@@ -33,14 +34,12 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
   const jobId = params.id;
   const session = await auth();
   const userId = session?.activeUser?.id || '';
-  const job: Job | { message: string } = await getJobById(jobId);
+  const job: Job | { error: string } = await getJobById(jobId);
   const applications = await getJobApplicationStatus(jobId, userId);
 
-  if ('message' in job) {
+  if ('error' in job) {
     return (
-      <div className="flex flex-col items-center justify-center pt-4">
-        <p className="text-red-500">Error: {job.message}</p>
-      </div>
+      <DataFetchErrorSnackbar messages={[job.error]} />
     )
   }
 

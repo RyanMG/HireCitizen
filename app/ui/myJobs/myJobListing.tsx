@@ -1,5 +1,6 @@
 import { getMyJobs } from "@/app/lib/query/job/data";
 import ActiveJobCard from "./activeJobCard";
+import DataFetchErrorSnack from "../components/dataFetchErrorSnack";
 
 /*
  * No jobs found block
@@ -31,7 +32,8 @@ export default async function MyJobListing({
   const jobs = await getMyJobs(jobStatusList);
 
   if ('error' in jobs) {
-    return <div>{jobs.error}</div>;
+    const messages: string[] = ['error' in jobs ? jobs.error : ''].filter(Boolean) as string[];
+    return <DataFetchErrorSnack messages={messages} />
   }
 
   if (jobs.length === 0) {
