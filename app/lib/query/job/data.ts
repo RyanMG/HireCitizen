@@ -167,15 +167,18 @@ export async function getJobTypeCategories(): Promise<JobTypeCategory[] | {error
   } catch {
     return { error: 'Database Error: Failed to get job categories.' };
   }
-
 }
 /**
  *
  */
-export async function getCrewRoles(): Promise<CrewRole[] | {error:string}> {
+export async function getCrewRoles(jobTypeId: number): Promise<CrewRole[] | {error:string}> {
+
   try {
     const sql = neon(process.env.DATABASE_URL!);
-    const data = await sql`SELECT * FROM crew_roles` as CrewRole[];
+    const data = await sql`SELECT * FROM crew_roles WHERE id = ANY (
+      SELECT crew_role_id FROM job_type_crew_role_join WHERE job_type_id = ${jobTypeId}
+    ) OR id = 1` as CrewRole[];
+
     return data;
 
   } catch (error) {

@@ -14,13 +14,15 @@ import { CreateJobFormState } from "@query/job/actions";
 interface JobFormProps {
   jobTypeCategories: JobTypeCategory[],
   formState: CreateJobFormState,
-  jobStartDate: string
+  jobStartDate: string,
+  onChangeJobType: (value: number) => void
 }
 
 export default function JobForm({
   jobTypeCategories,
   formState,
-  jobStartDate
+  jobStartDate,
+  onChangeJobType
 }: JobFormProps) {
 
   const {
@@ -51,6 +53,9 @@ export default function JobForm({
           size="small"
           label="Job Type"
           key={prevState?.jobType || ""}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChangeJobType(Number(e.target.value));
+          }}
           defaultValue={prevState?.jobType || ""}
         >
           {jobTypeCategories

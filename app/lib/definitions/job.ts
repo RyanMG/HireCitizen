@@ -50,3 +50,9 @@ export type JobApplicant = {
   crewRoleId: number;
   acceptedStatus: string;
 }
+
+export type JobTypeCrewRoleJoin = {
+  id: number;
+  job_type_id: number;
+  crew_role_id: number;
+}
