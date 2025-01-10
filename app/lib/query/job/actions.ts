@@ -103,11 +103,12 @@ export async function createNewJob(prevState: CreateJobFormState | null, formDat
   const { jobTitle, jobType, jobDescription, jobDate, jobEstimatedTime, jobPrivacy, jobReputationGate } = validatedFields.data;
   const dateNow = new Date().toISOString();
   const status = 'PENDING';
+  let jobId: string | null = null;
 
   try {
     const sql = neon(process.env.DATABASE_URL!);
 
-    await sql`
+    const resp = await sql`
       INSERT INTO job (owner_id, language_id, title, job_type_id, description, status, job_start, estimated_time, job_privacy, reputation_gate, created_at, updated_at)
       VALUES (
         ${owner_id},
@@ -122,16 +123,17 @@ export async function createNewJob(prevState: CreateJobFormState | null, formDat
         ${jobReputationGate},
         ${dateNow},
         ${dateNow}
-      )
+      ) RETURNING id;
     `;
+
+    jobId = resp[0].id;
 
   } catch (error) {
     console.error(error);
     return { saveResponse: 'Database Error: Failed to Create New Job.' };
   }
 
-  revalidatePath(JOB_SAVE_REVALIDATE_PATH);
-  redirect(JOB_SAVE_REDIRECT_PATH);
+  redirect(`/create-job/${jobId}/roles`);
 }
 
 /**

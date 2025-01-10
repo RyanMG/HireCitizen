@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, MenuItem, Modal, TextField } from "@mui/material";
 import PageHeader from "../components/pageHeader";
 import { initialCap } from "@lib/utils/textUtils";

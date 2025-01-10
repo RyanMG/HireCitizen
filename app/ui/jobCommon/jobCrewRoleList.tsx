@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from "@mui/material";
 import AddJobRolesModal from "./addJobRolesModal";
 import { CrewRole, JobTypeCategory } from "@/app/lib/definitions/job";
@@ -69,6 +71,9 @@ export default function JobCrewRoleList({
   return (
     <>
       <div className="flex flex-col gap-2">
+        {currentJobRoles?.length === 0 && (
+          <p className="text-gray-500 text-sm font-bold italic text-center">No crew roles added yet.</p>
+        )}
         {currentJobRoles?.map(role => (
           <JobRoleListItem
             key={role.id}

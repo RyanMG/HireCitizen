@@ -8,9 +8,7 @@ import CreateJobForm from "./createJobForm";
 import DataFetchErrorSnack from "@components/dataFetchErrorSnack";
 
 export default async function CreateJobFormWrapper() {
-  const [jobTypeCategories] = await Promise.all([
-    getJobTypeCategories()
-  ]);
+  const jobTypeCategories = await getJobTypeCategories();
 
   if ('error' in jobTypeCategories) {
     const messages: string[] = ['error' in jobTypeCategories ? jobTypeCategories.error : ''].filter(Boolean) as string[];

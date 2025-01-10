@@ -15,7 +15,7 @@ interface JobFormProps {
   jobTypeCategories: JobTypeCategory[],
   formState: CreateJobFormState,
   jobStartDate: string,
-  onChangeJobType: (value: number) => void
+  onChangeJobType?: (value: number) => void
 }
 
 export default function JobForm({
@@ -54,7 +54,7 @@ export default function JobForm({
           label="Job Type"
           key={prevState?.jobType || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            onChangeJobType(Number(e.target.value));
+            if (onChangeJobType) onChangeJobType(Number(e.target.value));
           }}
           defaultValue={prevState?.jobType || ""}
         >

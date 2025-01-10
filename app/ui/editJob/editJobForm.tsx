@@ -33,7 +33,7 @@ export default function EditJobForm({
   }
 
   return (
-    <div className="flex flex-col bg-gray-300 p-4 rounded-lg mt-4 mb-4 overflow-auto">
+    <div className="flex flex-col bg-gray-300 p-4 rounded-lg mb-4 overflow-auto">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <form
           action={formAction}
