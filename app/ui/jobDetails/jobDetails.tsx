@@ -35,7 +35,7 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
   const session = await auth();
   const userId = session?.activeUser?.id || '';
   const job: Job | { error: string } = await getJobById(jobId);
-  const applications = await getJobApplicationStatus(jobId, userId);
+  const application = await getJobApplicationStatus(jobId, userId);
 
   if ('error' in job) {
     return (
@@ -83,7 +83,7 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
         </div>
       </div>
 
-      <CrewRoleList job={job} applications={applications} userId={userId} />
+      <CrewRoleList job={job} application={application} userId={userId} />
     </div>
   )
 }

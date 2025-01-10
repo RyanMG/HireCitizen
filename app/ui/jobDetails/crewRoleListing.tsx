@@ -2,16 +2,16 @@
 
 import { CrewRole, JobApplicant } from "@definitions/job";
 import { Button, ButtonProps, styled } from "@mui/material";
-import { useActionState, useEffect } from "react";
-import { applyToCrewRole } from "@query/jobRoles/actions";
+import { useActionState, useEffect, useState } from "react";
+import { applyToCrewRole, rescindCrewRoleApplication } from "@query/jobRoles/actions";
 
-const getButtonText = (isApplied: boolean, appliedAny: boolean, acceptedStatus: string|null) => {
-  if (isApplied && acceptedStatus === 'ACCEPTED') {
+const getButtonText = (currentApplication: JobApplicant | null, isApplied: boolean) => {
+  if (currentApplication && currentApplication.acceptedStatus === 'ACCEPTED') {
     return 'Accepted';
-  } else if (isApplied && acceptedStatus === 'REJECTED') {
+  } else if (currentApplication && currentApplication.acceptedStatus === 'REJECTED') {
     return 'Rejected';
   } else if (isApplied) {
-    return 'Applied';
+    return 'Rescind';
   }
 
   return 'Apply';
@@ -27,39 +27,51 @@ const ApplicationButton = styled(Button)<ButtonProps>(({ theme }) => ({
 export default function CrewRoleListing(props: {
   role: CrewRole,
   jobId: string,
-  applications: JobApplicant[] | null,
-  setHasApplied: (hasApplied: boolean) => void
+  currentApplication: JobApplicant | null,
+  updateApplication: (isApplied: boolean) => void
 }) {
   const {
     role,
     jobId,
-    applications,
-    setHasApplied,
+    currentApplication,
+    updateApplication,
   } = props;
 
+  const [showApplicationBtn, setShowApplicationBtn] = useState<boolean>(false);
   const [state, applyAction] = useActionState(applyToCrewRole.bind(null, jobId, role.id), { submitted: false, message: null, error: null });
-  const thisApplication = applications?.find(application => application.crewRoleId === role.id);
-  const isApplied = thisApplication !== undefined;
-  const appliedAny = isApplied || Boolean(applications && applications?.length > 0);
-  const showApplicationBtn = isApplied || !appliedAny;
+  const [rescindState, rescindAction] = useActionState(rescindCrewRoleApplication.bind(null, jobId, role.id), { submitted: false, message: null, error: null });
+  const isApplied = Boolean(currentApplication && currentApplication.crewRoleId === role.id);
+
+  useEffect(() => {
+    setShowApplicationBtn(isApplied || currentApplication === null);
+  }, [isApplied, currentApplication]);
 
   useEffect(() => {
     if (state.submitted) {
-      setHasApplied(true);
+      updateApplication(true);
     }
-  }, [state, setHasApplied]);
+
+    if (rescindState.submitted) {
+      updateApplication(false);
+    }
+  }, [state, rescindState]);
 
   return (
-    <form action={applyAction} className="flex flex-row justify-between bg-blue rounded-lg p-2 mb-2 items-center">
+    <form action={() => {
+      if (currentApplication) {
+        rescindAction();
+      } else {
+        applyAction();
+      }
+    }} className="flex flex-row justify-between bg-blue rounded-lg p-2 mb-2 items-center">
       <p className="text-white">{role.name} <span className="text-gray-400 text-sm pl-2">({role.count} {role.count === 1 ? 'spot' : 'spots'})</span></p>
       {showApplicationBtn &&
         <ApplicationButton
           variant="contained"
           size="small"
           type="submit"
-          disabled={state.submitted || appliedAny}
         >
-          {getButtonText(isApplied, appliedAny, thisApplication?.acceptedStatus || null)}
+          {getButtonText(currentApplication, isApplied)}
         </ApplicationButton>
       }
     </form>
