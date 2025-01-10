@@ -25,7 +25,7 @@ export default function Searchbar({
   }, 300);
 
   return (
-    <div className="pt-4 pb-4">
+    <div className="pb-4">
 
       <div className="flex flex-row items-center">
         <div className="bg-gray-100 rounded-l-full border-l border-gray-300 w-8 h-11 flex justify-end items-center">

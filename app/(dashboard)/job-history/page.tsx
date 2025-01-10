@@ -1,9 +1,9 @@
-import PageHeader from "@ui/components/pageHeader";
+import PageWrapper from "@/app/ui/components/pageWrapper";
 
 export default function JobHistory() {
   return (
-      <div className="flex-grow p-4">
-        <PageHeader title="Your Job History" />
-      </div>
-    );
-  }
+    <PageWrapper pageHeaderTitle="Your Job History">
+      <div></div>
+    </PageWrapper>
+  );
+}

@@ -1,8 +1,8 @@
-import PageHeader from "@components/pageHeader";
 import Searchbar from "@components/searchbar";
 import { Suspense } from "react";
 import JobResultList from "@ui/jobList/jobResultList";
 import ResultsLoading from "@/app/ui/components/resultsLoading";
+import PageWrapper from "@/app/ui/components/pageWrapper";
 
 export default function JobList(props: {
   searchParams?: Promise<{
@@ -11,8 +11,7 @@ export default function JobList(props: {
   }>;
 }) {
   return (
-    <div className="flex flex-col p-4 pr-7 h-screen">
-      <PageHeader title="Job Listings" />
+    <PageWrapper pageHeaderTitle="Job Listings">
       <Suspense fallback={<div>Loading...</div>}>
         <Searchbar />
       </Suspense>
@@ -20,6 +19,6 @@ export default function JobList(props: {
       <Suspense fallback={<ResultsLoading />}>
         <JobResultList searchParams={props.searchParams} />
       </Suspense>
-    </div>
+    </PageWrapper>
   );
 }

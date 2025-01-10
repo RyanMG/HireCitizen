@@ -1,9 +1,11 @@
-import PageHeader from "@components/pageHeader";
+import PageWrapper from "../ui/components/pageWrapper";
 
 export default function About() {
   return (
-  <div className="flex-grow p-4">
-    <PageHeader title="About" />
-  </div>
-);
+    <PageWrapper pageHeaderTitle="About">
+      <div>
+
+      </div>
+    </PageWrapper>
+  );
 }

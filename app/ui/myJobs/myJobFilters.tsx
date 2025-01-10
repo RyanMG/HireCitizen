@@ -60,7 +60,7 @@ export default function MyJobFilters() {
   }
 
   return (
-    <div className="flex flex-row gap-2 py-4">
+    <div className="flex flex-row gap-2 mb-4">
       <Chip label="Pending Jobs" color="warning" variant={pending ? 'filled' : 'outlined'} onClick={() => handleFilterClick(JOB_PENDING)} />
       <Chip label="Active Jobs" color="warning" variant={active ? 'filled' : 'outlined'} onClick={() => handleFilterClick(JOB_ACTIVE)} />
       <Chip label="Completed Jobs" color="warning" variant={completed ? 'filled' : 'outlined'} onClick={() => handleFilterClick(JOB_FINISHED)} />
