@@ -43,6 +43,7 @@ export default async function EditJobFormWrapper(props: { params: Promise<{ id: 
         initialState={buildInitialFormState()}
         jobStartDate={job.jobStart || dayjs().toLocaleString()}
         jobId={job.id}
+        crewRoles={job.crewRoles}
       />
     </>
   );

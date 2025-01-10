@@ -4,25 +4,27 @@ import JobForm from '@ui/jobCommon/jobForm';
 import { Button } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { useActionState, useState } from "react";
-import { CreateJobFormState, editJob, saveJobRoles } from '@/app/lib/query/job/actions';
+import { CreateJobFormState, editJob } from '@/app/lib/query/job/actions';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CrewRole, JobTypeCategory } from '@/app/lib/definitions/job';
-import AddJobRolesModal from '@ui/jobCommon/addJobRolesModal';
+import JobCrewRoleList from '../jobCommon/jobCrewRoleList';
 
 export default function EditJobForm({
   jobTypeCategories,
   initialState,
   jobStartDate,
-  jobId
+  jobId,
+  crewRoles
 }: {
   jobTypeCategories: JobTypeCategory[],
   initialState: CreateJobFormState,
   jobStartDate: string,
-  jobId: string
+  jobId: string,
+  crewRoles: CrewRole[] | undefined
 }) {
   const editJobAction = editJob.bind(null, jobId);
   const [state, formAction] = useActionState(editJobAction, initialState);
-  const [rolesModalOpen, setRolesModalOpen] = useState<boolean>(false);
+
   const [currentJobType, setCurrentJobType] = useState<JobTypeCategory | null>(jobTypeCategories.find(jobType => jobType.id === Number(initialState.prevState?.jobType)) || null);
 
   const onChangeJobType = (value: number) => {
@@ -30,27 +32,13 @@ export default function EditJobForm({
     setCurrentJobType(jobType);
   }
 
-  const showAddJobRolesModal = () => {
-    setRolesModalOpen(true);
-  }
-
-  const saveUpdatedJobRoles = async (selectedRoles: CrewRole[]) => {
-    const saveResp = await saveJobRoles(jobId, selectedRoles);
-    if ('error' in saveResp) {
-      // @TODO handle error
-      return;
-    }
-
-    console.log('saveResp', saveResp.message);
-  }
-
   return (
-    <>
+    <div className="flex flex-col bg-gray-300 p-4 rounded-lg mt-4 mb-4 overflow-auto">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <form
           action={formAction}
           aria-describedby="form-error"
-          className="flex flex-col gap-4 bg-gray-300 p-4 rounded-lg mt-4 mb-4 h-full overflow-auto"
+          className="flex flex-col gap-3"
         >
 
           <JobForm
@@ -59,16 +47,6 @@ export default function EditJobForm({
             formState={state}
             onChangeJobType={onChangeJobType}
           />
-
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={showAddJobRolesModal}
-            className="w-full"
-          >
-            Add / Edit Job Roles
-          </Button>
-
           <Button
             variant="contained"
             type="submit"
@@ -79,17 +57,14 @@ export default function EditJobForm({
           {'saveResponse' in state && <p className="text-red-500">{state.saveResponse}</p>}
         </form>
       </LocalizationProvider>
-      <AddJobRolesModal
-        open={rolesModalOpen}
-        jobType={currentJobType}
-        onClickClose={() => {
-          setRolesModalOpen(false);
-        }}
-        onClickSave={(selectedRoles: CrewRole[]) => {
-          setRolesModalOpen(false);
-          saveUpdatedJobRoles(selectedRoles);
-        }}
+
+      <div className="w-full h-0 border-b border-gray-900 mt-2 mb-6" />
+      <JobCrewRoleList
+        jobId={jobId}
+        crewRoles={crewRoles}
+        currentJobType={currentJobType}
       />
-    </>
+
+    </div>
   );
 }

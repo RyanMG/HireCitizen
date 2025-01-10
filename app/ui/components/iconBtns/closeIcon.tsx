@@ -1,6 +1,6 @@
 interface ICloseElementIconProps {
   onClickFn: () => void;
-  iconFillColor: string;
+  iconFillColor?: string;
 }
 
 export default function CloseElementIcon({

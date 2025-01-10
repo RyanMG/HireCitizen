@@ -210,7 +210,24 @@ export async function saveJobRoles(jobId: string, selectedRoles: CrewRole[]) {
     return { error: 'Database Error: Failed to save job roles.' };
   }
 }
+/**
+ * Save user-defined roles associated with a job
+ */
+export async function removeJobRole(roleJoinId: number): Promise<{message?: string} | {error?: string}> {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    const resp = await sql`DELETE FROM job_crew_role_join WHERE id=${roleJoinId} RETURNING *`;
+    if (resp.length === 0) {
+      return { error: 'Job role not found.' };
+    }
 
+    return { message: 'Job role removed.' };
+
+  } catch (error) {
+    console.error(error);
+    return { error: 'Database Error: Failed to remove job role.' };
+  }
+}
 /**
  * Delete a job
  */
