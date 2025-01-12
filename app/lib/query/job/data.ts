@@ -237,7 +237,23 @@ export async function getMyJobs(jobStatusList: string[]): Promise<Job[] | {error
       return { error: 'Invalid job status list.' };
     }
 
-    return await sql`SELECT * FROM job WHERE owner_id = ${userId} AND status = ANY(${jobStatusList});` as Job[];
+    return await sql`
+      SELECT j.*,
+      COALESCE(NULLIF(jsonb_agg(
+        CASE WHEN cr.name IS NOT NULL THEN
+          jsonb_build_object(
+            'name', cr.name,
+            'description', cr.description
+          )
+        END
+      ), '[null]'), '[]'::jsonb) AS "crewRoles"
+      FROM job j
+      LEFT JOIN job_crew_role_join jcrj ON j.id = jcrj.job_id
+      LEFT JOIN crew_roles cr ON jcrj.crew_role_id = cr.id
+      WHERE owner_id = ${userId}
+      AND status = ANY(${jobStatusList})
+      GROUP BY j.id
+      ORDER BY created_at DESC;` as Job[];
 
   } catch (error) {
     console.error(error);

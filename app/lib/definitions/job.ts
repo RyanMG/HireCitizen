@@ -18,7 +18,7 @@ export type Job = {
   title: string;
   description: string;
   jobType: JobType;
-  status?: string;
+  status?: 'PENDING' | 'ACTIVE' | 'FINISHED' | 'CANCELLED';
   createdAt?: string;
   updatedAt?: string;
   jobStart?: string;

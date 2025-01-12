@@ -10,15 +10,18 @@ interface IButtonProps {
 
 const themeMap = {
   primary: "bg-blue hover:bg-light-blue text-white",
-  secondary: "bg-construction-yellow hover:bg-construction-yellow-light",
-  destory: "bg-red-900 hover:bg-red-800 text-white"
+  primaryDisabled: "bg-blue opacity-50 cursor-not-allowed text-white",
+  secondary: "bg-construction-yellow hover:bg-construction-yellow-light text-white",
+  secondaryDisabled: "bg-construction-yellow opacity-50 cursor-not-allowed text-white",
+  destory: "bg-red-900 hover:bg-red-800 text-white",
+  destoryDisabled: "bg-red-900 opacity-50 cursor-not-allowed text-white"
 }
 
 export default function Button({ label, theme = "primary", onClick, href, disabled = false }: IButtonProps) {
-  const buttonClass = `flex justify-center items-center bg-blue-500 px-4 py-1 rounded-lg ${themeMap[theme]}`;
+  const buttonClass = `flex justify-center items-center bg-blue-500 px-4 py-1 rounded-lg ${disabled ? themeMap[theme + 'Disabled' as keyof typeof themeMap] : themeMap[theme]}`;
   if (onClick) {
     return (
-      <button className={buttonClass} disabled={disabled} onClick={onClick}>
+      <button className={buttonClass} disabled={disabled ? true : false} onClick={onClick}>
         <p className="text-white">{label}</p>
       </button>
     )
