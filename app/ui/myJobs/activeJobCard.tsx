@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteJob } from "@/app/lib/query/job/actions";
+import { deleteJob, toggleJobActive } from "@/app/lib/query/job/actions";
 import { Job } from "@definitions/job";
 import Button from "@components/button";
 import Dialog from "@components/dialog";
@@ -23,11 +23,16 @@ export default function ActiveJobCard({ job }: {job: Job}) {
           <>
             <Button href={`/my-jobs/${job.id}/edit`} label="Edit Job" theme="primary" />
             <div className="my-1" />
-            <Button
-              label={isFullyPopulated ? "Activate Job" : "Job is missing crew roles"}
-              theme="primary"
-              disabled={!isFullyPopulated}
-              onClick={() => {}} />
+            <form className="w-full" action={() => {
+              toggleJobActive(job.id, true);
+            }}>
+              <Button
+                label={isFullyPopulated ? "Activate Job" : "Job is missing crew roles"}
+                theme="primary"
+                disabled={!isFullyPopulated}
+                type="submit"
+               />
+            </form>
             <div className="my-1" />
             <Button label="Delete Job" theme="destory" onClick={() => {
               setDialogOpen(true);
@@ -38,7 +43,15 @@ export default function ActiveJobCard({ job }: {job: Job}) {
         return (
           <>
             <div className="my-1" />
-            <Button label="Deactivate Job" theme="primary" onClick={() => {}} />
+            <form action={() => {
+              toggleJobActive(job.id, false);
+            }}>
+              <Button
+                label="Deactivate Job"
+                theme="primary"
+                type="submit"
+              />
+            </form>
             <div className="my-1" />
             <Button label="Delete Job" theme="destory" onClick={() => {
               setDialogOpen(true);

@@ -6,6 +6,7 @@ interface IButtonProps {
   onClick?: () => void;
   href?: string;
   disabled?: boolean;
+  type?: 'button' | 'submit';
 }
 
 const themeMap = {
@@ -17,11 +18,11 @@ const themeMap = {
   destoryDisabled: "bg-red-900 opacity-50 cursor-not-allowed text-white"
 }
 
-export default function Button({ label, theme = "primary", onClick, href, disabled = false }: IButtonProps) {
-  const buttonClass = `flex justify-center items-center bg-blue-500 px-4 py-1 rounded-lg ${disabled ? themeMap[theme + 'Disabled' as keyof typeof themeMap] : themeMap[theme]}`;
+export default function Button({ label, theme = "primary", onClick, href, disabled = false, type = 'button' }: IButtonProps) {
+  const buttonClass = `flex justify-center items-center bg-blue-500 border border-gray-800 px-4 py-1 rounded-lg ${disabled ? themeMap[theme + 'Disabled' as keyof typeof themeMap] : themeMap[theme]}`;
   if (onClick) {
     return (
-      <button className={buttonClass} disabled={disabled ? true : false} onClick={onClick}>
+      <button className={buttonClass} disabled={disabled ? true : false} onClick={onClick} type={type}>
         <p className="text-white">{label}</p>
       </button>
     )
@@ -41,7 +42,7 @@ export default function Button({ label, theme = "primary", onClick, href, disabl
   }
 
   return (
-    <button className={buttonClass} type="submit" disabled={disabled}>
+    <button className={buttonClass} type={type} disabled={disabled}>
       <p className="text-white">{label}</p>
     </button>
   );

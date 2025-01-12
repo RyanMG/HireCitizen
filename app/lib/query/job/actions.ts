@@ -247,6 +247,28 @@ export async function deleteJob(jobId: string): Promise<{message: string|null} |
   return { message: 'Job deleted.' };
 }
 /**
+ * Activate a job
+ */
+export async function toggleJobActive(jobId: string, active: boolean): Promise<{message: string} | {error: string}> {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    if (active) {
+      await sql`UPDATE job SET status = 'ACTIVE' WHERE id = ${jobId}`;
+      revalidatePath('/my-jobs');
+      return { message: 'Job activated.' };
+    } else {
+      await sql`UPDATE job SET status = 'PENDING' WHERE id = ${jobId}`;
+      revalidatePath('/my-jobs');
+      return { message: 'Job deactivated.' };
+    }
+
+
+  } catch (error) {
+    console.error(error);
+    return { error: 'Database Error: Failed to activate job.' };
+  }
+}
+/**
  * Toggle a job flag
  */
 export async function toggleJobFlag(jobId: string, selected: boolean): Promise<{message: string} | {error: string}> {
