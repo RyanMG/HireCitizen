@@ -122,55 +122,60 @@ export async function getJobById(jobId: string): Promise<Job | {error:string}> {
       LEFT JOIN job_flag jf ON j.id = jf.job_id AND jf.person_id = ${userId}
       WHERE j.id = ${jobId};`
 
-    const job = jobData[0];
-    const jobRoles = await sql`
-      SELECT jcrj.*,
-      cr.name as crew_role_name, cr.description as crew_role_description
-      FROM job_crew_role_join jcrj
-      LEFT JOIN crew_roles cr ON jcrj.crew_role_id = cr.id
-      WHERE jcrj.job_id = ${job.id}
-      ORDER BY cr.name DESC;`
+    const job = jobData && jobData[0];
+
+    if (job) {
+      const jobRoles = await sql`
+        SELECT jcrj.*,
+        cr.name as crew_role_name, cr.description as crew_role_description
+        FROM job_crew_role_join jcrj
+        LEFT JOIN crew_roles cr ON jcrj.crew_role_id = cr.id
+        WHERE jcrj.job_id = ${job.id}
+        ORDER BY cr.name DESC;`
 
       // @TODO populate and fetch role requirements
 
-    const jobResp = {
-      id: job.id,
-      title: job.title,
-      description: job.description,
-      status: job.status,
-      createdAt: job.created_at,
-      updatedAt: job.updated_at,
-      jobStart: job.job_start,
-      estimatedTime: job.estimated_time,
-      isBookmarked: job.is_bookmarked,
-      isFlagged: job.is_flagged,
-      jobReputationGate: job.reputation_gate,
-      jobPrivacy: job.job_privacy,
-      owner: {
-        id: job.owner_id,
-        moniker: job.moniker
-      } as Person,
-      jobType: {
-        id: job.jobtype_id,
-        name: job.job_type_name,
-        description: job.job_type_description
-      } as JobType,
-      language: {
-        code: job.language_code,
-        name: job.language_name
-      } as PersonLanguage,
-      crewRoles: jobRoles.map(role => {
-        return {
-          id: role.id,
-          jobId: role.job_id,
-          name: role.crew_role_name,
-          description: role.crew_role_description,
-          count: role.crew_role_count
-        } as CrewRole
-      })
-    } as Job;
+      const jobResp = {
+        id: job.id,
+        title: job.title,
+        description: job.description,
+        status: job.status,
+        createdAt: job.created_at,
+        updatedAt: job.updated_at,
+        jobStart: job.job_start,
+        estimatedTime: job.estimated_time,
+        isBookmarked: job.is_bookmarked,
+        isFlagged: job.is_flagged,
+        jobReputationGate: job.reputation_gate,
+        jobPrivacy: job.job_privacy,
+        owner: {
+          id: job.owner_id,
+          moniker: job.moniker
+        } as Person,
+        jobType: {
+          id: job.jobtype_id,
+          name: job.job_type_name,
+          description: job.job_type_description
+        } as JobType,
+        language: {
+          code: job.language_code,
+          name: job.language_name
+        } as PersonLanguage,
+        crewRoles: jobRoles.map(role => {
+          return {
+            id: role.id,
+            jobId: role.job_id,
+            name: role.crew_role_name,
+            description: role.crew_role_description,
+            count: role.crew_role_count
+          } as CrewRole
+        })
+      } as Job;
 
-    return jobResp;
+      return jobResp;
+    }
+
+    return { error: `Database Error: Failed to find matching job for ${jobId}`};
 
   } catch (error) {
     console.error(error);

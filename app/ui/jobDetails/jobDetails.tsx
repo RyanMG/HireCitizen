@@ -6,7 +6,7 @@ import { getJobApplicationStatus } from "@query/jobRoles/data";
 import CrewRoleList from "./crewRoleList";
 import IconButton from "@ui/components/iconBtns/iconBtn";
 import { auth } from "@/auth";
-import DataFetchErrorSnackbar from "@ui/components/dataFetchErrorSnack";
+import NotificationSnackbar from "@ui/components/notificationSnackbar";
 
 import DayJs from "dayjs";
 import Link from "next/link";
@@ -39,7 +39,10 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
 
   if ('error' in job) {
     return (
-      <DataFetchErrorSnackbar messages={[job.error]} />
+      <NotificationSnackbar
+        type="error"
+        messages={[job.error]}
+      />
     )
   }
 

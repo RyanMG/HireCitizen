@@ -4,7 +4,7 @@ import { getJobById, getJobTypeCategories } from "@query/job/data";
 import { CreateJobFormState } from "@query/job/actions";
 import dayjs from "dayjs";
 import EditJobForm from "@ui/editJob/editJobForm";
-import DataFetchErrorSnack from "../components/dataFetchErrorSnack";
+import NotificationSnackbar from "@components/notificationSnackbar";
 
 export default async function EditJobFormWrapper(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -15,7 +15,10 @@ export default async function EditJobFormWrapper(props: { params: Promise<{ id: 
 
   if ('error' in jobTypeCategories || 'error' in job) {
     const messages: string[] = ['error' in jobTypeCategories ? jobTypeCategories.error : '', 'error' in job ? job.error : ''].filter(Boolean) as string[];
-    return <DataFetchErrorSnack messages={messages} />
+    return <NotificationSnackbar
+      type="error"
+      messages={messages}
+    />
   }
 
   const buildInitialFormState = (): CreateJobFormState => {

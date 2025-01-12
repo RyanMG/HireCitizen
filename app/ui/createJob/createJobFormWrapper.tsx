@@ -5,14 +5,17 @@ import { getJobTypeCategories } from "@/app/lib/query/job/data";
 import { CreateJobFormState } from "@/app/lib/query/job/actions";
 import dayjs from "dayjs";
 import CreateJobForm from "./createJobForm";
-import DataFetchErrorSnack from "@components/dataFetchErrorSnack";
+import NotificationSnackbar from "@components/notificationSnackbar";
 
 export default async function CreateJobFormWrapper() {
   const jobTypeCategories = await getJobTypeCategories();
 
   if ('error' in jobTypeCategories) {
     const messages: string[] = ['error' in jobTypeCategories ? jobTypeCategories.error : ''].filter(Boolean) as string[];
-    return <DataFetchErrorSnack messages={messages} />
+    return <NotificationSnackbar
+      type="error"
+      messages={messages}
+    />
   }
 
   const getJobStartDate = () => {

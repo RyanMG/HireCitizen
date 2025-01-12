@@ -3,7 +3,7 @@
 import { Job } from "@/app/lib/definitions/job";
 import { getJobById } from "@/app/lib/query/job/data";
 import JobCrewRoleList from "../jobCommon/jobCrewRoleList";
-import { redirect } from "next/navigation";
+import NotificationSnackbar from "../components/notificationSnackbar";
 
 interface AddCrewRolesWrapperProps {
   id: string;
@@ -16,8 +16,11 @@ export default async function AddCrewRolesWrapper({
   const job: Job | { error: string } = await getJobById(id);
 
   if ('error' in job) {
-    // @TODO snackbar error message
-    redirect('/');
+    return <NotificationSnackbar
+      type="error"
+      messages={[job.error]}
+      redirectTo="/"
+    />
   }
 
   return (

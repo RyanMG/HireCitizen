@@ -7,8 +7,8 @@ import { CrewRole, CrewRoleOption, JobTypeCategory } from "@definitions/job";
 import JobRoleAssignmentRow from "./jobRoleAssignmentRow";
 import { useEffect, useRef, useState } from "react";
 import { getCrewRoles } from "@/app/lib/query/job/data";
-import DataFetchErrorSnack from "../components/dataFetchErrorSnack";
-import ResultsLoading from "../components/resultsLoading";
+import NotificationSnackbar from "@components/notificationSnackbar";
+import ResultsLoading from "@components/resultsLoading";
 
 interface AddJobRolesModalProps {
   open: boolean,
@@ -37,7 +37,10 @@ export default function AddJobRolesModal({
     const fetchCrewRoles = async () => {
       const crewRoles = await getCrewRoles(jobType?.id || 0);
       if ('error' in crewRoles) {
-        return <DataFetchErrorSnack messages={[crewRoles.error]} />
+        return <NotificationSnackbar
+          type="error"
+          messages={[crewRoles.error]}
+        />
       }
       crewRolesRef.current = crewRoles.sort((a, b) => a.name.localeCompare(b.name));
       setRolesToPick(buildCrewRoleOptions());
