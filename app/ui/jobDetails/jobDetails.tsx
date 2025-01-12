@@ -50,7 +50,8 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-xl mb-4 p-4">
       <div className="flex flex-row justify-between bg-blue border border-gray-700 rounded-md px-2 py-1 mb-2">
         <h1 className="flex items-center text-white text-2xl font-bold pl-1">{job.title}</h1>
-        <div className="flex flex-row">
+        {job.owner.id !== userId && (
+          <div className="flex flex-row">
             <IconButton
               type={"bookmark"}
               selected={job.isBookmarked || false}
@@ -62,12 +63,15 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
               jobId={job.id}
             />
           </div>
+        )}
       </div>
 
-      <Link href={`/profile/${job.owner.id}`} className="py-2">
-        <p className="text-gray-400 text-sm italic">Job Owner</p>
-        <p className="text-light-blue text-lg font-bold not-italic">{job.owner.moniker}</p>
-      </Link>
+      {job.owner.id !== userId && (
+        <Link href={`/profile/${job.owner.id}`} className="py-2">
+          <p className="text-gray-400 text-sm italic">Job Owner</p>
+          <p className="text-light-blue text-lg font-bold not-italic">{job.owner.moniker}</p>
+        </Link>
+      )}
 
       <div className="flex flex-col">
         <p className="text-gray-400 text-sm italic">Description</p>
@@ -86,7 +90,9 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
         </div>
       </div>
 
-      <CrewRoleList job={job} application={application} userId={userId} />
+      {job.owner.id !== userId && (
+        <CrewRoleList job={job} application={application} userId={userId} />
+      )}
     </div>
   )
 }

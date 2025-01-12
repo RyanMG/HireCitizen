@@ -6,10 +6,12 @@ import Button from "@components/button";
 import Dialog from "@components/dialog";
 
 import { useActionState, useState } from "react";
+import Link from "next/link";
 
 export default function ActiveJobCard({ job }: {job: Job}) {
   const [state, deleteJobAction] = useActionState(deleteJob.bind(null, job.id), {message: null, error: null});
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [activateDialogOpen, setActivateDialogOpen] = useState<boolean>(false);
 
   const jobIsFullyPopulated = (job: Job) => {
     return job.crewRoles && job.crewRoles.length > 0;
@@ -23,19 +25,17 @@ export default function ActiveJobCard({ job }: {job: Job}) {
           <>
             <Button href={`/my-jobs/${job.id}/edit`} label="Edit Job" theme="primary" />
             <div className="my-1" />
-            <form className="w-full" action={() => {
-              toggleJobActive(job.id, true);
-            }}>
               <Button
                 label={isFullyPopulated ? "Activate Job" : "Job is missing crew roles"}
                 theme="primary"
                 disabled={!isFullyPopulated}
-                type="submit"
-               />
-            </form>
+                onClick={() => {
+                  setActivateDialogOpen(true);
+                }}
+              />
             <div className="my-1" />
             <Button label="Delete Job" theme="destory" onClick={() => {
-              setDialogOpen(true);
+              setDeleteDialogOpen(true);
             }} />
           </>
         );
@@ -43,18 +43,16 @@ export default function ActiveJobCard({ job }: {job: Job}) {
         return (
           <>
             <div className="my-1" />
-            <form action={() => {
-              toggleJobActive(job.id, false);
-            }}>
-              <Button
-                label="Deactivate Job"
-                theme="primary"
-                type="submit"
-              />
-            </form>
+            <Button
+              label="Deactivate Job"
+              theme="primary"
+              onClick={() => {
+                setActivateDialogOpen(true);
+              }}
+            />
             <div className="my-1" />
             <Button label="Delete Job" theme="destory" onClick={() => {
-              setDialogOpen(true);
+              setDeleteDialogOpen(true);
             }} />
           </>
         );
@@ -64,30 +62,52 @@ export default function ActiveJobCard({ job }: {job: Job}) {
   }
 
   return (
-    <div className="bg-dark-blue border border-gray-400 rounded-xl my-4 p-4">
-      <div className="flex flex-row justify-between">
-        <div className="flex flex-col flex-1 mr-4">
-          <p className="text-lg font-semibold text-white">{job.title}</p>
-          <p className="text-sm text-gray-400">{job.description}</p>
+    <>
+        <div className="bg-dark-blue border border-gray-400 rounded-xl my-4 p-4">
+          <div className="flex flex-row justify-between">
+            <Link className="flex flex-col flex-1 mr-4" href={`/my-jobs/${job.id}`}>
+              <p className="text-lg font-semibold text-white">{job.title}</p>
+              <p className="text-sm text-gray-400">{job.description}</p>
+            </Link>
+            <div className="flex flex-col justify-end w-36">
+              {jobButtonList()}
+            </div>
+            {'error' in state && <p className="text-red-500">{state.error}</p>}
+          </div>
         </div>
-        <div className="flex flex-col justify-end w-36">
-          {jobButtonList()}
-        </div>
-        {'error' in state && <p className="text-red-500">{state.error}</p>}
-      </div>
 
-      {dialogOpen && (
+      {deleteDialogOpen && (
         <Dialog>
           <p>Are you sure you want to delete this job?</p>
           <div className="my-2 flex flex-row items-center justify-between">
             <form action={deleteJobAction}>
-              <Button label="Delete Job" theme="destory" />
+              <Button label="Delete Job" theme="destory" type="submit" />
             </form>
-            <Button label="Cancel" theme="primary" onClick={() => setDialogOpen(false)} />
+            <Button label="Cancel" theme="primary" onClick={() => setDeleteDialogOpen(false)} />
           </div>
         </Dialog>
       )}
 
-    </div>
+      {activateDialogOpen && (
+        <Dialog>
+          <p>Are you sure you want to activate this job?</p>
+          <div className="my-2 flex flex-row items-center justify-between">
+            <form className="w-full" action={() => {
+              switch (job.status) {
+                case 'PENDING':
+                  toggleJobActive(job.id, true);
+                  break;
+                case 'ACTIVE':
+                  toggleJobActive(job.id, false);
+                  break;
+              }
+            }}>
+              <Button label={job.status === 'PENDING' ? "Activate Job" : "Deactivate Job"} theme="primary" type="submit" />
+            </form>
+            <Button label="Cancel" theme="primary" onClick={() => setActivateDialogOpen(false)} />
+          </div>
+        </Dialog>
+      )}
+    </>
   )
 }
