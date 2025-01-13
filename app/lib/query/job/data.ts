@@ -37,6 +37,7 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
         WHERE j.title ILIKE ${queryLike}
         AND j.status = 'ACTIVE'
         AND j.job_privacy = 'PUBLIC'
+        AND j.job_start > NOW()
         ORDER BY j.id, j.created_at DESC
         LIMIT ${JOB_SEARCH_RESULTS_PER_PAGE} OFFSET ${pageOffset};`
     } else {
@@ -64,6 +65,7 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
         WHERE j.title ILIKE ${queryLike}
         AND j.owner_id != ${userId}
         AND j.status = 'ACTIVE'
+        AND j.job_start > NOW()
         AND (
           j.job_privacy = 'PUBLIC'
           OR (j.job_privacy = 'FRIENDS' AND f.id IS NOT NULL)
