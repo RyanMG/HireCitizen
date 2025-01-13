@@ -3,9 +3,17 @@ import ResultsLoading from "@components/resultsLoading";
 import EditJobFormWrapper from "@ui/editJob/editJobFormWrapper";
 import { Suspense } from "react";
 
-export default function EditJob(props: { params: Promise<{ id: string }> }) {
+export default async function EditJob(props: {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{
+    back?: string
+  }>
+}) {
+  const { back } = await props.searchParams;
+  const backUrl = back ? `/${back}` : undefined;
+
   return (
-    <PageWrapper pageHeaderTitle="Edit Job" showBackButton={true} pageBackPath={'/my-jobs?jobStatus=PENDING%2CACTIVE'}>
+    <PageWrapper pageHeaderTitle="Edit Job" showBackButton={backUrl ? true : false} pageBackPath={backUrl}>
       <Suspense fallback={<ResultsLoading />}>
         <EditJobFormWrapper params={props.params} />
       </Suspense>

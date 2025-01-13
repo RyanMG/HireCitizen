@@ -1,4 +1,4 @@
-import UserProfile from "@ui/userProfile";
+import UserProfile from "@ui/profile/userProfile";
 import { Suspense } from "react";
 import ResultsLoading from "@components/resultsLoading";
 import PageWrapper from "@/app/ui/components/pageWrapper";

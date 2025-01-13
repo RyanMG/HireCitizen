@@ -2,36 +2,39 @@
 
 import { Job, JobApplicant } from "@definitions/job";
 import CrewRoleListing from "./crewRoleListing";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getJobApplicationStatus } from "@/app/lib/query/jobRoles/data";
+import { Person } from "@definitions/person";
 
 interface CrewRoleListProps {
   job: Job,
-  application: JobApplicant | null,
-  userId: string
+  user: Person
 }
 
 export default function CrewRoleList({
   job,
-  application: initialApplication,
-  userId
+  user
 }: CrewRoleListProps) {
-  const [application, setApplication] = useState<JobApplicant | null>(initialApplication);
+  const [application, setApplication] = useState<JobApplicant | null>(null);
+
+  const fetchAndSetApplication = (user: Person, jobId: string) => {
+    getJobApplicationStatus(jobId, user).then((updatedApplication) => {
+      setApplication(updatedApplication);
+    });
+  }
 
   const updateApplication = useCallback((isApplied: boolean) => {
     if (isApplied) {
-      getJobApplicationStatus(job.id, userId).then((updatedApplication) => {
-        setApplication(updatedApplication);
-      });
-
+      fetchAndSetApplication(user, job.id);
     } else {
       setApplication(null);
     }
-  }, [setApplication, job.id, userId]);
+  }, [setApplication, job.id, user]);
 
-  if (!userId) {
-    return null;
-  }
+  // Initial fetch of application state
+  useEffect(() => {
+    fetchAndSetApplication(user, job.id);
+  }, [user, job.id]);
 
   return (
     <>

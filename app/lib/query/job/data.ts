@@ -37,10 +37,11 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
         WHERE j.title ILIKE ${queryLike}
         AND j.status = 'ACTIVE'
         AND j.job_privacy = 'PUBLIC'
-        AND j.job_start > NOW()
+        AND j.job_start >= CURRENT_TIMESTAMP
         ORDER BY j.id, j.created_at DESC
         LIMIT ${JOB_SEARCH_RESULTS_PER_PAGE} OFFSET ${pageOffset};`
-    } else {
+
+      } else {
 
       /**
         Get all jobs that:
@@ -65,7 +66,7 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
         WHERE j.title ILIKE ${queryLike}
         AND j.owner_id != ${userId}
         AND j.status = 'ACTIVE'
-        AND j.job_start > NOW()
+        AND j.job_start >= CURRENT_TIMESTAMP
         AND (
           j.job_privacy = 'PUBLIC'
           OR (j.job_privacy = 'FRIENDS' AND f.id IS NOT NULL)
@@ -129,7 +130,7 @@ export async function getJobById(jobId: string): Promise<Job | {error:string}> {
     if (job) {
       const jobRoles = await sql`
         SELECT jcrj.*,
-        cr.name as crew_role_name, cr.description as crew_role_description
+        cr.id as crew_role_id, cr.name as crew_role_name, cr.description as crew_role_description
         FROM job_crew_role_join jcrj
         LEFT JOIN crew_roles cr ON jcrj.crew_role_id = cr.id
         WHERE jcrj.job_id = ${job.id}
@@ -165,7 +166,7 @@ export async function getJobById(jobId: string): Promise<Job | {error:string}> {
         } as PersonLanguage,
         crewRoles: jobRoles.map(role => {
           return {
-            id: role.id,
+            id: role.crew_role_id,
             jobId: role.job_id,
             name: role.crew_role_name,
             description: role.crew_role_description,
@@ -244,6 +245,7 @@ export async function getMyJobs(jobStatusList: string[]): Promise<Job[] | {error
       COALESCE(NULLIF(jsonb_agg(
         CASE WHEN cr.name IS NOT NULL THEN
           jsonb_build_object(
+            'id', cr.id,
             'name', cr.name,
             'description', cr.description
           )

@@ -1,13 +1,14 @@
-import PageWrapper from "@/app/ui/components/pageWrapper";
 import { Suspense } from "react";
-import ResultsLoading from "@/app/ui/components/resultsLoading";
-import JobDetails from "@/app/ui/jobDetails/jobDetails";
+
+import PageWrapper from "@ui/components/pageWrapper";
+import ResultsLoading from "@ui/components/resultsLoading";
+import MyJobDetails from "@ui/myJobDetails/myJobDetails";
 
 export default function MyJobDetailsPage(props: { params: Promise<{ id: string }> }) {
   return (
     <PageWrapper pageHeaderTitle="Job Details" showBackButton={true}>
       <Suspense fallback={<ResultsLoading />}>
-        <JobDetails params={props.params} />
+        <MyJobDetails params={props.params} />
       </Suspense>
     </PageWrapper>
   );

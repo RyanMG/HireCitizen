@@ -2,13 +2,12 @@
 
 import { Job } from "@definitions/job";
 import { getJobById } from "@query/job/data";
-import CrewRoleList from "./crewRoleList";
-import IconButton from "@ui/components/iconBtns/iconBtn";
-import { auth } from "@/auth";
 import NotificationSnackbar from "@ui/components/notificationSnackbar";
 
 import DayJs from "dayjs";
-import Link from "next/link";
+import CrewRoleApplications from "@ui/myJobDetails/crewRoleApplications";
+import { Suspense } from "react";
+import ResultsLoading from "../components/resultsLoading";
 
 /**
  * Formats the estimated time to a human readable format.
@@ -21,6 +20,9 @@ const getEstimatedTime = (estimatedTime: number | undefined) => {
   return '1 hour';
 }
 
+/**
+ * Formats the job start date to a human readable format.
+ */
 const getJobStart = (jobStart: string | undefined) => {
   if (jobStart) {
     return `${DayJs(jobStart).format('ddd MMM DD, YYYY')} - ${DayJs(jobStart).format('h:mm a')}`;
@@ -31,7 +33,6 @@ const getJobStart = (jobStart: string | undefined) => {
 export default async function JobDetails(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const jobId = params.id;
-  const session = await auth();
   const job: Job | { error: string } = await getJobById(jobId);
 
   if ('error' in job) {
@@ -47,25 +48,8 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-xl mb-4 p-4">
       <div className="flex flex-row justify-between bg-blue border border-gray-700 rounded-md px-2 py-1 mb-2">
         <h1 className="flex items-center text-white text-2xl font-bold pl-1">{job.title}</h1>
-        <div className="flex flex-row">
-          <IconButton
-            type={"bookmark"}
-            selected={job.isBookmarked || false}
-            jobId={job.id}
-          />
-          <IconButton
-            type={"flag"}
-            selected={job.isFlagged || false}
-            jobId={job.id}
-          />
-        </div>
       </div>
-
-      <Link href={`/profile/${job.owner.id}`} className="py-2">
-        <p className="text-gray-400 text-sm italic">Job Owner</p>
-        <p className="text-light-blue text-lg font-bold not-italic">{job.owner.moniker}</p>
-      </Link>
-
+      <div className="w-full mb-2" />
       <div className="flex flex-col">
         <p className="text-gray-400 text-sm italic">Description</p>
         <p className="text-white text-lg">{job.description}</p>
@@ -83,10 +67,13 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
         </div>
       </div>
 
-      {session?.activeUser && (
-        <CrewRoleList job={job} user={session?.activeUser} />
-      )}
-
+      <div className="w-full my-4 border border-gray-700" />
+      <Suspense fallback={<ResultsLoading />}>
+        <CrewRoleApplications
+          job={job}
+        />
+      </Suspense>
     </div>
   )
 }
+

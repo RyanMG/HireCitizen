@@ -40,7 +40,7 @@ export default function CrewRoleListing(props: {
   const [showApplicationBtn, setShowApplicationBtn] = useState<boolean>(false);
   const [state, applyAction] = useActionState(applyToCrewRole.bind(null, jobId, role.id), { submitted: false, message: null, error: null });
   const [rescindState, rescindAction] = useActionState(rescindCrewRoleApplication.bind(null, jobId, role.id), { submitted: false, message: null, error: null });
-  const isApplied = Boolean(currentApplication && currentApplication.crewRoleId === role.id);
+  const isApplied = Boolean(currentApplication && currentApplication.crewRole.id === role.id);
 
   useEffect(() => {
     setShowApplicationBtn(isApplied || currentApplication === null);

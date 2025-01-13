@@ -7,8 +7,11 @@ import Dialog from "@components/dialog";
 
 import { useActionState, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function ActiveJobCard({ job }: {job: Job}) {
+  const params = useSearchParams();
+
   const [state, deleteJobAction] = useActionState(deleteJob.bind(null, job.id), {message: null, error: null});
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [activateDialogOpen, setActivateDialogOpen] = useState<boolean>(false);
@@ -23,7 +26,7 @@ export default function ActiveJobCard({ job }: {job: Job}) {
         const isFullyPopulated = jobIsFullyPopulated(job);
         return (
           <>
-            <Button href={`/my-jobs/${job.id}/edit`} label="Edit Job" theme="primary" />
+            <Button href={`/my-jobs/${job.id}/edit?back=my-jobs?jobStatus=${params.get('jobStatus')}`} label="Edit Job" theme="primary" />
             <div className="my-1" />
               <Button
                 label={isFullyPopulated ? "Activate Job" : "Job is missing crew roles"}

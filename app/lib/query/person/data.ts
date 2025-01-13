@@ -4,6 +4,46 @@ import { neon } from "@neondatabase/serverless";
 import { Person } from "@definitions/person";
 import { parse } from 'node-html-parser';
 
+export const getPersonById = async (id: string): Promise<Person | {error: string}> => {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    const personQuery = await sql`
+      SELECT p.*,
+      l.code as language_code, l.name as language_name, l.id as language_id,
+      tz.name as timezone_name, tz.utc_offset as timezone_offset
+      FROM person p
+      LEFT JOIN language l ON p.language_id = l.id
+      LEFT JOIN time_zones tz on p.timezone_id = tz.id
+      WHERE p.id=${id};
+    `;
+
+    if (personQuery.length === 0) {
+      return {
+        error: 'Person not found'
+      };
+    }
+
+    return {
+      ...personQuery[0],
+      language: {
+        code: personQuery[0].language_code,
+        name: personQuery[0].language_name,
+        id: personQuery[0].language_id
+      },
+      timezone: {
+        name: personQuery[0].timezone_name,
+        utc_offset: personQuery[0].timezone_offset,
+        id: personQuery[0].timezone_id
+      }
+    } as Person;
+
+  } catch (error) {
+    console.error('Error fetching person by id:', error);
+    return {
+      error: 'Error getting person by ID'
+    };
+  }
+}
 /**
  * Get a person by email - used in authentication as providers return a common email
  */

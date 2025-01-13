@@ -46,8 +46,8 @@ export type CrewRoleOption = {
 export type JobApplicant = {
   id: number;
   jobId: string;
-  personId: string;
-  crewRoleId: number;
+  person: Person;
+  crewRole: CrewRole;
   acceptedStatus: string;
 }
 
