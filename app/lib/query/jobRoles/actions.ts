@@ -62,3 +62,26 @@ export async function rescindCrewRoleApplication(jobId: string, roleId: number):
     };
   }
 }
+/**
+ * Job owner toggles a job application status
+ */
+export async function toggleApplicationStatus(applicationId: number, status: string): Promise<{submitted: boolean, message: string | null, error: string | null}> {
+
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    await sql`UPDATE job_applicants SET accepted_status=${status} WHERE id=${applicationId}`;
+    return {
+      submitted: true,
+      message: 'Job application status updated.',
+      error: null
+    };
+
+  } catch (error) {
+    console.error(error);
+    return {
+      submitted: false,
+      message: null,
+      error: 'Database Error: Failed to update job application status.'
+    };
+  }
+}
