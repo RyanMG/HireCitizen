@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
 import { Session } from "next-auth";
-import { useActionState, useState, useRef } from "react";
+import { useActionState, useState, useRef, useEffect } from "react";
 
 import FormWithErrorBlock from "@components/formWIthErrorBlock";
 import ProfileImage from "@ui/profile/profileImage";
@@ -34,6 +34,12 @@ export default function EditUserProfileForm({
   const urlInputRef = useRef<HTMLInputElement>(null);
   const handleInputRef = useRef<HTMLInputElement>(null);
   const monikerInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (state?.message) {
+      setFormSaving(false);
+    }
+  }, [state?.message]);
 
   return (
     <form action={formAction} onSubmit={() => {
@@ -187,6 +193,13 @@ export default function EditUserProfileForm({
           Cancel
         </Button>
       </div>
+      {state?.message && (
+        <div className="flex flex-col">
+          <p className="text-gray-800 text-md text-center text-red-500 italic mb-2">
+            {state?.message}
+          </p>
+        </div>
+      )}
     </form>
   );
 }
