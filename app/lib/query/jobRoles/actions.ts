@@ -2,6 +2,7 @@
 
 import { neon } from "@neondatabase/serverless";
 import { auth } from 'auth';
+import { revalidatePath } from "next/cache";
 
 /**
  * User applies to a crew role
@@ -70,11 +71,6 @@ export async function toggleApplicationStatus(applicationId: number, status: str
   try {
     const sql = neon(process.env.DATABASE_URL!);
     await sql`UPDATE job_applicants SET accepted_status=${status} WHERE id=${applicationId}`;
-    return {
-      submitted: true,
-      message: 'Job application status updated.',
-      error: null
-    };
 
   } catch (error) {
     console.error(error);
@@ -84,4 +80,11 @@ export async function toggleApplicationStatus(applicationId: number, status: str
       error: 'Database Error: Failed to update job application status.'
     };
   }
+
+  revalidatePath('/my-jobs');
+  return {
+    submitted: true,
+    message: 'Job application status updated.',
+    error: null
+  };
 }

@@ -1,4 +1,5 @@
-import { getMyJobs } from "@/app/lib/query/job/data";
+import { getMyJobs } from "@query/job/data";
+import SectionHeader from "@components/sectionHeader";
 import ActiveJobCard from "./activeJobCard";
 import NotificationSnackbar from "@components/notificationSnackbar";
 
@@ -11,13 +12,6 @@ const NoJobsFound = ({ text }: { text: string }) => {
       <p className="border border-white rounded-md p-4 text-white">{text}</p>
     </div>
   );
-}
-
-/*
- * Section header for a job status section
- */
-const SectionHeader = ({ title }: { title: string }) => {
-  return <h2 className="text-xl text-gray-500 font-bold border-b border-gray-500 pb-2">{title}</h2>;
 }
 
 export default async function MyJobListing({
