@@ -2,17 +2,7 @@ import { getMyJobs } from "@query/job/data";
 import SectionHeader from "@components/sectionHeader";
 import ActiveJobCard from "./activeJobCard";
 import NotificationSnackbar from "@components/notificationSnackbar";
-
-/*
- * No jobs found block
- */
-const NoJobsFound = ({ text }: { text: string }) => {
-  return (
-    <div className="flex flex-col pt-10 items-center justify-center flex-1">
-      <p className="border border-white rounded-md p-4 text-white">{text}</p>
-    </div>
-  );
-}
+import NoResultsBlock from "@ui/jobCommon/noResultsBlock";
 
 export default async function MyJobListing({
   jobStatusList
@@ -20,7 +10,7 @@ export default async function MyJobListing({
   jobStatusList: string[]
 }) {
   if (!jobStatusList || jobStatusList.length === 0) {
-    return <NoJobsFound text="Select a job status to view jobs" />;
+    return <NoResultsBlock text="Select a job status to view jobs" />;
   }
 
   const jobs = await getMyJobs(jobStatusList);
@@ -34,7 +24,7 @@ export default async function MyJobListing({
   }
 
   if (jobs.length === 0) {
-    return <NoJobsFound text="No jobs found" />;
+    return <NoResultsBlock text="No jobs found" />;
   }
 
   const jobDisplay = jobs.reduce((acc, job) => {

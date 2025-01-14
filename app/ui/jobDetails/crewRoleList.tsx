@@ -16,11 +16,18 @@ export default function CrewRoleList({
   user
 }: CrewRoleListProps) {
   const [application, setApplication] = useState<JobApplicant | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchAndSetApplication = (user: Person, jobId: string) => {
-    getJobApplicationStatus(jobId, user).then((updatedApplication) => {
-      setApplication(updatedApplication);
-    });
+    getJobApplicationStatus(jobId, user)
+      .then((updatedApplication) => {
+        if (updatedApplication && 'error' in updatedApplication) {
+          setError(updatedApplication.error);
+          return;
+        }
+
+        setApplication(updatedApplication);
+      });
   }
 
   const updateApplication = useCallback((isApplied: boolean) => {
@@ -29,6 +36,7 @@ export default function CrewRoleList({
     } else {
       setApplication(null);
     }
+    setError(null);
   }, [setApplication, job.id, user]);
 
   // Initial fetch of application state
@@ -39,6 +47,7 @@ export default function CrewRoleList({
   return (
     <>
       <h2 className="text-gray-400 text-lg font-bold mt-4 border-t border-gray-700 pt-4">Job Roles Available</h2>
+      {error && <div className="text-red-500">{error}</div>}
       <div className="flex flex-col pt-4">
         {job.crewRoles?.map(role => (
           <CrewRoleListing
