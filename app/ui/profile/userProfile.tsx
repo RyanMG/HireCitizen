@@ -4,9 +4,19 @@ import { auth } from 'auth';
 import Link from 'next/link';
 import ProfileImage from '@ui/profile/profileImage';
 import ProfileActionButtons from '@ui/profile/profileActionBtns';
+import NotificationSnackbar from '../components/notificationSnackbar';
 
 export default async function UserProfile() {
   const session = await auth();
+
+  if (!session) {
+    return <NotificationSnackbar
+      type="error"
+      messages={["Error authenticating."]}
+      redirectTo="/"
+    />
+  }
+
   const activeUser = session?.activeUser;
 
   return (
