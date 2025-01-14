@@ -5,11 +5,13 @@ import Link from 'next/link';
 import ProfileImage from '@ui/profile/profileImage';
 import ProfileActionButtons from '@ui/profile/profileActionBtns';
 import NotificationSnackbar from '../components/notificationSnackbar';
+import ReputationBar from './reputationBars';
+import { Reputation } from '@/app/lib/definitions/person';
 
 export default async function UserProfile() {
   const session = await auth();
 
-  if (!session) {
+  if (!session || !session.activeUser) {
     return <NotificationSnackbar
       type="error"
       messages={["Error authenticating."]}
@@ -17,7 +19,7 @@ export default async function UserProfile() {
     />
   }
 
-  const activeUser = session?.activeUser;
+  const activeUser = session.activeUser;
 
   return (
     <>
@@ -39,8 +41,17 @@ export default async function UserProfile() {
         <ProfileActionButtons />
       </div>
       <div className="flex flex-row mt-4 gap-6">
-        <p className="text-gray-300"><span className="text-gray-500 italic">Timezone:</span> <span className="font-bold">{activeUser?.timezone.name}</span></p>
-        <p className="text-gray-300"><span className="text-gray-500 italic">Language:</span> <span className="font-bold">{activeUser?.language.name}</span></p>
+        <p className="text-gray-300"><span className="text-gray-500 italic">Working Timezone:</span> <span className="font-bold">{activeUser?.timezone.name}</span></p>
+        <p className="text-gray-300"><span className="text-gray-500 italic">Primary Language:</span> <span className="font-bold">{activeUser?.language.name}</span></p>
+      </div>
+      <div className="w-full border-b border-gray-500 my-4" />
+      <div className="flex flex-row gap-4 w-full">
+        <div className="flex flex-col gap-2 w-1/2">
+          <ReputationBar title="Your Reputation as an Employee" reputation={activeUser?.employee_reputation as Reputation} />
+        </div>
+        <div className="flex flex-col gap-2 w-1/2">
+          <ReputationBar title="Your Reputation as an Employer" reputation={activeUser?.employer_reputation as Reputation} />
+        </div>
       </div>
     </>
   );

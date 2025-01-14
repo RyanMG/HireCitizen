@@ -2,6 +2,8 @@ import { getPersonById } from "@/app/lib/query/person/data";
 import NotificationSnackbar from "../components/notificationSnackbar";
 import ProfileImage from "./profileImage";
 import Link from "next/link";
+import ReputationBar from "./reputationBars";
+import { Reputation } from "@/app/lib/definitions/person";
 
 export default async function MemberProfile({
   memberId
@@ -34,6 +36,16 @@ export default async function MemberProfile({
       <p className="text-gray-300"><span className="text-gray-500 italic">Timezone:</span> <span className="font-bold">{member?.timezone.name}</span></p>
       <p className="text-gray-300"><span className="text-gray-500 italic">Language:</span> <span className="font-bold">{member?.language.name}</span></p>
     </div>
+
+    <div className="w-full border-b border-gray-500 my-4" />
+      <div className="flex flex-row gap-4 w-full">
+        <div className="flex flex-col gap-2 w-1/2">
+          <ReputationBar title="Citizen's Employee Reputation" reputation={member?.employee_reputation as Reputation} />
+        </div>
+        <div className="flex flex-col gap-2 w-1/2">
+          <ReputationBar title="Citizen's Employer Reputation" reputation={member?.employer_reputation as Reputation} />
+        </div>
+      </div>
   </>
   );
 }

@@ -36,8 +36,8 @@ export const createNewPersonFromAuth = async (user: User): Promise<Person | null
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const person = await sql`
-      INSERT INTO person (handle, moniker, email, phone, rsi_url, timezone_id, account_status, reputation, profile_image, language_id)
-      VALUES ('', '', ${user.email}, '', '', 1, 'PENDING', 0, ${user.image}, 1)
+      INSERT INTO person (handle, moniker, email, phone, rsi_url, timezone_id, account_status, employee_reputation, employer_reputation, profile_image, language_id)
+      VALUES ('', '', ${user.email}, '', '', 1, 'PENDING', 2, 2, ${user.image}, 1)
       RETURNING *;
     `;
 
@@ -101,6 +101,9 @@ export const updatePerson = async (state: GetUserRSIUrlFormState | Promise<{mess
     };
   }
 
+  const employeeReputation = 3;
+  const employerReputation = 3;
+
   try {
     const sql = neon(process.env.DATABASE_URL!);
     await sql`
@@ -113,6 +116,8 @@ export const updatePerson = async (state: GetUserRSIUrlFormState | Promise<{mess
       timezone_id = ${validatedFields.data.timezone},
       language_id = ${validatedFields.data.language_id},
       profile_image = ${validatedFields.data.profile_image},
+      employee_reputation = ${employeeReputation},
+      employer_reputation = ${employerReputation},
       account_status = 'ACTIVE'
       WHERE id = ${personId}
     `;

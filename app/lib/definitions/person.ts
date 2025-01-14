@@ -11,7 +11,8 @@ export type Person = {
   account_status: string;
   profile_image: string;
   language: PersonLanguage;
-  reputation: number;
+  employee_reputation: Reputation;
+  employer_reputation: Reputation;
 };
 
 export type PersonLanguage = {
@@ -19,3 +20,5 @@ export type PersonLanguage = {
   name: string;
   id: number;
 }
+
+export type Reputation = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
