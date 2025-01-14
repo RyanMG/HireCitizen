@@ -2,7 +2,7 @@
 
 import PageWrapper from "@components/pageWrapper";
 import ResultsLoading from "@components/resultsLoading";
-import MemberProfile from "@ui/profile/memberProfile";
+import CitizenProfile from "@/app/ui/profile/citizenProfile";
 import { Suspense } from "react";
 
 export default async function MemberProfilePage(props: {
@@ -19,7 +19,7 @@ export default async function MemberProfilePage(props: {
     <PageWrapper pageHeaderTitle="Citizen Profile" showBackButton={backUrl ? true : false} pageBackPath={backUrl}>
       <div className="flex flex-col bg-gray-900 p-4 rounded-xl border border-indigo-900 min-h-[200px]">
         <Suspense fallback={<ResultsLoading />}>
-          <MemberProfile memberId={id} />
+          <CitizenProfile memberId={id} />
         </Suspense>
       </div>
     </PageWrapper>

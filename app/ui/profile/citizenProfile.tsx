@@ -26,7 +26,7 @@ export default async function MemberProfile({
         <h1 className="text-2xl font-bold text-gray-300">{member?.moniker || "Unknown Citizen"}</h1>
         <p className="text-gray-300"><span className="text-gray-500 italic">RSI Handle:</span> <span className="font-bold">{member?.handle || "Unknown Handle"}</span></p>
         {member?.rsi_url ? (
-          <Link href={member?.rsi_url || ''} target="_blank" className="text-gray-300">View on RSI</Link>
+          <Link href={member?.rsi_url || ''} target="_blank" className="text-light-blue">View on RSI</Link>
         ) : (
           <p className="text-gray-300 italic">No citizen profile found</p>
         )}

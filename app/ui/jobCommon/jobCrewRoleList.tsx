@@ -1,11 +1,12 @@
 'use client';
 
-import { Button } from "@mui/material";
+import Button from "@components/button";
 import AddJobRolesModal from "./addJobRolesModal";
 import { CrewRole, JobTypeCategory } from "@/app/lib/definitions/job";
 import { useState } from "react";
 import { saveJobRoles, removeJobRole } from "@/app/lib/query/job/actions";
 import CloseIcon from "@components/iconBtns/closeIcon";
+import { useRouter } from "next/navigation";
 
 interface JobCrewRoleListProps {
   jobId: string;
@@ -37,7 +38,7 @@ export default function JobCrewRoleList({
 }: JobCrewRoleListProps) {
   const [rolesModalOpen, setRolesModalOpen] = useState<boolean>(false);
   const [currentJobRoles, setCurrentJobRoles] = useState<CrewRole[]>(crewRoles || []);
-
+  const router = useRouter();
   /**
    * Remove a role from the job
    */
@@ -87,17 +88,27 @@ export default function JobCrewRoleList({
 
       <div className="w-full h-0 mt-4" />
 
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => setRolesModalOpen(true)}
-        className="w-full"
-      >
-        Add / Edit Job Roles
-      </Button>
+      <div className="flex flex-row gap-2">
+        <Button
+          type="button"
+          theme="secondary"
+          label="Add / Edit Job Roles"
+          onClick={() => setRolesModalOpen(true)}
+        />
+        <Button
+          type="button"
+          theme="primary"
+          label="Done"
+          onClick={() => {
+            router.push(`/my-jobs?jobStatus=PENDING,ACTIVE`);
+          }}
+        />
+      </div>
+
 
       <AddJobRolesModal
         open={rolesModalOpen}
+        currentJobRoles={currentJobRoles}
         jobType={currentJobType}
         onClickClose={() => {
           setRolesModalOpen(false);

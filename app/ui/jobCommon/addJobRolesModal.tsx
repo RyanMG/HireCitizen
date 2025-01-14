@@ -14,18 +14,20 @@ interface AddJobRolesModalProps {
   open: boolean,
   onClickClose: () => void,
   onClickSave: (selectedRoles: CrewRole[]) => void,
-  jobType: JobTypeCategory | null
+  jobType: JobTypeCategory | null,
+  currentJobRoles: CrewRole[]
 }
 
 export default function AddJobRolesModal({
   open,
   onClickClose,
   onClickSave,
-  jobType
+  jobType,
+  currentJobRoles = [] as CrewRole[]
 }: AddJobRolesModalProps) {
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedRoles, setSelectedRoles] = useState<CrewRole[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<CrewRole[]>(currentJobRoles);
   const [rolesToPick, setRolesToPick] = useState<CrewRoleOption[]>([]);
   const [saveDisabled, setSaveDisabled] = useState<boolean>(true);
 

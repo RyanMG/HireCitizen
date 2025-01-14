@@ -19,7 +19,7 @@ const themeMap = {
 }
 
 export default function Button({ label, theme = "primary", onClick, href, disabled = false, type = 'button' }: IButtonProps) {
-  const buttonClass = `flex justify-center items-center bg-blue-500 border border-gray-800 px-4 py-1 w-full rounded-lg ${disabled ? themeMap[theme + 'Disabled' as keyof typeof themeMap] : themeMap[theme]}`;
+  const buttonClass = `flex justify-center items-center bg-blue-500 px-4 py-1 w-full rounded-lg ${disabled ? themeMap[theme + 'Disabled' as keyof typeof themeMap] : themeMap[theme]}`;
   if (onClick) {
     return (
       <button className={buttonClass} disabled={disabled ? true : false} onClick={onClick} type={type}>
