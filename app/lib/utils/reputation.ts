@@ -32,5 +32,5 @@ export default async function calculateEmployeeReputation(): Promise<Reputation 
 
   const reputation = user.employee_reputation;
 
-  return reputation;
+  return reputation || null;
 }

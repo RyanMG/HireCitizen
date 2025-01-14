@@ -11,8 +11,8 @@ export type Person = {
   account_status: string;
   profile_image: string;
   language: PersonLanguage;
-  employee_reputation: Reputation;
-  employer_reputation: Reputation;
+  employee_reputation?: Reputation;
+  employer_reputation?: Reputation;
 };
 
 export type PersonLanguage = {

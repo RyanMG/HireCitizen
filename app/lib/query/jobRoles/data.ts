@@ -59,7 +59,7 @@ export async function getUserJobApplications(user: Person, statusList: ('PENDING
             'handle', p.handle,
             'moniker', p.moniker,
             'rsi_url', p.rsi_url,
-            'reputation', p.reputation
+            'employee_reputation', p.employee_reputation
           )
         ))[0] as "person",
         (jsonb_agg(
@@ -73,7 +73,7 @@ export async function getUserJobApplications(user: Person, statusList: ('PENDING
               'handle', o.handle,
               'moniker', o.moniker,
               'rsi_url', o.rsi_url,
-              'reputation', o.reputation
+              'employer_reputation', o.employer_reputation
             )
           )
         ))[0] as "job"
@@ -112,7 +112,7 @@ export async function getUserPastJobs(user: Person): Promise<JobApplicant[] | {e
             'handle', p.handle,
             'moniker', p.moniker,
             'rsi_url', p.rsi_url,
-            'reputation', p.reputation
+            'employee_reputation', p.employee_reputation
           )
         ))[0] as "person",
         (jsonb_agg(
@@ -126,7 +126,7 @@ export async function getUserPastJobs(user: Person): Promise<JobApplicant[] | {e
               'handle', o.handle,
               'moniker', o.moniker,
               'rsi_url', o.rsi_url,
-              'reputation', o.reputation
+              'employer_reputation', o.employer_reputation
             )
           )
         ))[0] as "job"
@@ -167,7 +167,7 @@ export async function getJobApplicants(jobId: string): Promise<JobApplicant[] | 
             'handle', p.handle,
             'moniker', p.moniker,
             'rsi_url', p.rsi_url,
-            'reputation', p.reputation
+            'employee_reputation', p.employee_reputation
           )
         ))[0] as "person"
         FROM job_applicants ja

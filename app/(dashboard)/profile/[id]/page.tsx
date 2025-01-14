@@ -16,7 +16,7 @@ export default async function MemberProfilePage(props: {
   const backUrl = back ? `/${back}` : undefined;
 
   return (
-    <PageWrapper pageHeaderTitle="Member Profile" showBackButton={backUrl ? true : false} pageBackPath={backUrl}>
+    <PageWrapper pageHeaderTitle="Citizen Profile" showBackButton={backUrl ? true : false} pageBackPath={backUrl}>
       <div className="flex flex-col bg-gray-900 p-4 rounded-xl border border-indigo-900 min-h-[200px]">
         <Suspense fallback={<ResultsLoading />}>
           <MemberProfile memberId={id} />
