@@ -4,19 +4,15 @@ import { auth } from 'auth';
 import Link from 'next/link';
 import ProfileImage from '@ui/profile/profileImage';
 import ProfileActionButtons from '@ui/profile/profileActionBtns';
-import NotificationSnackbar from '../components/notificationSnackbar';
 import ReputationBar from './reputationBars';
 import { Reputation } from '@/app/lib/definitions/person';
+import { redirect } from 'next/navigation';
 
 export default async function UserProfile() {
   const session = await auth();
 
   if (!session || !session.activeUser) {
-    return <NotificationSnackbar
-      type="error"
-      messages={["Error authenticating."]}
-      redirectTo="/"
-    />
+    redirect('/api/auth/force-signout');
   }
 
   const activeUser = session.activeUser;
