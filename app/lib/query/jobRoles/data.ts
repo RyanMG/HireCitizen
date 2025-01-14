@@ -41,6 +41,7 @@ export async function getJobApplicationStatus(jobId: string, user: Person): Prom
  * Gets all applications for a given user
  */
 export async function getUserJobApplications(user: Person, statusList: ('PENDING' | 'REJECTED' | 'ACCEPTED')[]): Promise<JobApplicant[] | {error:string}> {
+  const now = dayjs().startOf('day').toDate();
   try {
     const sql = neon(process.env.DATABASE_URL!);
     return await sql`
@@ -81,7 +82,7 @@ export async function getUserJobApplications(user: Person, statusList: ('PENDING
         JOIN crew_roles cr ON cr.id = ja.crew_role_id
         JOIN job j ON j.id = ja.job_id
         JOIN person o ON o.id = j.owner_id
-        WHERE ja.person_id = ${user.id} AND ja.accepted_status = ANY(${statusList})
+        WHERE ja.person_id = ${user.id} AND ja.accepted_status = ANY(${statusList}) AND j.job_start >= ${now}
         GROUP BY ja.id;
       ` as JobApplicant[];
 
