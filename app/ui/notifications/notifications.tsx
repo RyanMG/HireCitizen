@@ -1,14 +1,28 @@
 "use client";
 
+import { getNotifications } from "@/app/lib/query/notifications/data";
 import CloseElementIcon from "@ui/components/iconBtns/closeIcon";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function NotificationSnipe() {
   const [notificationsShown, showNotifications] = useState<boolean>(false);
   const onNotificationClick = () => {
     showNotifications(!notificationsShown);
   };
+
+  const pollNotifications = async () => {
+    const res = await getNotifications();
+    console.log(res);
+  }
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      pollNotifications();
+    }, 3000)
+
+    return () => clearInterval(intervalId)
+}, [])
 
   return (
     <div className="z-100">
