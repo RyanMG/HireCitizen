@@ -11,8 +11,11 @@ export default function ReputationBar({
   return (
     <div className="flex flex-col gap-2">
       <p className="text-gray-300 text-md">{title}</p>
-      <div className="w-full h-4 bg-gray-800 rounded-full my-1">
-        <div style={{ width: `${(reputation / 10) * 100}%` }} className={clsx("text-right text-white rounded-l-full h-full",
+      <div className="w-full h-5 bg-gray-800 rounded-full my-1">
+        {reputation === 0 && (
+          <div className="text-center text-white h-full text-xs">No history available</div>
+        )}
+        <div style={{ width: `${(reputation / 10) * 100}%` }} className={clsx("text-white rounded-l-full h-full",
           {
             'bg-red-900': reputation === 1,
             'bg-red-700': reputation === 2,
