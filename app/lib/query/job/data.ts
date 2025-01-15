@@ -111,7 +111,7 @@ export async function getJobById(jobId: string): Promise<Job | {error:string}> {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const jobData = await sql`
-      SELECT j.*,
+      SELECT j.*, TO_CHAR(j.job_start, 'YYYY-MM-DD HH24:MI:SS') as job_start,
       p.id AS person_id, p.moniker,
       jt.id as jobtype_id, jt.name AS job_type_name, jt.description AS job_type_description,
       l.code AS language_code, l.name AS language_name,
@@ -242,6 +242,7 @@ export async function getMyJobs(jobStatusList: string[]): Promise<Job[] | {error
 
     return await sql`
       SELECT j.*,
+      TO_CHAR(j.job_start, 'YYYY-MM-DD HH24:MI:SS') as "jobStart",
       COALESCE(NULLIF(jsonb_agg(
         CASE WHEN cr.name IS NOT NULL THEN
           jsonb_build_object(

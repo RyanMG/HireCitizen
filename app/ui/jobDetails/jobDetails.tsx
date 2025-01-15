@@ -7,8 +7,8 @@ import IconButton from "@ui/components/iconBtns/iconBtn";
 import { auth } from "@/auth";
 import NotificationSnackbar from "@ui/components/notificationSnackbar";
 
-import DayJs from "dayjs";
 import Link from "next/link";
+import { getJobDateFormatted } from "@/app/lib/utils/dateUtils";
 
 /**
  * Formats the estimated time to a human readable format.
@@ -19,13 +19,6 @@ const getEstimatedTime = (estimatedTime: number | undefined) => {
     return hours > 1 ? `${hours} hours` : hours === 1 ? '1 hour' : `${hours} minutes`;
   }
   return '1 hour';
-}
-
-const getJobStart = (jobStart: string | undefined) => {
-  if (jobStart) {
-    return `${DayJs(jobStart).format('ddd MMM DD, YYYY')} - ${DayJs(jobStart).format('h:mm a')}`;
-  }
-  return 'No job start time provided.';
 }
 
 export default async function JobDetails(props: { params: Promise<{ id: string }> }) {
@@ -42,6 +35,8 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
       />
     )
   }
+
+  console.log('job', job);
 
   return (
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-xl mb-4 p-4">
@@ -74,7 +69,7 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
       <div className="flex flex-row justify-between py-2">
         <div className="flex flex-col">
           <p className="text-gray-400 text-sm italic">Job Start Date</p>
-          <p className="text-white text-lg">{getJobStart(job.jobStart)}</p>
+          <p className="text-white text-lg">{getJobDateFormatted(job.jobStart)}</p>
         </div>
 
         <div className="flex flex-col">

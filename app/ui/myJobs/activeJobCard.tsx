@@ -8,6 +8,7 @@ import Dialog from "@components/dialog";
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { getJobDateFormatted } from "@/app/lib/utils/dateUtils";
 
 export default function ActiveJobCard({ job }: {job: Job}) {
   const params = useSearchParams();
@@ -63,7 +64,7 @@ export default function ActiveJobCard({ job }: {job: Job}) {
         return null;
     }
   }
-
+  console.log('job', job);
   return (
     <>
         <div className="bg-dark-blue border border-gray-400 rounded-xl my-4 p-4">
@@ -71,6 +72,7 @@ export default function ActiveJobCard({ job }: {job: Job}) {
             <Link className="flex flex-col flex-1 mr-4" href={`/my-jobs/${job.id}`}>
               <p className="text-lg font-semibold text-white">{job.title}</p>
               <p className="text-sm text-gray-400">{job.description}</p>
+              <p className="text-sm text-gray-400">{getJobDateFormatted(job.jobStart)}</p>
             </Link>
             <div className="flex flex-col justify-end w-36">
               {jobButtonList()}
