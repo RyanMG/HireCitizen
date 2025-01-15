@@ -69,10 +69,10 @@ export default function ActiveJobCard({ job }: {job: Job}) {
     <>
         <div className="bg-dark-blue border border-gray-400 rounded-xl my-4 p-4">
           <div className="flex flex-row justify-between">
-            <Link className="flex flex-col flex-1 mr-4" href={`/my-jobs/${job.id}`}>
+            <Link className="flex flex-col flex-1 gap-1 mr-4" href={`/my-jobs/${job.id}`}>
               <p className="text-lg font-semibold text-white">{job.title}</p>
-              <p className="text-sm text-gray-400">{job.description}</p>
-              <p className="text-sm text-gray-400">{getJobDateFormatted(job.jobStart)}</p>
+              <p className="text-sm text-gray-400 italic">{job.description}</p>
+              <p className="text-sm text-gray-400">Job starts: <span className="font-semibold text-gray-200">{getJobDateFormatted(job.jobStart)}</span></p>
             </Link>
             <div className="flex flex-col justify-end w-36">
               {jobButtonList()}
