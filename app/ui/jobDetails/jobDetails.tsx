@@ -36,8 +36,6 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
     )
   }
 
-  console.log('job', job);
-
   return (
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-xl mb-4 p-4">
       <div className="flex flex-row justify-between bg-blue border border-gray-700 rounded-md px-2 py-1 mb-2">

@@ -4,6 +4,7 @@ import "@ui/global.css";
 
 import Sidebar from "@ui/sidebar/sidebar";
 import Notification from "@ui/notifications/notifications";
+import { SessionProvider } from "next-auth/react"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,15 +35,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-blue`}
       >
         <main className="flex flex-col">
-
-          <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-            <Sidebar />
-            <section className="flex-grow">
+          <SessionProvider>
+            <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+              <Sidebar />
+              <section className="flex-grow">
               {children}
             </section>
-            <Notification />
-          </div>
-
+              <Notification />
+            </div>
+          </SessionProvider>
         </main>
       </body>
     </html>

@@ -64,7 +64,7 @@ export default function ActiveJobCard({ job }: {job: Job}) {
         return null;
     }
   }
-  console.log('job', job);
+
   return (
     <>
         <div className="bg-dark-blue border border-gray-400 rounded-xl my-4 p-4">

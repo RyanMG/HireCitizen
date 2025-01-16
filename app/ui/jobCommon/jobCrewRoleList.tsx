@@ -61,7 +61,7 @@ export default function JobCrewRoleList({
       // @TODO handle error
       return;
     }
-    console.log('saveResp', saveResp);
+
     setCurrentJobRoles([
       ...currentJobRoles,
       ...selectedRoles

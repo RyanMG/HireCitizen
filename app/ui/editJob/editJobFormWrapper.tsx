@@ -21,8 +21,6 @@ export default async function EditJobFormWrapper(props: { params: Promise<{ id: 
     />
   }
 
-  console.log(job);
-
   const buildInitialFormState = (): CreateJobFormState => {
     const initialState: CreateJobFormState = { saveResponse: null, errors: {}, prevState: {} };
 

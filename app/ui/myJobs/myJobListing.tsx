@@ -14,7 +14,6 @@ export default async function MyJobListing({
   }
 
   const jobs = await getMyJobs(jobStatusList);
-  console.log('jobs', jobs);
 
   if ('error' in jobs) {
     const messages: string[] = ['error' in jobs ? jobs.error : ''].filter(Boolean) as string[];
