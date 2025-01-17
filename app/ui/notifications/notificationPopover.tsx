@@ -1,15 +1,54 @@
 "use client";
 
 import clsx from "clsx";
-import CloseElementIcon from "../components/iconBtns/closeIcon";
+import CloseElementIcon from "@components/iconBtns/closeIcon";
+import {
+  TNotification
+} from "@/app/lib/definitions/notifications";
+
+interface INotificationPopoverProps {
+  notificationsShown: boolean;
+  onNotificationClick: () => void;
+  notifications: TNotification;
+}
 
 export default function NotificationPopover({
   notificationsShown,
-  onNotificationClick
-}: {
-  notificationsShown: boolean;
-  onNotificationClick: () => void;
-}) {
+  onNotificationClick,
+  notifications
+}: INotificationPopoverProps) {
+
+  const notificationContent = Object.keys(notifications).reduce((output, notificationType) => {
+
+    switch (notificationType) {
+      case 'upcomingEmployeeJobs':
+        notifications[notificationType].forEach((notification) => {
+          output.push(<div className="text-white text-sm" key={notification.data.jobId}>{notification.data.jobId}</div>);
+        });
+        break;
+      case 'upcomingEmployerJobs':
+        notifications[notificationType].forEach((notification) => {
+          output.push(<div className="text-white text-sm" key={notification.data.jobId}>{notification.data.jobId}</div>);
+        });
+        break;
+      case 'employeeApplicationChanges':
+        notifications[notificationType].forEach((notification) => {
+          output.push(<div className="text-white text-sm" key={notification.data.jobId}>{notification.data.jobId}</div>);
+        });
+        break;
+      case 'employerApplicationsIncoming':
+        notifications[notificationType].forEach((notification) => {
+          output.push(<div className="text-white text-sm" key={notification.data.jobId}>{notification.data.jobId}</div>);
+        });
+        break;
+      case 'messages':
+        notifications[notificationType].forEach((notification) => {
+          output.push(<div className="text-white text-sm" key={notification.data.messageId}>{notification.data.messageId}</div>);
+        });
+        break;
+    }
+    return output;
+  }, [] as React.ReactNode[]);
 
   return (
     <div>
@@ -30,9 +69,13 @@ export default function NotificationPopover({
             <CloseElementIcon onClickFn={onNotificationClick} iconFillColor="#e8eaed" />
           </div>
 
-          <div className="flex flex-col justify-center items-start mt-4">
-            <p className="text-white text-sm">No new notifications. Get back to work!</p>
-          </div>
+          {notificationContent.length === 0 ? (
+            <div className="flex flex-col justify-center items-start mt-4">
+              <p className="text-white text-sm">No new notifications. Get back to work!</p>
+            </div>
+          ) : (
+            notificationContent
+          )}
 
         </div>
       </div>

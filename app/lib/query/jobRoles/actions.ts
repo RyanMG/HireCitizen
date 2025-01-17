@@ -4,6 +4,9 @@ import { neon } from "@neondatabase/serverless";
 import { auth } from 'auth';
 import { revalidatePath } from "next/cache";
 
+import { addUserNotification } from "@query/notifications/actions";
+import { buildNotificationPayload } from "../../utils/notifications";
+import { TApplicationsData } from "../../definitions/notifications";
 /**
  * User applies to a crew role
  */
@@ -22,21 +25,22 @@ export async function applyToCrewRole(jobId: string, roleId: number): Promise<{s
       };
     }
 
-    await sql`INSERT INTO job_applicants (job_id, person_id, crew_role_id, accepted_status) VALUES (${jobId}, ${userId}, ${roleId}, 'PENDING')`;
+    const applicationID = await sql`INSERT INTO job_applicants (job_id, person_id, crew_role_id, accepted_status) VALUES (${jobId}, ${userId}, ${roleId}, 'PENDING') RETURNING id`;
+    const jobOwnerId = await sql`SELECT owner_id FROM job WHERE id = ${jobId}`;
 
-    // Pull job owner_id to pass as user ID
+    const notifcationPayload = buildNotificationPayload('employerApplicationsIncoming', {
+      applicationId: applicationID[0].id,
+      applicantId: userId,
+      jobId: jobId
+    } as TApplicationsData)!;
 
-    // const notificationUpdateResp = await addUserNotification({
-    //   userId,
-    //   type: 'employerApplicationsIncoming',
-    //   data: {
-    //     jobId,
-    //     roleId,
-    //     userId
-    //   }
-    // });
+    const notificationUpdateResp = await addUserNotification({
+      userId: jobOwnerId[0].owner_id,
+      type: 'employerApplicationsIncoming',
+      payload: notifcationPayload
+    });
 
-    // console.log('notificationUpdateResp', notificationUpdateResp);
+    console.log('notificationUpdateResp', notificationUpdateResp);
 
     return {
       submitted: true,

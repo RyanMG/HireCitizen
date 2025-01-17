@@ -12,14 +12,7 @@ import {
   TUpcomingEmployerJobsItem,
   TMessagesItem
 } from "@definitions/notifications";
-
-const newUserJSONBase = {
-  employeeApplicationChanges: [] as TEmployeeApplicationChangesItem[],
-  employerApplicationsIncoming: [] as TEmployerApplicationsIncomingItem[],
-  upcomingEmployeeJobs: [] as TUpcomingEmployeeJobsItem[],
-  upcomingEmployerJobs: [] as TUpcomingEmployerJobsItem[],
-  messages: [] as TMessagesItem[]
-}
+import {NEW_USER_NOTIFICATION_BASE} from "@constants/notifications";
 
 /**
  * Add a user into redis for use by the notifications system
@@ -31,7 +24,7 @@ export async function addUserToNotifications(userId: string): Promise<{userAdded
       `user:${userId}`,
       '$',
       JSON.stringify({
-        ...newUserJSONBase,
+        ...NEW_USER_NOTIFICATION_BASE,
         lastNotificationCheck: new Date().toISOString()
       }),
       { nx: true }
@@ -72,7 +65,7 @@ export async function deleteUserFromNotifications(userId: string): Promise<{user
  */
 export async function getUserNotifications(): Promise<TNotification | {error: string}> {
   const session = await auth();
-  const userId = session?.user?.id;
+  const userId = session?.activeUser?.id;
 
   if (!userId) {
     return {
@@ -82,8 +75,9 @@ export async function getUserNotifications(): Promise<TNotification | {error: st
 
   try {
     const client = Redis.fromEnv();
-
+    console.log('userId', userId);
     const notifications = await client.json.get(`user:${userId}`);
+
     await client.json.set(`user:${userId}`, '$.lastNotificationCheck', `"${new Date().toISOString()}"`);
 
     return notifications as unknown as TNotification;
@@ -101,31 +95,28 @@ export async function getUserNotifications(): Promise<TNotification | {error: st
 export async function addUserNotification({
   userId,
   type,
-  data
+  payload
 }: {
   userId: string,
   type: TNotificationType,
-  data: TEmployeeApplicationChangesItem | TEmployerApplicationsIncomingItem | TUpcomingEmployeeJobsItem | TUpcomingEmployerJobsItem | TMessagesItem
+  payload: TEmployeeApplicationChangesItem | TEmployerApplicationsIncomingItem | TUpcomingEmployeeJobsItem | TUpcomingEmployerJobsItem | TMessagesItem
 }): Promise<{success: boolean} | {error: string}> {
 
   try {
     const client = Redis.fromEnv();
-    const notifications = await client.json.set(
+    const notifications = await client.json.arrappend(
       `user:${userId}`,
       `$.${type}`,
-      JSON.stringify(data)
+      JSON.stringify(payload)
     )
-
-    console.log('notifications', notifications);
-
     return {
-      success: true
+      success: notifications[0] === 1 ? true : false
     };
 
   } catch (error) {
-    console.error('Error fetching notifications:', error);
+    console.error('Error updating notifications:', error);
     return {
-      error: 'Error fetching notifications'
+      error: 'Error updating notifications'
     };
   }
 }

@@ -25,7 +25,8 @@
       "@query/*": ["./app/lib/query/*"],
       "@definitions/*": ["./app/lib/definitions/*"],
       "@ui/*": ["./app/ui/*"],
-      "@components/*": ["./app/ui/components/*"]
+      "@components/*": ["./app/ui/components/*"],
+      "@constants/*": ["./app/lib/constants/*"]
     }
   },
   "include": [
