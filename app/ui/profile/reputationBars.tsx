@@ -1,4 +1,4 @@
-import { Reputation } from "@definitions/person";
+import { Reputation } from "@/app/lib/definitions/person";
 import clsx from "clsx";
 
 export default function ReputationBar({

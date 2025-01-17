@@ -1,8 +1,8 @@
 'use server';
 
 import { neon } from "@neondatabase/serverless";
-import { CrewRole, JobApplicant } from "@definitions/job";
-import { Person } from "@definitions/person";
+import { CrewRole, JobApplicant } from "@/app/lib/definitions/job";
+import { Person } from "@/app/lib/definitions/person";
 import dayjs from "dayjs";
 
 /**

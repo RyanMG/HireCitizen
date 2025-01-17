@@ -1,10 +1,10 @@
 'use client';
 
-import { Job, JobApplicant } from "@definitions/job";
+import { Job, JobApplicant } from "@/app/lib/definitions/job";
 import CrewRoleListing from "./crewRoleListing";
 import { useCallback, useEffect, useState } from "react";
 import { getJobApplicationStatus } from "@/app/lib/query/jobRoles/data";
-import { Person } from "@definitions/person";
+import { Person } from "@/app/lib/definitions/person";
 
 interface CrewRoleListProps {
   job: Job,

@@ -1,12 +1,13 @@
 'use server';
 
-import { Person } from "@definitions/person";
+import { Person } from "@/app/lib/definitions/person";
 import { neon } from "@neondatabase/serverless";
 import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
 import z from "zod";
+
+import { deleteUserFromNotifications } from "@query/notifications/actions";
 
 // eslint-disable-next-line
 const PersonSchema = z.object({
@@ -135,7 +136,17 @@ export const updatePerson = async (state: GetUserRSIUrlFormState | Promise<{mess
 export const removePersonByEmail = async (email: string): Promise<{ error: string } | undefined> => {
   try {
     const sql = neon(process.env.DATABASE_URL!);
-    await sql`DELETE FROM person WHERE email = ${email}`;
+    const person = await sql`DELETE FROM person WHERE email = ${email} RETURNING id`;
+    /**
+     * remove the user from redis for notifications
+     */
+    const removeUserResponse = await deleteUserFromNotifications(person[0].id);
+
+    if ('error' in removeUserResponse || !removeUserResponse.userDeleted) {
+      return {
+        error: 'Error removing user from notifications'
+      }
+    }
 
   } catch (error) {
     return {

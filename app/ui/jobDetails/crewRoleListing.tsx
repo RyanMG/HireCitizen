@@ -1,6 +1,6 @@
 'use client';
 
-import { CrewRole, JobApplicant } from "@definitions/job";
+import { CrewRole, JobApplicant } from "@/app/lib/definitions/job";
 import { Button, ButtonProps, styled } from "@mui/material";
 import { useActionState, useEffect, useState } from "react";
 import { applyToCrewRole, rescindCrewRoleApplication } from "@query/jobRoles/actions";

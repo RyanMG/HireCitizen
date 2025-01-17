@@ -1,6 +1,6 @@
 'use server';
 
-import { Job } from "@definitions/job";
+import { Job } from "@/app/lib/definitions/job";
 import { getJobById } from "@query/job/data";
 import CrewRoleList from "./crewRoleList";
 import IconButton from "@ui/components/iconBtns/iconBtn";
@@ -35,8 +35,6 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
       />
     )
   }
-
-  console.log('job', job);
 
   return (
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-xl mb-4 p-4">
