@@ -1,7 +1,8 @@
 'use server';
 
 import { auth } from "@/auth";
-import redisClient from "@lib/redisClient";
+import { Redis } from '@upstash/redis';
+
 import {
   TNotification,
   TNotificationType,
@@ -25,22 +26,19 @@ const newUserJSONBase = {
  */
 export async function addUserToNotifications(userId: string): Promise<{userAdded: boolean} | {error: string}> {
   try {
-    const client = redisClient.getClient();
-    const wasAdded = await client.call(
-      'JSON.SET',
+    const client = Redis.fromEnv();
+    const wasAdded = await client.json.set(
       `user:${userId}`,
       '$',
       JSON.stringify({
         ...newUserJSONBase,
         lastNotificationCheck: new Date().toISOString()
       }),
-      'NX'
+      { nx: true }
     )
 
-    console.log('wasAdded', wasAdded);
-
     return {
-      userAdded: wasAdded === 1 ? true : false
+      userAdded: wasAdded === 'OK' ? true : false
     }
 
   } catch (error) {
@@ -54,9 +52,8 @@ export async function addUserToNotifications(userId: string): Promise<{userAdded
  */
 export async function deleteUserFromNotifications(userId: string): Promise<{userDeleted: boolean} | {error: string}> {
   try {
-    const client = redisClient.getClient();
-    const wasDeleted = await client.call(
-      'JSON.DEL',
+    const client = Redis.fromEnv();
+    const wasDeleted = await client.json.del(
       `user:${userId}`
     )
 
@@ -84,10 +81,10 @@ export async function getUserNotifications(): Promise<TNotification | {error: st
   }
 
   try {
-    const client = redisClient.getClient();
+    const client = Redis.fromEnv();
 
-    const notifications = await client.get(`users:${userId}`);
-    await client.call('JSON.SET', `user:${userId}`, '$.lastNotificationCheck', `"${new Date().toISOString()}"`);
+    const notifications = await client.json.get(`user:${userId}`);
+    await client.json.set(`user:${userId}`, '$.lastNotificationCheck', `"${new Date().toISOString()}"`);
 
     return notifications as unknown as TNotification;
 
@@ -112,9 +109,8 @@ export async function addUserNotification({
 }): Promise<{success: boolean} | {error: string}> {
 
   try {
-    const client = redisClient.getClient();
-    const notifications = await client.call(
-      'JSON.SET',
+    const client = Redis.fromEnv();
+    const notifications = await client.json.set(
       `user:${userId}`,
       `$.${type}`,
       JSON.stringify(data)
