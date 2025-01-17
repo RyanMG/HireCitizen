@@ -3,7 +3,7 @@
 import { Button, MenuItem, Modal, TextField } from "@mui/material";
 import PageHeader from "../components/pageHeader";
 import { initialCap } from "@lib/utils/textUtils";
-import { CrewRole, CrewRoleOption, JobTypeCategory } from "@definitions/job";
+import { CrewRole, CrewRoleOption, JobTypeCategory } from "@/app/lib/definitions/job";
 import JobRoleAssignmentRow from "./jobRoleAssignmentRow";
 import { useEffect, useRef, useState } from "react";
 import { getCrewRoles } from "@/app/lib/query/job/data";

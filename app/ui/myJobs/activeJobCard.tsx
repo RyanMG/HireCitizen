@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteJob, toggleJobActive } from "@/app/lib/query/job/actions";
-import { Job } from "@definitions/job";
+import { Job } from "@/app/lib/definitions/job";
 import Button from "@components/button";
 import Dialog from "@components/dialog";
 

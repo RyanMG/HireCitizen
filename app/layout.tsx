@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@ui/global.css";
-
-import Sidebar from "@ui/sidebar/sidebar";
-import Notification from "@ui/notifications/notifications";
 import { SessionProvider } from "next-auth/react"
+import DashboardRoot from "./dashboardRoot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,13 +34,9 @@ export default function RootLayout({
       >
         <main className="flex flex-col">
           <SessionProvider>
-            <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-              <Sidebar />
-              <section className="flex-grow">
+            <DashboardRoot>
               {children}
-            </section>
-              <Notification />
-            </div>
+            </DashboardRoot>
           </SessionProvider>
         </main>
       </body>

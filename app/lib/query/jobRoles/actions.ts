@@ -23,6 +23,21 @@ export async function applyToCrewRole(jobId: string, roleId: number): Promise<{s
     }
 
     await sql`INSERT INTO job_applicants (job_id, person_id, crew_role_id, accepted_status) VALUES (${jobId}, ${userId}, ${roleId}, 'PENDING')`;
+
+    // Pull job owner_id to pass as user ID
+
+    // const notificationUpdateResp = await addUserNotification({
+    //   userId,
+    //   type: 'employerApplicationsIncoming',
+    //   data: {
+    //     jobId,
+    //     roleId,
+    //     userId
+    //   }
+    // });
+
+    // console.log('notificationUpdateResp', notificationUpdateResp);
+
     return {
       submitted: true,
       message: 'Job application submitted.',

@@ -1,26 +1,24 @@
-import { createClient, RedisClientType } from 'redis';
+import Redis from "ioredis";
+
+if (!process.env.REDIS_URL) {
+  throw new Error('Redis URL is not defined for the environment');
+}
+
+console.log('Redis URL', process.env.REDIS_URL);
 
 class RedisClient {
-  client: RedisClientType;
+  client: Redis;
 
   constructor() {
-    this.client = createClient({
-      url: process.env.REDIS_URL
-    });
+    this.client = new Redis(process.env.REDIS_URL!);
 
     this.client.on('connect', () => {
       console.log('Connected to Redis');
     });
 
     this.client.on('error', (err) => {
-      console.error('Redis error', err);
+      console.error('Redis client error', err);
     });
-
-    this.connect();
-  }
-
-  async connect() {
-    await this.client.connect();
   }
 
   getClient() {

@@ -1,4 +1,4 @@
-import { Job } from "@definitions/job";
+import { Job } from "@/app/lib/definitions/job";
 import JobTypeIcon from "@ui/jobList/jobTypeIcon";
 import Link from "next/link";
 

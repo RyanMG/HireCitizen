@@ -1,8 +1,8 @@
 'use server';
 
 import { neon } from "@neondatabase/serverless";
-import { CrewRole, Job, JobType, JobTypeCategory } from "@definitions/job";
-import { Person, PersonLanguage } from "@definitions/person";
+import { CrewRole, Job, JobType, JobTypeCategory } from "@/app/lib/definitions/job";
+import { Person, PersonLanguage } from "@/app/lib/definitions/person";
 import { Timezone } from "@definitions/misc";
 import { auth } from "@/auth";
 

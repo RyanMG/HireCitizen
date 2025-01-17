@@ -1,7 +1,7 @@
 'use server';
 
 import { neon } from "@neondatabase/serverless";
-import { Person } from "@definitions/person";
+import { Person } from "@/app/lib/definitions/person";
 import { parse } from 'node-html-parser';
 
 export const getPersonById = async (id: string): Promise<Person | {error: string}> => {

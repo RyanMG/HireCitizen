@@ -1,4 +1,4 @@
-import { Person } from '@definitions/person';
+import { Person } from '@/app/lib/definitions/person';
 
 declare module 'next-auth' {
   interface Session {

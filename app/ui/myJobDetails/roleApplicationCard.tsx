@@ -1,6 +1,6 @@
 'use client';
 
-import { JobApplicant } from "@definitions/job";
+import { JobApplicant } from "@/app/lib/definitions/job";
 import Dialog from "@components/dialog";
 import Button from "@components/button";
 

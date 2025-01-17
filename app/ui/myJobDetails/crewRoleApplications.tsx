@@ -1,5 +1,5 @@
 import { getJobApplicants } from "@/app/lib/query/jobRoles/data";
-import { Job } from "@definitions/job";
+import { Job } from "@/app/lib/definitions/job";
 import SectionHeader from "@components/sectionHeader";
 
 import ApplicationCard from "./roleApplicationCard";

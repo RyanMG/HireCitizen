@@ -1,6 +1,6 @@
 'use server';
 
-import { Job } from "@definitions/job";
+import { Job } from "@/app/lib/definitions/job";
 import { getJobById } from "@query/job/data";
 import CrewRoleList from "./crewRoleList";
 import IconButton from "@ui/components/iconBtns/iconBtn";

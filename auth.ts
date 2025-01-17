@@ -5,6 +5,7 @@ import Discord from "next-auth/providers/discord"
 import { createNewPersonFromAuth } from '@query/person/actions';
 import { getPersonByEmail } from '@query/person/data';
 import { Person } from '@definitions/person';
+import { addUserToNotifications } from '@query/notifications/actions';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -30,8 +31,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             activeUser = await createNewPersonFromAuth(user as User);
           }
 
-          if (activeUser) {
+          if (activeUser && activeUser.id) {
             token.id = activeUser.id;
+            /**
+             * Add the new user into redis for notifications
+             */
+            const addUserResponse = await addUserToNotifications(activeUser.id);
+            if ('error' in addUserResponse) {
+              console.error('Error add new person into redis notificaton list', addUserResponse.error);
+            }
+
             return token;
           }
 

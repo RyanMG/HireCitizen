@@ -1,4 +1,4 @@
-import { JobType } from "@definitions/job";
+import { JobType } from "@/app/lib/definitions/job";
 import clsx from "clsx";
 import { ReactElement } from "react";
 
