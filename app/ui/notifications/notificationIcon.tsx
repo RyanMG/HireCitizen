@@ -2,20 +2,20 @@ import clsx from "clsx";
 
 interface INotificationIconProps {
   notificationsShown: boolean;
-  onNotificationClick: () => void;
+  closeNotificationsFn: () => void;
   hasNewNotifications: boolean;
 }
 
 export default function NotificationIcon({
   notificationsShown,
-  onNotificationClick,
+  closeNotificationsFn,
   hasNewNotifications
 }: INotificationIconProps) {
   return (
     <div className={clsx(`bottom-6 right-5 z-50 h-[38px] w-[38px]`, {
       "hidden": notificationsShown,
       "fixed": !notificationsShown
-    })} onClick={onNotificationClick}>
+    })} onClick={closeNotificationsFn}>
 
       <div className="absolute top-0 left-0 bg-dark-blue border-2 border-dark-blue rounded-full">
         <div className="border border-gray-300 rounded-full p-1">

@@ -18,11 +18,13 @@ export type TApplicationsData = {
 }
 
 export type TEmployerApplicationsIncomingItem = {
+  id: string
   type: TNotificationType['employerApplicationsIncoming'];
   data: TEmployerApplicationsData
 }
 
 export type TEmployeeApplicationChangesItem = {
+  id: string
   type: TNotificationType['employeeApplicationChanges'];
   data: TApplicationsData
 }
@@ -32,15 +34,17 @@ export type TEmployeeApplicationChangesItem = {
  */
 export type TUpcomingJobData = {
   jobId: string,
-  startDateTime: string
+  startDateTime: string,
 }
 
 export type TUpcomingEmployeeJobsItem = {
+  id: string,
   type: TNotificationType['upcomingEmployeeJobs'];
   data: TUpcomingJobData
 }
 
 export type TUpcomingEmployerJobsItem = {
+  id: string,
   type: TNotificationType['upcomingEmployerJobs'];
   data: TUpcomingJobData
 }
@@ -54,6 +58,7 @@ type TMessageData = {
 }
 
 export type TMessagesItem = {
+  id: string,
   type: TNotificationType['messages'];
   data: TMessageData
 }

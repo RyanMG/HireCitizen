@@ -75,7 +75,6 @@ export async function getUserNotifications(): Promise<TNotification | {error: st
 
   try {
     const client = Redis.fromEnv();
-    console.log('userId', userId);
     const notifications = await client.json.get(`user:${userId}`);
 
     await client.json.set(`user:${userId}`, '$.lastNotificationCheck', `"${new Date().toISOString()}"`);
@@ -107,7 +106,10 @@ export async function addUserNotification({
     const notifications = await client.json.arrappend(
       `user:${userId}`,
       `$.${type}`,
-      JSON.stringify(payload)
+      JSON.stringify({
+        ...payload,
+        id: crypto.randomUUID()
+      })
     )
     return {
       success: notifications[0] === 1 ? true : false

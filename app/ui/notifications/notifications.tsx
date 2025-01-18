@@ -14,7 +14,7 @@ export default function NotificationSnipe() {
   const [hasNewNotifications, setHasNewNotifications] = useState<boolean>(false);
   const notifications = useRef<TNotification>(NEW_USER_NOTIFICATION_BASE);
 
-  const onNotificationClick = () => {
+  const closeNotificationsFn = () => {
     showNotifications(!notificationsShown);
   };
 
@@ -55,10 +55,10 @@ export default function NotificationSnipe() {
 
   return (
     <div className="z-100">
-      <NotificationIcon notificationsShown={notificationsShown} onNotificationClick={onNotificationClick} hasNewNotifications={hasNewNotifications} />
+      <NotificationIcon notificationsShown={notificationsShown} closeNotificationsFn={closeNotificationsFn} hasNewNotifications={hasNewNotifications} />
       <NotificationPopover
         notificationsShown={notificationsShown}
-        onNotificationClick={onNotificationClick}
+        closeNotificationsFn={closeNotificationsFn}
         notifications={notifications.current}
       />
     </div>
