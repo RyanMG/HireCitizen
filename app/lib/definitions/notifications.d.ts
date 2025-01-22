@@ -3,7 +3,8 @@ export type TNotification = {
   employerApplicationsIncoming:  Record<string, TEmployerApplicationsIncomingItem>,
   upcomingEmployeeJobs: Record<string, TUpcomingEmployeeJobsItem>,
   upcomingEmployerJobs: Record<string, TUpcomingEmployerJobsItem>,
-  messages: Record<string, TMessagesItem>
+  messages: Record<string, TMessagesItem>,
+  lastNotificationCheck: string
 }
 
 export type TNotificationType = 'employeeApplicationChanges' | 'employerApplicationsIncoming' | 'upcomingEmployeeJobs' | 'upcomingEmployerJobs' | 'messages';
@@ -65,7 +66,7 @@ export type TMessagesItem = {
 
 // SAMPLE NOTIFICATION CATEGORY
 // "employerApplicationsIncoming": {
-//   "89ca8c0c-767a-4618-b6a9-b0c405b69721": {
+//   "89ca8c0c767a4618b6a9b0c405b69721": {
 //     "data": {
 //       "jobId": "f4677c20-ef7d-4825-b71d-d80c956f4925",
 //       "applicationId": 2,

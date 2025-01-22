@@ -2,48 +2,37 @@
 
 import clsx from "clsx";
 import CloseElementIcon from "@components/iconBtns/closeIcon";
-import {
-  TNotification
-} from "@/app/lib/definitions/notifications";
 import NotificationItem from "./notificationItem";
+import { useNotifications } from "@context/notificationProvider";
 
-interface INotificationPopoverProps {
-  notificationsShown: boolean;
-  closeNotificationsFn: () => void;
-  notifications: TNotification;
-}
+export default function NotificationPopover() {
+  const { notifications, toggleShowNotifications, notificationsShown } = useNotifications();
 
-export default function NotificationPopover({
-  notificationsShown,
-  closeNotificationsFn,
-  notifications
-}: INotificationPopoverProps) {
-
-  const notificationContent = Object.keys(notifications).reduce((output, notificationType) => {
+  const notificationContent = Object.keys(notifications!.current!).reduce((output, notificationType) => {
     switch (notificationType) {
       case 'upcomingEmployeeJobs':
-        Object.values(notifications[notificationType]).forEach((notification) => {
-          output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
+        Object.values(notifications!.current[notificationType]).forEach((notification) => {
+          output.push(<NotificationItem key={notification.id} notification={notification} />);
         });
         break;
       case 'upcomingEmployerJobs':
-        Object.values(notifications[notificationType]).forEach((notification) => {
-          output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
+        Object.values(notifications!.current[notificationType]).forEach((notification) => {
+          output.push(<NotificationItem key={notification.id} notification={notification} />);
         });
         break;
       case 'employeeApplicationChanges':
-        Object.values(notifications[notificationType]).forEach((notification) => {
-          output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
+        Object.values(notifications!.current[notificationType]).forEach((notification) => {
+          output.push(<NotificationItem key={notification.id} notification={notification} />);
         });
         break;
       case 'employerApplicationsIncoming':
-        Object.values(notifications[notificationType]).forEach((notification) => {
-          output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
+        Object.values(notifications!.current[notificationType]).forEach((notification) => {
+          output.push(<NotificationItem key={notification.id} notification={notification} />);
         });
         break;
       case 'messages':
-        Object.values(notifications[notificationType]).forEach((notification) => {
-          output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
+        Object.values(notifications!.current[notificationType]).forEach((notification) => {
+          output.push(<NotificationItem key={notification.id} notification={notification} />);
         });
         break;
     }
@@ -53,7 +42,7 @@ export default function NotificationPopover({
   return (
     <div>
       <div
-        onClick={closeNotificationsFn}
+        onClick={() => toggleShowNotifications(false)}
         className={clsx(
         "absolute top-0 left-0 h-full bg-black",
         {
@@ -66,7 +55,7 @@ export default function NotificationPopover({
 
           <div className="flex flex-row justify-between border-b-2 border-gray-300 pb-2 mb-2">
             <div className="text-white text-lg font-bold">Notifications</div>
-            <CloseElementIcon onClickFn={closeNotificationsFn} iconFillColor="#e8eaed" />
+            <CloseElementIcon onClickFn={() => toggleShowNotifications(false)} iconFillColor="#e8eaed" />
           </div>
 
           {notificationContent.length === 0 ? (

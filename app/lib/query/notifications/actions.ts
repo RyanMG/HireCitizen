@@ -119,7 +119,7 @@ export async function addUserNotification({
       success: notifications === 'OK' ? true : false
     };
 
-} catch (error) {
+  } catch (error) {
     console.error('Error updating notifications:', error);
     return {
       error: 'Error updating notifications'
@@ -136,9 +136,18 @@ export async function deleteUserNotification(notificationId: string, notificatio
       error: 'No user session found'
     }
   }
-  const client = Redis.fromEnv();
-  const wasDeleted = await client.json.del(`user:${userId}`, `$.${notificationType}.${notificationId}`);
-  return {
-    success: wasDeleted === 1 ? true : false
-  };
+
+  try {
+    const client = Redis.fromEnv();
+    const wasDeleted = await client.json.del(`user:${userId}`, `$.${notificationType}.${notificationId}`);
+    return {
+      success: wasDeleted === 1 ? true : false
+    };
+
+  } catch (error) {
+    console.error('Error deleting notification:', error);
+    return {
+      error: 'Error deleting notification'
+    };
+  }
 }

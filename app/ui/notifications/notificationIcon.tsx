@@ -1,21 +1,13 @@
+import { useNotifications } from "@context/notificationProvider";
 import clsx from "clsx";
 
-interface INotificationIconProps {
-  notificationsShown: boolean;
-  closeNotificationsFn: () => void;
-  hasNewNotifications: boolean;
-}
-
-export default function NotificationIcon({
-  notificationsShown,
-  closeNotificationsFn,
-  hasNewNotifications
-}: INotificationIconProps) {
+export default function NotificationIcon() {
+  const { notificationsShown, toggleShowNotifications, hasNewNotifications } = useNotifications();
   return (
     <div className={clsx(`bottom-6 right-5 z-50 h-[38px] w-[38px]`, {
       "hidden": notificationsShown,
       "fixed": !notificationsShown
-    })} onClick={closeNotificationsFn}>
+    })} onClick={() => toggleShowNotifications(!notificationsShown)}>
 
       <div className="absolute top-0 left-0 bg-dark-blue border-2 border-dark-blue rounded-full">
         <div className="border border-gray-300 rounded-full p-1">

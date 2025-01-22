@@ -7,16 +7,15 @@ import {
   TEmployerApplicationsIncomingItem,
   TMessagesItem,
   TNotificationType
-} from "@/app/lib/definitions/notifications";
-import Button from "../components/button";
+} from "@definitions/notifications";
+import Button from "@components/button";
 import { useRouter } from "next/navigation";
-import { deleteUserNotification } from "@query/notifications/actions";
 
 import { ReactNode } from "react";
+import { useNotifications } from "@context/notificationProvider";
 
 interface INotificationItemProps {
   notification: TUpcomingEmployeeJobsItem | TUpcomingEmployerJobsItem | TEmployeeApplicationChangesItem | TEmployerApplicationsIncomingItem | TMessagesItem;
-  closeNotificationsFn: () => void;
 }
 /**
  *
@@ -66,11 +65,11 @@ const getNotificationLink = (notification: TUpcomingEmployeeJobsItem | TUpcoming
 }
 
 export default function NotificationItem({
-  notification,
-  closeNotificationsFn
+  notification
 }: INotificationItemProps) {
 
   const router = useRouter();
+  const { dismissNotification, toggleShowNotifications } = useNotifications();
 
   return (
     <div className="flex flex-col justify-between gap-2 my-1 p-2 bg-light-blue border border-gray-300 rounded-md">
@@ -79,17 +78,16 @@ export default function NotificationItem({
         <Button
           theme="primary"
           onClick={() => {
-            closeNotificationsFn();
+            toggleShowNotifications(false);
             router.push(getNotificationLink(notification));
-            deleteUserNotification(notification.id, notification.type);
+            dismissNotification(notification.id, notification.type);
           }}
           label="View"
         />
         <Button
           theme="secondary"
           onClick={() => {
-            closeNotificationsFn();
-            deleteUserNotification(notification.id, notification.type);
+            dismissNotification(notification.id, notification.type);
           }}
           label="Dismiss"
         />

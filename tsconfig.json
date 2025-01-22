@@ -26,7 +26,8 @@
       "@definitions/*": ["./app/lib/definitions/*"],
       "@ui/*": ["./app/ui/*"],
       "@components/*": ["./app/ui/components/*"],
-      "@constants/*": ["./app/lib/constants/*"]
+      "@constants/*": ["./app/lib/constants/*"],
+      "@context/*": ["./app/lib/context/*"]
     }
   },
   "include": [
