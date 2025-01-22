@@ -12,14 +12,14 @@ const JobFormSchema = z.object({
   owner_id: z.number(),
   language_id: z.number(),
   jobTitle: z.string().trim().min(5, {
-    message: 'Please provide a valid job title.',
+    message: 'Job title must be at least 5 characters.',
   }),
   jobType: z.coerce
     .number()
     .gt(0, { message: 'Please select a valid job type.' }
   ),
   jobDescription: z.string().trim().min(10, {
-    message: 'Please provide a valid job description.',
+    message: 'Job description must be at least 10 characters.',
   }),
   jobStatus: z.enum(['PENDING', 'ACTIVE', 'FINISHED', 'CANCELLED']),
   jobDate: z.string().datetime({

@@ -103,22 +103,42 @@ export async function addUserNotification({
 
   try {
     const client = Redis.fromEnv();
-    const notifications = await client.json.arrappend(
+    const notificationId = crypto.randomUUID().replace(/-/g, '');
+    const payloadString = JSON.stringify({
+      ...payload,
+      id: notificationId
+    });
+
+    const notifications = await client.json.set(
       `user:${userId}`,
-      `$.${type}`,
-      JSON.stringify({
-        ...payload,
-        id: crypto.randomUUID()
-      })
+      `$.${type}.${notificationId}`,
+      payloadString
     )
+
     return {
-      success: notifications[0] === 1 ? true : false
+      success: notifications === 'OK' ? true : false
     };
 
-  } catch (error) {
+} catch (error) {
     console.error('Error updating notifications:', error);
     return {
       error: 'Error updating notifications'
     };
   }
+}
+
+export async function deleteUserNotification(notificationId: string, notificationType: TNotificationType): Promise<{success: boolean} | {error: string}> {
+  const session = await auth();
+  const userId = session?.activeUser?.id;
+
+  if (!userId) {
+    return {
+      error: 'No user session found'
+    }
+  }
+  const client = Redis.fromEnv();
+  const wasDeleted = await client.json.del(`user:${userId}`, `$.${notificationType}.${notificationId}`);
+  return {
+    success: wasDeleted === 1 ? true : false
+  };
 }

@@ -1,15 +1,11 @@
 import {
-  TEmployeeApplicationChangesItem,
-  TEmployerApplicationsIncomingItem,
-  TUpcomingEmployeeJobsItem,
-  TUpcomingEmployerJobsItem,
-  TMessagesItem
+  TNotification
 } from "@definitions/notifications";
 
 export const NEW_USER_NOTIFICATION_BASE = {
-  employeeApplicationChanges: [] as TEmployeeApplicationChangesItem[],
-  employerApplicationsIncoming: [] as TEmployerApplicationsIncomingItem[],
-  upcomingEmployeeJobs: [] as TUpcomingEmployeeJobsItem[],
-  upcomingEmployerJobs: [] as TUpcomingEmployerJobsItem[],
-  messages: [] as TMessagesItem[]
+  employeeApplicationChanges: {} as TNotification['employeeApplicationChanges'],
+  employerApplicationsIncoming: {} as TNotification['employerApplicationsIncoming'],
+  upcomingEmployeeJobs: {} as TNotification['upcomingEmployeeJobs'],
+  upcomingEmployerJobs: {} as TNotification['upcomingEmployerJobs'],
+  messages: {} as TNotification['messages']
 };

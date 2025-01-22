@@ -40,7 +40,13 @@ export async function applyToCrewRole(jobId: string, roleId: number): Promise<{s
       payload: notifcationPayload
     });
 
-    console.log('notificationUpdateResp', notificationUpdateResp);
+    if ('error' in notificationUpdateResp || !notificationUpdateResp.success) {
+      return {
+        submitted: false,
+        message: null,
+        error: 'Failed to add notification.'
+      };
+    }
 
     return {
       submitted: true,

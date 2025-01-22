@@ -20,30 +20,29 @@ export default function NotificationPopover({
 }: INotificationPopoverProps) {
 
   const notificationContent = Object.keys(notifications).reduce((output, notificationType) => {
-
     switch (notificationType) {
       case 'upcomingEmployeeJobs':
-        notifications[notificationType].forEach((notification) => {
+        Object.values(notifications[notificationType]).forEach((notification) => {
           output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
         });
         break;
       case 'upcomingEmployerJobs':
-        notifications[notificationType].forEach((notification) => {
+        Object.values(notifications[notificationType]).forEach((notification) => {
           output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
         });
         break;
       case 'employeeApplicationChanges':
-        notifications[notificationType].forEach((notification) => {
+        Object.values(notifications[notificationType]).forEach((notification) => {
           output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
         });
         break;
       case 'employerApplicationsIncoming':
-        notifications[notificationType].forEach((notification) => {
+        Object.values(notifications[notificationType]).forEach((notification) => {
           output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
         });
         break;
       case 'messages':
-        notifications[notificationType].forEach((notification) => {
+        Object.values(notifications[notificationType]).forEach((notification) => {
           output.push(<NotificationItem key={notification.id} notification={notification} closeNotificationsFn={closeNotificationsFn} />);
         });
         break;

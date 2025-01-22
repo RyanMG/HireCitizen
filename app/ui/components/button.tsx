@@ -7,6 +7,7 @@ interface IButtonProps {
   href?: string;
   disabled?: boolean;
   type?: 'button' | 'submit';
+  size?: "sm" | "md" | "lg";
 }
 
 const themeMap = {
@@ -18,8 +19,32 @@ const themeMap = {
   destoryDisabled: "bg-red-900 opacity-50 cursor-not-allowed text-white"
 }
 
-export default function Button({ label, theme = "primary", onClick, href, disabled = false, type = 'button' }: IButtonProps) {
-  const buttonClass = `flex justify-center items-center bg-blue-500 px-4 py-1 w-full rounded-lg ${disabled ? themeMap[theme + 'Disabled' as keyof typeof themeMap] : themeMap[theme]}`;
+export default function Button({
+  label,
+  theme = "primary",
+  onClick,
+  href,
+  disabled = false,
+  type = 'button',
+  size = "md"
+}: IButtonProps) {
+
+  let buttonClass = "flex justify-center items-center bg-blue-500 w-full rounded-lg";
+
+  if (disabled) {
+    buttonClass += ` ${themeMap[theme + 'Disabled' as keyof typeof themeMap]}`;
+  } else {
+    buttonClass += ` ${themeMap[theme]}`;
+  }
+
+  if (size === "sm") {
+    buttonClass += " px-2 py-1";
+  } else if (size === "md") {
+    buttonClass += " px-4 py-0";
+  } else if (size === "lg") {
+    buttonClass += " px-6 py-2";
+  }
+
   if (onClick) {
     return (
       <button className={buttonClass} disabled={disabled ? true : false} onClick={onClick} type={type}>

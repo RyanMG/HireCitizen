@@ -5,6 +5,7 @@ import { CrewRole, Job, JobType, JobTypeCategory } from "@/app/lib/definitions/j
 import { Person, PersonLanguage } from "@/app/lib/definitions/person";
 import { Timezone } from "@definitions/misc";
 import { auth } from "@/auth";
+import dayjs from "dayjs";
 
 const JOB_SEARCH_RESULTS_PER_PAGE = 8;
 
@@ -234,6 +235,8 @@ export async function getMyJobs(jobStatusList: string[]): Promise<Job[] | {error
   const session = await auth();
   const userId = session?.activeUser?.id;
 
+  const oneHourFromNow = dayjs().add(1, 'hour').toDate();
+
   try {
     const sql = neon(process.env.DATABASE_URL!);
     if (jobStatusList.length === 0 || jobStatusList.length > 4) {
@@ -257,6 +260,7 @@ export async function getMyJobs(jobStatusList: string[]): Promise<Job[] | {error
       LEFT JOIN crew_roles cr ON jcrj.crew_role_id = cr.id
       WHERE owner_id = ${userId}
       AND status = ANY(${jobStatusList})
+      AND j.job_start >= ${oneHourFromNow}
       GROUP BY j.id
       ORDER BY created_at DESC;` as Job[];
 

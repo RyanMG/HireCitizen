@@ -3,11 +3,11 @@
 import NotificationPopover from "./notificationPopover";
 import NotificationIcon from "./notificationIcon";
 import { useEffect, useRef, useState } from "react";
-import { getUserNotifications } from "@/app/lib/query/notifications/actions";
+import { getUserNotifications } from "@query/notifications/actions";
 import {
   TNotification
 } from "@definitions/notifications";
-import { NEW_USER_NOTIFICATION_BASE } from "@/app/lib/constants/notifications";
+import { NEW_USER_NOTIFICATION_BASE } from "@constants/notifications";
 
 export default function NotificationSnipe() {
   const [notificationsShown, showNotifications] = useState<boolean>(false);
@@ -27,12 +27,11 @@ export default function NotificationSnipe() {
       messages
     } = incomingNotifications;
 
-    return upcomingEmployeeJobs.length > 0 || upcomingEmployerJobs.length > 0 || employeeApplicationChanges.length > 0 || employerApplicationsIncoming.length > 0 || messages.length > 0;
+    return Object.keys(upcomingEmployeeJobs).length > 0 || Object.keys(upcomingEmployerJobs).length > 0 || Object.keys(employeeApplicationChanges).length > 0 || Object.keys(employerApplicationsIncoming).length > 0 || Object.keys(messages).length > 0;
   }
 
   const pollNotifications = async () => {
     const notificationResponse = await getUserNotifications();
-    console.log(notificationResponse);
 
     if ('error' in notificationResponse) {
       console.error(notificationResponse.error);
