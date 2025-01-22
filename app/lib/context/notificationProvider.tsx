@@ -55,8 +55,7 @@ function NotificationProvider({children}:{children: ReactNode}): ReactNode {
     }
 
     if (response.success) {
-      delete notifications.current[notificationType][notificationId];
-      setHasNewNotifications(parseNotificationResponseForChanges(notifications.current));
+      pollNotifications();
     }
   }
 
