@@ -151,3 +151,57 @@ export async function deleteUserNotification(notificationId: string, notificatio
     };
   }
 }
+
+export async function deleteUserNotificationWithoutId(notificationType: TNotificationType, notificationTargetUserId: string, keysToFindNotification: {jobId: string}|{messageId: string}): Promise<{success: boolean} | {error: string}> {
+  const session = await auth();
+  const userId = session?.activeUser?.id;
+
+  if (!userId) {
+    return {
+      error: 'No user session found'
+    }
+  }
+
+  try {
+    const client = Redis.fromEnv();
+    const notificationsResponse: Record<string, TEmployeeApplicationChangesItem | TEmployerApplicationsIncomingItem | TUpcomingEmployeeJobsItem | TUpcomingEmployerJobsItem | TMessagesItem>[]|null = await client.json.get(`user:${notificationTargetUserId}`, `$.${notificationType}`);
+    if (!notificationsResponse) {
+      return {
+        error: 'No notifications found for the provided user'
+      };
+    }
+
+    const notifications: Record<string, TEmployeeApplicationChangesItem | TEmployerApplicationsIncomingItem | TUpcomingEmployeeJobsItem | TUpcomingEmployerJobsItem | TMessagesItem> = notificationsResponse[0];
+    const notificationId = Object.keys(notifications).find((key: string) => {
+      switch (notificationType) {
+        case 'employeeApplicationChanges':
+        case 'employerApplicationsIncoming':
+        case 'upcomingEmployeeJobs':
+        case 'upcomingEmployerJobs':
+          return 'jobId' in keysToFindNotification && notifications[key].data.jobId === keysToFindNotification.jobId;
+
+        case 'messages':
+          return 'messageId' in keysToFindNotification && notifications[key].data.messageId === keysToFindNotification.messageId;
+        default:
+          return false;
+      }
+    });
+
+    if (!notificationId) {
+      return {
+        error: 'No notification found for the provided user'
+      };
+    }
+
+    const wasDeleted = await client.json.del(`user:${notificationTargetUserId}`, `$.${notificationType}.${notificationId}`);
+    return {
+      success: wasDeleted === 1 ? true : false
+    };
+
+  } catch (error) {
+    console.error('Error deleting notification:', error);
+    return {
+      error: 'Error deleting notification'
+    };
+  }
+}

@@ -8,6 +8,7 @@ import WorkHistory from "@ui/jobHistory/workHistory";
 import { Suspense } from "react";
 
 export default function JobHistory() {
+
   return (
     <PageWrapper pageHeaderTitle="Your Work History">
       <SectionHeader title="Pending Applications" />

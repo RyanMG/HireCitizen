@@ -4,9 +4,9 @@ import { neon } from "@neondatabase/serverless";
 import { auth } from 'auth';
 import { revalidatePath } from "next/cache";
 
-import { addUserNotification } from "@query/notifications/actions";
+import { addUserNotification, deleteUserNotificationWithoutId } from "@query/notifications/actions";
 import { buildNotificationPayload } from "../../utils/notifications";
-import { TApplicationsData } from "../../definitions/notifications";
+import { TApplicationsData } from "@definitions/notifications";
 /**
  * User applies to a crew role
  */
@@ -28,7 +28,7 @@ export async function applyToCrewRole(jobId: string, roleId: number): Promise<{s
     const applicationID = await sql`INSERT INTO job_applicants (job_id, person_id, crew_role_id, accepted_status) VALUES (${jobId}, ${userId}, ${roleId}, 'PENDING') RETURNING id`;
     const jobOwnerId = await sql`SELECT owner_id FROM job WHERE id = ${jobId}`;
 
-    const notifcationPayload = buildNotificationPayload('employerApplicationsIncoming', {
+    const notificationPayload = buildNotificationPayload('employerApplicationsIncoming', {
       applicationId: applicationID[0].id,
       applicantId: userId,
       jobId: jobId
@@ -37,7 +37,7 @@ export async function applyToCrewRole(jobId: string, roleId: number): Promise<{s
     const notificationUpdateResp = await addUserNotification({
       userId: jobOwnerId[0].owner_id,
       type: 'employerApplicationsIncoming',
-      payload: notifcationPayload
+      payload: notificationPayload
     });
 
     if ('error' in notificationUpdateResp || !notificationUpdateResp.success) {
@@ -95,7 +95,45 @@ export async function toggleApplicationStatus(applicationId: number, status: str
 
   try {
     const sql = neon(process.env.DATABASE_URL!);
-    await sql`UPDATE job_applicants SET accepted_status=${status} WHERE id=${applicationId}`;
+    const statusChangeResponse = await sql`UPDATE job_applicants SET accepted_status=${status} WHERE id=${applicationId} RETURNING person_id, job_id`;
+
+    // If the user is accepted, notify them
+    if (status === 'ACCEPTED') {
+      const notificationPayload = buildNotificationPayload('employeeApplicationChanges', {
+        applicationId: applicationId,
+        applicantId: statusChangeResponse[0].person_id,
+        jobId: statusChangeResponse[0].job_id
+      } as TApplicationsData)!;
+
+      const notificationUpdateResp = await addUserNotification({
+        userId: statusChangeResponse[0].person_id,
+        type: 'employeeApplicationChanges',
+        payload: notificationPayload
+      });
+
+      if ('error' in notificationUpdateResp || !notificationUpdateResp.success) {
+        return {
+          submitted: false,
+          message: null,
+          error: 'Failed to add notification.'
+        };
+      }
+    }
+
+    // If the user is set to pending or rejected, ensure we clear out any existing notifications
+    if (status === 'PENDING' || status === 'REJECTED') {
+      const notificationUpdateResp = await deleteUserNotificationWithoutId('employeeApplicationChanges', statusChangeResponse[0].person_id, {
+        jobId: statusChangeResponse[0].job_id
+      });
+
+      if ('error' in notificationUpdateResp || !notificationUpdateResp.success) {
+        return {
+          submitted: false,
+          message: null,
+          error: 'Failed to delete notification.'
+        };
+      }
+    }
 
   } catch (error) {
     console.error(error);

@@ -24,7 +24,7 @@ export function buildNotificationPayload(type: TNotificationType, data: TApplica
         type,
         data: data as TApplicationsData
       } as TEmployerApplicationsIncomingItem;
-    case 'employerApplicationsIncoming':
+    case 'employeeApplicationChanges':
       return {
         type,
         data: data as TApplicationsData
