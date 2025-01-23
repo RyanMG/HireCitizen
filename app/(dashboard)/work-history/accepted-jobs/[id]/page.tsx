@@ -1,6 +1,13 @@
-import { getJobById } from "@/app/lib/query/job/data";
-import PageWrapper from "@/app/ui/components/pageWrapper";
+import { getJobById } from "@query/job/data";
+import PageWrapper from "@components/pageWrapper";
+import ResultsLoading from "@components/resultsLoading";
 import NotificationSnackbar from "@components/notificationSnackbar";
+
+import AcceptedJobDetails from "@ui/acceptedJobs/acceptedJobDetails";
+import CurrentCrewMembers from "@ui/acceptedJobs/currentCrewMembers";
+import JobMessages from "@ui/jobCommon/jobMessagesWrapper";
+
+import { Suspense } from "react";
 
 export default async  function JobHistory(props: { params: Promise<{ id: string }> }) {
   const jobParams = await props.params;
@@ -13,7 +20,13 @@ export default async  function JobHistory(props: { params: Promise<{ id: string 
 
   return (
     <PageWrapper pageHeaderTitle={job?.title || ''}>
-      <h1>Job ID: {jobId}</h1>
+      <AcceptedJobDetails job={job} />
+      <Suspense fallback={<ResultsLoading />}>
+        <CurrentCrewMembers jobId={jobId} />
+      </Suspense>
+      <Suspense fallback={<ResultsLoading />}>
+        <JobMessages jobId={jobId} />
+      </Suspense>
     </PageWrapper>
   );
 }

@@ -92,6 +92,9 @@ export async function getUserJobApplications(user: Person, statusList: ('PENDING
   }
 }
 
+/**
+ * Get all jobs that a user has been a part of.
+ */
 export async function getUserPastJobs(user: Person): Promise<JobApplicant[] | {error:string}> {
   const dateRef = dayjs().startOf('day').subtract(1, 'day').toDate();
 
@@ -181,4 +184,44 @@ export async function getJobApplicants(jobId: string): Promise<JobApplicant[] | 
     console.error(error);
     return { error: 'Failed to get job applicants' };
   }
+}
+
+/**
+ * Get all applicants for a given job. Who have been ACCEPTED for the job.
+ */
+export async function getAcceptedCrewMembers(jobId: string): Promise<JobApplicant[] | {error:string}> {
+
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    return await sql`
+      SELECT ja.id, ja.job_id as "jobId",
+        (jsonb_agg(
+          jsonb_build_object(
+            'id', cr.id,
+            'name', cr.name,
+            'description', cr.description
+          )
+        ))[0] as "crewRole",
+        (jsonb_agg(
+          jsonb_build_object(
+            'id', p.id,
+            'handle', p.handle,
+            'moniker', p.moniker,
+            'rsi_url', p.rsi_url,
+            'employee_reputation', p.employee_reputation
+          )
+        ))[0] as "person"
+        FROM job_applicants ja
+        LEFT JOIN person p ON p.id = ja.person_id
+        LEFT JOIN crew_roles cr ON cr.id = ja.crew_role_id
+        WHERE ja.job_id = ${jobId}
+        AND ja.accepted_status = 'ACCEPTED'
+        GROUP BY ja.id;
+    ` as JobApplicant[];
+
+  } catch (error) {
+    console.error(error);
+    return { error: 'Failed to get current crew members' };
+  }
+
 }

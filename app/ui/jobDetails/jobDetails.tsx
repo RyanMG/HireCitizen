@@ -8,18 +8,7 @@ import { auth } from "@/auth";
 import NotificationSnackbar from "@ui/components/notificationSnackbar";
 
 import Link from "next/link";
-import { getJobDateFormatted } from "@/app/lib/utils/dateUtils";
-
-/**
- * Formats the estimated time to a human readable format.
- */
-const getEstimatedTime = (estimatedTime: number | undefined) => {
-  if (estimatedTime) {
-    const hours = Math.round(estimatedTime / 60);
-    return hours > 1 ? `${hours} hours` : hours === 1 ? '1 hour' : `${hours} minutes`;
-  }
-  return '1 hour';
-}
+import { getJobDateFormatted, getEstimatedTime } from "@/app/lib/utils/dateUtils";
 
 export default async function JobDetails(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
