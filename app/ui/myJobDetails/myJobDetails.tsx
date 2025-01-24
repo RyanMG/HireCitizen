@@ -2,37 +2,16 @@
 
 import { Job } from "@/app/lib/definitions/job";
 import { getJobById } from "@query/job/data";
-import NotificationSnackbar from "@ui/components/notificationSnackbar";
+import { getEstimatedTime, getJobDateFormatted } from "@utils/dateUtils";
 
-import DayJs from "dayjs";
-import CrewRoleApplications from "@ui/myJobDetails/crewRoleApplications";
+import NotificationSnackbar from "@components/notificationSnackbar";
+import ResultsLoading from "@components/resultsLoading";
+
+import CrewRoleApplications from "@ui/myJobDetails/incomingCrewRoleApplications";
+
 import { Suspense } from "react";
-import ResultsLoading from "../components/resultsLoading";
 
-/**
- * Formats the estimated time to a human readable format.
- */
-const getEstimatedTime = (estimatedTime: number | undefined) => {
-  if (estimatedTime) {
-    const hours = Math.round(estimatedTime / 60);
-    return hours > 1 ? `${hours} hours` : hours === 1 ? '1 hour' : `${hours} minutes`;
-  }
-  return '1 hour';
-}
-
-/**
- * Formats the job start date to a human readable format.
- */
-const getJobStart = (jobStart: string | undefined) => {
-  if (jobStart) {
-    return `${DayJs(jobStart).format('ddd MMM DD, YYYY')} - ${DayJs(jobStart).format('h:mm a')}`;
-  }
-  return 'No job start time provided.';
-}
-
-export default async function JobDetails(props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
-  const jobId = params.id;
+export default async function JobDetails({ jobId }: { jobId: string }) {
   const job: Job | { error: string } = await getJobById(jobId);
 
   if ('error' in job) {
@@ -58,7 +37,7 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
       <div className="flex flex-row justify-between py-2">
         <div className="flex flex-col">
           <p className="text-gray-400 text-sm italic">Job Start Date</p>
-          <p className="text-white text-lg">{getJobStart(job.jobStart)}</p>
+          <p className="text-white text-lg">{getJobDateFormatted(job.jobStart)}</p>
         </div>
 
         <div className="flex flex-col">
