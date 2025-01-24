@@ -9,7 +9,7 @@ interface IJobSearchResultProps {
 export default function JobSearchResult({ jobData }: IJobSearchResultProps) {
   return (
     <Link className="flex w-full lg:w-1/2 lg:h-28"
-      href={`/job-list/job/${jobData.id}`}
+      href={`/job-search/job/${jobData.id}`}
       prefetch={false}
     >
       <div className="flex flex-row bg-gray-300 hover:bg-gray-200 rounded-lg border border-dark-blue p-2 m-1 w-full">

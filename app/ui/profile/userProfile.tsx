@@ -43,10 +43,10 @@ export default async function UserProfile() {
       <div className="w-full border-b border-gray-500 my-4" />
       <div className="flex flex-row gap-4 w-full">
         <div className="flex flex-col gap-2 w-1/2">
-          <ReputationBar title="Your Reputation as an Employee" reputation={activeUser?.employee_reputation as Reputation} />
+          <ReputationBar title="Your Employee Reputation" reputation={activeUser?.employee_reputation as Reputation} />
         </div>
         <div className="flex flex-col gap-2 w-1/2">
-          <ReputationBar title="Your Reputation as an Employer" reputation={activeUser?.employer_reputation as Reputation} />
+          <ReputationBar title="Your Employer Reputation" reputation={activeUser?.employer_reputation as Reputation} />
         </div>
       </div>
     </>
