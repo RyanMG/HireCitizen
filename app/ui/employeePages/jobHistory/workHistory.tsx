@@ -1,7 +1,7 @@
 import { getUserPastJobs } from "@/app/lib/query/jobRoles/data";
 import { auth } from '@/auth';
 import { Person } from "@/app/lib/definitions/person";
-import NoResultsBlock from "../jobCommon/noResultsBlock";
+import NoResultsBlock from "@ui/jobCommon/noResultsBlock";
 import JobApplicationDetailsBlock from "./jobApplicationDetailsBlock";
 
 export default async function WorkHistory() {

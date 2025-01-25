@@ -7,7 +7,7 @@ import { useActionState, useState } from "react";
 import { CreateJobFormState, editJob } from '@/app/lib/query/job/actions';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CrewRole, JobTypeCategory } from '@/app/lib/definitions/job';
-import JobCrewRoleList from '../jobCommon/jobCrewRoleList';
+import JobCrewRoleList from '@ui/jobCommon/jobCrewRoleList';
 
 export default function EditJobForm({
   jobTypeCategories,

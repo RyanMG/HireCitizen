@@ -2,7 +2,7 @@ import { getUserJobApplications } from "@/app/lib/query/jobRoles/data";
 import { auth } from '@/auth';
 import { Person } from "@/app/lib/definitions/person";
 import NoResultsBlock from "../jobCommon/noResultsBlock";
-import JobApplicationDetailsBlock from "./jobApplicationDetailsBlock";
+import JobApplicationDetailsBlock from "./jobHistory/jobApplicationDetailsBlock";
 
 export default async function PendingApplications() {
   const session = await auth();

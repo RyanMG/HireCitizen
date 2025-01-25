@@ -7,7 +7,7 @@ import { getEstimatedTime, getJobDateFormatted } from "@utils/dateUtils";
 import NotificationSnackbar from "@components/notificationSnackbar";
 import ResultsLoading from "@components/resultsLoading";
 
-import CrewRoleApplications from "@ui/myJobDetails/incomingCrewRoleApplications";
+import CrewRoleApplications from "@ui/employerPages/myJobDetails/incomingCrewRoleApplications";
 
 import { Suspense } from "react";
 

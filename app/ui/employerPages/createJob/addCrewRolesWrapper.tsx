@@ -2,8 +2,8 @@
 
 import { Job } from "@/app/lib/definitions/job";
 import { getJobById } from "@/app/lib/query/job/data";
-import JobCrewRoleList from "../jobCommon/jobCrewRoleList";
-import NotificationSnackbar from "../components/notificationSnackbar";
+import JobCrewRoleList from "@ui/jobCommon/jobCrewRoleList";
+import NotificationSnackbar from "@ui/components/notificationSnackbar";
 
 interface AddCrewRolesWrapperProps {
   id: string;

@@ -1,5 +1,5 @@
 import ResultsLoading from "@components/resultsLoading";
-import CreateJobFormWrapper from "@ui/createJob/createJobFormWrapper";
+import CreateJobFormWrapper from "@ui/employerPages/createJob/createJobFormWrapper";
 import { Suspense } from "react";
 import PageWrapper from "@/app/ui/components/pageWrapper";
 

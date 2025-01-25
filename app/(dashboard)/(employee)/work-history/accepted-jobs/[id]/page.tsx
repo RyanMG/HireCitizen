@@ -3,8 +3,8 @@ import PageWrapper from "@components/pageWrapper";
 import ResultsLoading from "@components/resultsLoading";
 import NotificationSnackbar from "@components/notificationSnackbar";
 
-import AcceptedJobDetails from "@ui/acceptedJobs/acceptedJobDetails";
-import CurrentCrewMembers from "@ui/acceptedJobs/currentCrewMembers";
+import AcceptedJobDetails from "@ui/employeePages/acceptedJobs/acceptedJobDetails";
+import CurrentCrewMembers from "@ui/employeePages/acceptedJobs/currentCrewMembers";
 import JobMessages from "@ui/jobCommon/jobMessagesWrapper";
 
 import { Suspense } from "react";

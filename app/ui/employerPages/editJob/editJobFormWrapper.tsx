@@ -3,7 +3,7 @@
 import { getJobById, getJobTypeCategories } from "@query/job/data";
 import { CreateJobFormState } from "@query/job/actions";
 import dayjs from "dayjs";
-import EditJobForm from "@ui/editJob/editJobForm";
+import EditJobForm from "@ui/employerPages/editJob/editJobForm";
 import NotificationSnackbar from "@components/notificationSnackbar";
 
 export default async function EditJobFormWrapper(props: { params: Promise<{ id: string }> }) {

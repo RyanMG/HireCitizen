@@ -1,6 +1,6 @@
 import PageWrapper from "@/app/ui/components/pageWrapper";
 import ResultsLoading from "@components/resultsLoading";
-import EditJobFormWrapper from "@ui/editJob/editJobFormWrapper";
+import EditJobFormWrapper from "@ui/employerPages/editJob/editJobFormWrapper";
 import { Suspense } from "react";
 
 export default async function EditJob(props: {

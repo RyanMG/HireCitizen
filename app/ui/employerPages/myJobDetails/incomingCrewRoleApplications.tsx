@@ -3,7 +3,7 @@ import { Job } from "@/app/lib/definitions/job";
 import SectionHeader from "@components/sectionHeader";
 
 import ApplicationCard from "./roleApplicationCard";
-import NotificationSnackbar from "../components/notificationSnackbar";
+import NotificationSnackbar from "@components/notificationSnackbar";
 
 const CrewRoleApplicationHeaderView = () => {
   return (

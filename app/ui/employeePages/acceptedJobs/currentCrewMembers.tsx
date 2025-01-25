@@ -1,6 +1,6 @@
 import SectionHeader from "@components/sectionHeader";
 import { getAcceptedCrewMembers } from "@query/jobRoles/data";
-import NotificationSnackbar from "../components/notificationSnackbar";
+import NotificationSnackbar from "@components/notificationSnackbar";
 import Link from "next/link";
 
 export default async function CurrentCrewMembers({ jobId }: { jobId: string }) {

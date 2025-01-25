@@ -1,6 +1,6 @@
 import PageWrapper from "@/app/ui/components/pageWrapper";
 import ResultsLoading from "@/app/ui/components/resultsLoading";
-import MyJobsListWrapper from "@/app/ui/myJobs/myJobsListWrapper";
+import MyJobsListWrapper from "@ui/employerPages/myJobs/myJobsListWrapper";
 import { Suspense } from "react";
 
 export default function MyJobs(props: {

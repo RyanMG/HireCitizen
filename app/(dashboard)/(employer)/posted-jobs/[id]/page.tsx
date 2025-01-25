@@ -2,8 +2,8 @@ import { Suspense } from "react";
 
 import PageWrapper from "@ui/components/pageWrapper";
 import ResultsLoading from "@ui/components/resultsLoading";
-import MyJobDetails from "@ui/myJobDetails/myJobDetails";
-import JobMessagesWrapper from "@/app/ui/jobCommon/jobMessagesWrapper";
+import MyJobDetails from "@ui/employerPages/myJobDetails/myJobDetails";
+import JobMessagesWrapper from "@ui/jobCommon/jobMessagesWrapper";
 
 export default async function MyJobDetailsPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;

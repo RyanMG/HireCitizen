@@ -1,6 +1,6 @@
 import MyJobFilters from "./myJobFilters";
 import { Suspense } from "react";
-import ResultsLoading from "../components/resultsLoading";
+import ResultsLoading from "@components/resultsLoading";
 import MyJobListing from "./myJobListing";
 
 export default async function ActiveJobsList(props: {
