@@ -23,7 +23,7 @@ export default function SideBarLink({link, text, children}:ISideBarLinkProps): R
   );
 
   return (
-    <div className="flex flex-row items-center py-1 gap-2 group">
+    <div className="flex flex-row items-center my-2 gap-2 group">
       <svg
         className={clsx(
           "group-hover:fill-gray-300",

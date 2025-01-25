@@ -14,7 +14,7 @@ export default async function WorkHistory() {
   }
 
   return (
-    <div>
+    <div className="min-h-28">
       {pastJobs.length === 0 && <NoResultsBlock text="No past jobs found." />}
       {pastJobs.map((acceptedApplication) => (
         <JobApplicationDetailsBlock key={acceptedApplication.id} application={acceptedApplication} />

@@ -14,7 +14,7 @@ export default async function PendingApplications() {
   }
 
   return (
-    <div>
+    <div className="min-h-28">
       {pendingApplications.length === 0 && <NoResultsBlock text="No applications currently pending." />}
       {pendingApplications.map((application) => (
         <JobApplicationDetailsBlock key={application.id} application={application} />

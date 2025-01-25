@@ -14,7 +14,7 @@ export default async function UpcomingJobs() {
   }
 
   return (
-    <div>
+    <div className="min-h-28">
       {upcomingJobs.length === 0 && <NoResultsBlock text="No scheduled jobs. Get out there and apply!" />}
       {upcomingJobs.map((acceptedApplication) => (
         <JobApplicationDetailsBlock key={acceptedApplication.id} application={acceptedApplication} />

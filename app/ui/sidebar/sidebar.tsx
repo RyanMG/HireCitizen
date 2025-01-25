@@ -25,12 +25,12 @@ export default async function SideNav() {
           </div>
         </div>
 
-        <div className="hidden md:flex grow justify-between flex-col space-x-0 space-y-4 mt-4 px-2">
+        <div className="hidden md:flex grow justify-between flex-col space-x-0 mt-4 px-2">
            <SideBarLink link="/job-search" text="Search Jobs">
               <path d="M80-200v-80h400v80H80Zm0-200v-80h200v80H80Zm0-200v-80h200v80H80Zm744 400L670-354q-24 17-52.5 25.5T560-320q-83 0-141.5-58.5T360-520q0-83 58.5-141.5T560-720q83 0 141.5 58.5T760-520q0 29-8.5 57.5T726-410l154 154-56 56ZM560-400q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Z"/>
             </SideBarLink>
 
-            {session && (
+            {session &&
               <>
                 <SidebarSectionHeader title="EMPLOYERS">
                   <SideBarLink link="/create-job" text="Create A Job">
@@ -51,16 +51,19 @@ export default async function SideNav() {
                   </SideBarLink>
                 </SidebarSectionHeader>
 
-                <SideBarLink link="/profile" text="My Profile">
-                  <path d="M160-80q-33 0-56.5-23.5T80-160v-440q0-33 23.5-56.5T160-680h200v-120q0-33 23.5-56.5T440-880h80q33 0 56.5 23.5T600-800v120h200q33 0 56.5 23.5T880-600v440q0 33-23.5 56.5T800-80H160Zm0-80h640v-440H600q0 33-23.5 56.5T520-520h-80q-33 0-56.5-23.5T360-600H160v440Zm80-80h240v-18q0-17-9.5-31.5T444-312q-20-9-40.5-13.5T360-330q-23 0-43.5 4.5T276-312q-17 8-26.5 22.5T240-258v18Zm320-60h160v-60H560v60Zm-200-60q25 0 42.5-17.5T420-420q0-25-17.5-42.5T360-480q-25 0-42.5 17.5T300-420q0 25 17.5 42.5T360-360Zm200-60h160v-60H560v60ZM440-600h80v-200h-80v200Zm40 220Z"/>
-                </SideBarLink>
                 <SideBarLink link="/messages" text="Messages">
                   <path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/>
                 </SideBarLink>
-              </>
-            )}
 
-            {!session && <SignInLink />}
+                <SideBarLink link="/profile" text="My Profile">
+                  <path d="M160-80q-33 0-56.5-23.5T80-160v-440q0-33 23.5-56.5T160-680h200v-120q0-33 23.5-56.5T440-880h80q33 0 56.5 23.5T600-800v120h200q33 0 56.5 23.5T880-600v440q0 33-23.5 56.5T800-80H160Zm0-80h640v-440H600q0 33-23.5 56.5T520-520h-80q-33 0-56.5-23.5T360-600H160v440Zm80-80h240v-18q0-17-9.5-31.5T444-312q-20-9-40.5-13.5T360-330q-23 0-43.5 4.5T276-312q-17 8-26.5 22.5T240-258v18Zm320-60h160v-60H560v60Zm-200-60q25 0 42.5-17.5T420-420q0-25-17.5-42.5T360-480q-25 0-42.5 17.5T300-420q0 25 17.5 42.5T360-360Zm200-60h160v-60H560v60ZM440-600h80v-200h-80v200Zm40 220Z"/>
+                </SideBarLink>
+              </>
+            }
+
+            {!session &&
+              <><SignInLink /></>
+            }
 
           <div className="hidden h-auto w-full grow rounded-md bg-transparent md:block"></div>
 

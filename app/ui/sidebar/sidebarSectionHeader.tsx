@@ -8,7 +8,7 @@ export default async function SidebarSectionHeader({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex flex-col items-start gap-1 w-full mb-4">
+    <div className="flex flex-col items-start gap-1 w-full my-2">
       <div className="text-gray-300 text-sm font-semibold">
         {title}
       </div>
