@@ -12,7 +12,7 @@ export default async function SidebarSectionHeader({
       <div className="text-gray-300 text-sm font-semibold">
         {title}
       </div>
-      <div className="flex flex-col items-start gap-1 w-full ml-3">
+      <div className="flex flex-col items-start gap-1 w-full ml-4">
         {children}
       </div>
     </div>
