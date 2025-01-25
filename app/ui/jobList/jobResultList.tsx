@@ -24,9 +24,15 @@ export default async function JobResultList(props: {
 
   return (
     <div className="overflow-auto flex flex-col lg:flex-row flex-wrap">
-      {jobs.map((job) => (
-        <JobSearchResult jobData={job} key={job.id} />
-      ))}
+      {jobs.map((job) => {
+        let backPath = `/job-search`;
+        if (searchTerm && currentPage) {
+          // Escape the ? and & characters. Since I am using these search param keys in a search param
+          // it was failing to be parsed properly.
+          backPath += `	%3Fpage=${currentPage}%26query=${searchTerm}`;
+        }
+        return <JobSearchResult jobData={job} key={job.id} backPath={backPath} />
+      })}
       {currentPage > 1 && <LoadPrevBtn />}
       {jobs.length === 8 && <LoadMoreBtn />}
     </div>

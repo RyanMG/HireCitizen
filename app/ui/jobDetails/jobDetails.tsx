@@ -43,7 +43,7 @@ export default async function JobDetails(props: { params: Promise<{ id: string }
         </div>
       </div>
 
-      <Link href={`/profile/${job.owner.id}`} className="py-2">
+      <Link href={`/profile/${job.owner.id}?back=job-search/job/${job.id}`} className="py-2">
         <p className="text-gray-400 text-sm italic">Job Owner</p>
         <p className="text-light-blue text-lg font-bold not-italic">{job.owner.moniker}</p>
       </Link>
