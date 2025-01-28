@@ -23,11 +23,11 @@ export default function EditUserProfileForm({
   session: Session|null,
   timezones: Timezone[]
 }) {
-  const initialState: GetUserRSIUrlFormState = { message: null, errors: {}, userDetails: { profileImage: "", handle: "", moniker: "" } };
+  const initialState: GetUserRSIUrlFormState = { message: null, errors: {}, userDetails: { profileImage: session?.activeUser?.profile_image || "", handle: session?.activeUser?.handle || "", moniker: session?.activeUser?.moniker || "" } };
   const [state, formAction] = useActionState(updatePerson, initialState);
 
   const [formSaving, setFormSaving] = useState<boolean>(false);
-  const [rsiFieldsDisabled, setRsiFieldsDisabled] = useState<boolean>(true);
+  const [rsiFieldsDisabled, setRsiFieldsDisabled] = useState<boolean>(state?.userDetails?.handle && state?.userDetails?.moniker ? false : true);
   const [rsiUrlError, setRsiUrlError] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<string>(session?.activeUser?.profile_image || "");
 

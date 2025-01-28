@@ -13,7 +13,7 @@ export default async function EditJob(props: {
   const backUrl = back ? `/${back}` : undefined;
 
   return (
-    <PageWrapper pageHeaderTitle="Edit Job" showBackButton={backUrl ? true : false} pageBackPath={backUrl}>
+    <PageWrapper pageHeaderTitle="Edit Job" pageBackPath={backUrl}>
       <Suspense fallback={<ResultsLoading />}>
         <EditJobFormWrapper params={props.params} />
       </Suspense>

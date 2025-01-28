@@ -9,7 +9,7 @@ export default async function MyJobDetailsPage(props: { params: Promise<{ id: st
   const params = await props.params;
   const jobId = params.id;
   return (
-    <PageWrapper pageHeaderTitle="Job Details" showBackButton={true}>
+    <PageWrapper pageHeaderTitle="Job Details">
       <Suspense fallback={<ResultsLoading />}>
         <MyJobDetails jobId={jobId} />
       </Suspense>

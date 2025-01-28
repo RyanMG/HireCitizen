@@ -1,3 +1,11 @@
-export default function JobPage() {
-  return <div>Job Page</div>;
+import PageWrapper from "@/app/ui/components/pageWrapper";
+
+export default function SharedJobPage() {
+  return (
+    <PageWrapper pageHeaderTitle="Job Details">
+      <div>
+        <h1>Job Details</h1>
+      </div>
+    </PageWrapper>
+  );
 }

@@ -1,27 +1,30 @@
 'use client'
 
+import backPathStack from "@utils/backPathStack";
 import BackElementIcon from "@components/iconBtns/backIcon";
 import { useRouter } from "next/navigation";
 
 interface IPageHeaderProps {
   title: string,
-  showBackButton?: boolean,
   pageBackPath?: string
 }
 
 export default function PageHeader({
   title,
-  showBackButton = false,
   pageBackPath
 }: IPageHeaderProps) {
   const router = useRouter();
 
+  if (pageBackPath) {
+    backPathStack.push(pageBackPath);
+  }
+
   return (
     <div className="flex flex-row justify-start items-center w-full border-b-2 border-gray-500 pb-2">
-      {showBackButton && <BackElementIcon
+      {backPathStack.lastPath && <BackElementIcon
         onClickFn={() => {
-          if (pageBackPath) {
-            router.push(pageBackPath);
+          if (backPathStack.lastPath) {
+            router.push(backPathStack.pop()!);
           } else {
             router.back();
           }

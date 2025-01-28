@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 
 const JOB_PENDING = 'PENDING';
 const JOB_ACTIVE = 'ACTIVE';
-const JOB_FINISHED = 'FINISHED';
 const JOB_CANCELLED = 'CANCELLED';
 
 export default function MyJobFilters() {
@@ -18,7 +17,6 @@ export default function MyJobFilters() {
 
   const [pending, setPending] = useState<boolean>(false);
   const [active, setActive] = useState<boolean>(false);
-  const [completed, setCompleted] = useState<boolean>(false);
   const [cancelled, setCancelled] = useState<boolean>(false);
 
   /**
@@ -27,7 +25,6 @@ export default function MyJobFilters() {
   const setFilterState = (filters: string[]) => {
     setPending(filters.includes(JOB_PENDING));
     setActive(filters.includes(JOB_ACTIVE));
-    setCompleted(filters.includes(JOB_FINISHED));
     setCancelled(filters.includes(JOB_CANCELLED));
   }
 
@@ -63,7 +60,6 @@ export default function MyJobFilters() {
     <div className="flex flex-row gap-2 mb-4">
       <Chip label="Pending Jobs" color="warning" variant={pending ? 'filled' : 'outlined'} onClick={() => handleFilterClick(JOB_PENDING)} />
       <Chip label="Active Jobs" color="warning" variant={active ? 'filled' : 'outlined'} onClick={() => handleFilterClick(JOB_ACTIVE)} />
-      <Chip label="Completed Jobs" color="warning" variant={completed ? 'filled' : 'outlined'} onClick={() => handleFilterClick(JOB_FINISHED)} />
       <Chip label="Cancelled Jobs" color="warning" variant={cancelled ? 'filled' : 'outlined'} onClick={() => handleFilterClick(JOB_CANCELLED)} />
     </div>
   );
