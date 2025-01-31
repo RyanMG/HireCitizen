@@ -1,11 +1,12 @@
 import { neon } from "@neondatabase/serverless";
 import { TJobMessage } from "../../definitions/messages";
+import { auth } from "@/auth";
 
 export const postJobMessages = async (message: string, jobId: string) => {
   const session = await auth();
   const userId = session?.activeUser?.id;
-  const createdAt = new Date().toIsoString();
-  
+  const createdAt = new Date().toISOString();
+
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const newMessage = await sql`
