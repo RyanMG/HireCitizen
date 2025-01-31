@@ -5,7 +5,7 @@ import Link from 'next/link';
 import ProfileImage from '@ui/profile/profileImage';
 import ProfileActionButtons from '@ui/profile/profileActionBtns';
 import ReputationBar from './reputationBars';
-import { Reputation } from '@/app/lib/definitions/person';
+import { TReputation } from '@/app/lib/definitions/person';
 import { redirect } from 'next/navigation';
 
 export default async function UserProfile() {
@@ -43,10 +43,10 @@ export default async function UserProfile() {
       <div className="w-full border-b border-gray-500 my-4" />
       <div className="flex flex-row gap-4 w-full">
         <div className="flex flex-col gap-2 w-1/2">
-          <ReputationBar title="Your Employee Reputation" reputation={activeUser?.employee_reputation as Reputation} />
+          <ReputationBar title="Your Employee Reputation" reputation={activeUser?.employee_reputation as TReputation} />
         </div>
         <div className="flex flex-col gap-2 w-1/2">
-          <ReputationBar title="Your Employer Reputation" reputation={activeUser?.employer_reputation as Reputation} />
+          <ReputationBar title="Your Employer Reputation" reputation={activeUser?.employer_reputation as TReputation} />
         </div>
       </div>
     </>

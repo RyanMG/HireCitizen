@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { auth } from 'auth';
 import { revalidatePath } from "next/cache";
-import { CrewRole } from "../../definitions/job";
+import { TCrewRole } from "@definitions/job";
 
 const JobFormSchema = z.object({
   id: z.string(),
@@ -58,8 +58,8 @@ export type CreateJobFormState = {
   };
 };
 
-const JOB_SAVE_REDIRECT_PATH = '/my-jobs?jobStatus=PENDING';
-const JOB_SAVE_REVALIDATE_PATH = '/my-jobs';
+const JOB_SAVE_REDIRECT_PATH = '/posted-jobs?jobStatus=PENDING';
+const JOB_SAVE_REVALIDATE_PATH = '/posted-jobs';
 /**
  * Create an new job
  */
@@ -199,7 +199,7 @@ export async function editJob(jobId: string, prevState: CreateJobFormState | nul
 /**
  * Save user-defined roles associated with a job
  */
-export async function saveJobRoles(jobId: string, selectedRoles: CrewRole[]) {
+export async function saveJobRoles(jobId: string, selectedRoles: TCrewRole[]) {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     for await (const role of selectedRoles) {
@@ -254,11 +254,11 @@ export async function toggleJobActive(jobId: string, active: boolean): Promise<{
     const sql = neon(process.env.DATABASE_URL!);
     if (active) {
       await sql`UPDATE job SET status = 'ACTIVE' WHERE id = ${jobId}`;
-      revalidatePath('/my-jobs');
+      revalidatePath('/posted-jobs');
       return { message: 'Job activated.' };
     } else {
       await sql`UPDATE job SET status = 'PENDING' WHERE id = ${jobId}`;
-      revalidatePath('/my-jobs');
+      revalidatePath('/posted-jobs');
       return { message: 'Job deactivated.' };
     }
 

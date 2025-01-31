@@ -1,10 +1,10 @@
 'use server';
 
 import { neon } from "@neondatabase/serverless";
-import { Person } from "@/app/lib/definitions/person";
+import { TPerson } from "@definitions/person";
 import { parse } from 'node-html-parser';
 
-export const getPersonById = async (id: string): Promise<Person | {error: string}> => {
+export const getPersonById = async (id: string): Promise<TPerson | {error: string}> => {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const personQuery = await sql`
@@ -35,7 +35,7 @@ export const getPersonById = async (id: string): Promise<Person | {error: string
         utc_offset: personQuery[0].timezone_offset,
         id: personQuery[0].timezone_id
       }
-    } as Person;
+    } as TPerson;
 
   } catch (error) {
     console.error('Error fetching person by id:', error);
@@ -47,7 +47,7 @@ export const getPersonById = async (id: string): Promise<Person | {error: string
 /**
  * Get a person by email - used in authentication as providers return a common email
  */
-export const getPersonByEmail = async (email: string): Promise<Person | null> => {
+export const getPersonByEmail = async (email: string): Promise<TPerson | null> => {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const personQuery = await sql`
@@ -77,7 +77,7 @@ export const getPersonByEmail = async (email: string): Promise<Person | null> =>
         name: timezone_name,
         id: timezone_id
       }
-    } as Person;
+    } as TPerson;
 
   } catch (error) {
     console.error('Error fetching person by email:', error);

@@ -144,7 +144,7 @@ export async function toggleApplicationStatus(applicationId: number, status: str
     };
   }
 
-  revalidatePath('/my-jobs');
+  revalidatePath('/posted-jobs');
   return {
     submitted: true,
     message: 'Job application status updated.',

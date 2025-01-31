@@ -1,11 +1,11 @@
-import { Reputation } from "@/app/lib/definitions/person";
+import { TReputation } from "@/app/lib/definitions/person";
 import clsx from "clsx";
 
 export default function ReputationBar({
   reputation,
   title
 }: {
-  reputation: Reputation;
+  reputation: TReputation;
   title: string;
 }) {
   return (

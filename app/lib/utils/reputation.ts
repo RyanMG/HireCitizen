@@ -1,9 +1,9 @@
 'use server';
 
 import { auth } from "@/auth";
-import { Reputation } from "@/app/lib/definitions/person";
+import { TReputation } from "@definitions/person";
 
-export default async function calculateEmployeeReputation(): Promise<Reputation | null> {
+export default async function calculateEmployeeReputation(): Promise<TReputation | null> {
   const session = await auth();
   const user = session?.activeUser;
 

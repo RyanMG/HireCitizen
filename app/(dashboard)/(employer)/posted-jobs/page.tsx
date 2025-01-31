@@ -1,6 +1,6 @@
 import PageWrapper from "@/app/ui/components/pageWrapper";
 import ResultsLoading from "@/app/ui/components/resultsLoading";
-import MyJobsListWrapper from "@/app/ui/myJobs/myJobsListWrapper";
+import PostedJobsListWrapper from "@ui/employerPages/postedJobs/postedJobsListWrapper";
 import { Suspense } from "react";
 
 export default function MyJobs(props: {
@@ -11,7 +11,7 @@ export default function MyJobs(props: {
   return (
     <PageWrapper pageHeaderTitle="Your Posted Jobs">
       <Suspense fallback={<ResultsLoading />}>
-        <MyJobsListWrapper searchParams={props.searchParams} />
+        <PostedJobsListWrapper searchParams={props.searchParams} />
       </Suspense>
     </PageWrapper>
   )

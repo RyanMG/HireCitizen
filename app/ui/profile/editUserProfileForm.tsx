@@ -13,7 +13,7 @@ import ProfileImage from "@ui/profile/profileImage";
 import { scrapeRSIDetails } from "@query/person/data";
 import { GetUserRSIUrlFormState, updatePerson } from "@query/person/actions";
 
-import { Timezone } from "@definitions/misc";
+import { TTimezone } from "@definitions/misc";
 import { redirect } from "next/navigation";
 
 export default function EditUserProfileForm({
@@ -21,13 +21,13 @@ export default function EditUserProfileForm({
   timezones
 }: {
   session: Session|null,
-  timezones: Timezone[]
+  timezones: TTimezone[]
 }) {
-  const initialState: GetUserRSIUrlFormState = { message: null, errors: {}, userDetails: { profileImage: "", handle: "", moniker: "" } };
+  const initialState: GetUserRSIUrlFormState = { message: null, errors: {}, userDetails: { profileImage: session?.activeUser?.profile_image || "", handle: session?.activeUser?.handle || "", moniker: session?.activeUser?.moniker || "" } };
   const [state, formAction] = useActionState(updatePerson, initialState);
 
   const [formSaving, setFormSaving] = useState<boolean>(false);
-  const [rsiFieldsDisabled, setRsiFieldsDisabled] = useState<boolean>(true);
+  const [rsiFieldsDisabled, setRsiFieldsDisabled] = useState<boolean>(state?.userDetails?.handle && state?.userDetails?.moniker ? false : true);
   const [rsiUrlError, setRsiUrlError] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<string>(session?.activeUser?.profile_image || "");
 

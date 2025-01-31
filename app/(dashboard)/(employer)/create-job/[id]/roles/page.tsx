@@ -1,6 +1,6 @@
 import PageWrapper from "@/app/ui/components/pageWrapper";
 import ResultsLoading from "@/app/ui/components/resultsLoading";
-import AddCrewRolesWrapper from "@/app/ui/createJob/addCrewRolesWrapper";
+import AddCrewRolesWrapper from "@ui/employerPages/createJob/addCrewRolesWrapper";
 import { Suspense } from "react";
 
 export default async function AddCrewRolesToNewJob(props: { params: Promise<{ id: string }> }) {

@@ -15,7 +15,7 @@ export default function SideBarLink({link, text, children}:ISideBarLinkProps): R
   const linkRoot = link?.split('?')[0];
 
   const textStyling = clsx(
-    "group-hover:text-gray-300 text-lg",
+    "group-hover:text-gray-300 text-md",
     {
       "text-white": pathname === linkRoot,
       "text-gray-500": pathname !== linkRoot
@@ -23,7 +23,7 @@ export default function SideBarLink({link, text, children}:ISideBarLinkProps): R
   );
 
   return (
-    <div className="flex flex-row items-center my-2 gap-2 group">
+    <div className="flex flex-row items-center my-2 gap-1 group">
       <svg
         className={clsx(
           "group-hover:fill-gray-300",
@@ -33,9 +33,9 @@ export default function SideBarLink({link, text, children}:ISideBarLinkProps): R
           }
         )}
         xmlns="http://www.w3.org/2000/svg"
-        height="24px"
+        height="22px"
         viewBox="0 -960 960 960"
-        width="24px"
+        width="22px"
       >
         {children}
       </svg>
