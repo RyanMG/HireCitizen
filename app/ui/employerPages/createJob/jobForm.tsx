@@ -7,12 +7,12 @@ import Checkbox from "@mui/material/Checkbox";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import FormWithErrorBlock from "@components/formWithErrorBlock";
-import { JobTypeCategory } from "@/app/lib/definitions/job";
+import { TJobTypeCategory } from "@definitions/job";
 import { initialCap } from "@/app/lib/utils/textUtils";
 import { CreateJobFormState } from "@query/job/actions";
 
 interface JobFormProps {
-  jobTypeCategories: JobTypeCategory[],
+  jobTypeCategories: TJobTypeCategory[],
   formState: CreateJobFormState,
   jobStartDate: string,
   onChangeJobType?: (value: number) => void

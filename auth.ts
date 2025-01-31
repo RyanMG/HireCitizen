@@ -4,7 +4,7 @@ import Discord from "next-auth/providers/discord"
 
 import { createNewPersonFromAuth } from '@query/person/actions';
 import { getPersonByEmail } from '@query/person/data';
-import { Person } from '@definitions/person';
+import { TPerson } from '@definitions/person';
 import { addUserToNotifications } from '@query/notifications/actions';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -25,7 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // User will be passed on first sign in with provider
       if (user && trigger === "signIn") {
         try {
-          let activeUser: Person | null = await getPersonByEmail(token.email as string);
+          let activeUser: TPerson | null = await getPersonByEmail(token.email as string);
           if (!activeUser) {
             // Create new user
             activeUser = await createNewPersonFromAuth(user as User);

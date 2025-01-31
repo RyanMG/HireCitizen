@@ -1,12 +1,12 @@
 import { getUserJobApplications } from "@/app/lib/query/jobRoles/data";
 import { auth } from '@/auth';
-import { Person } from "@/app/lib/definitions/person";
+import { TPerson } from "@definitions/person";
 import NoResultsBlock from "@components/noResultsBlock";
 import JobApplicationDetailsBlock from "@ui/employeePages/jobApplicationDetailsBlock";
 
 export default async function PendingApplications() {
   const session = await auth();
-  const user = session?.activeUser as Person;
+  const user = session?.activeUser as TPerson;
   const pendingApplications = await getUserJobApplications(user, ['PENDING', 'REJECTED']);
 
   if ('error' in pendingApplications) {

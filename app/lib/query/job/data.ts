@@ -1,9 +1,9 @@
 'use server';
 
 import { neon } from "@neondatabase/serverless";
-import { CrewRole, Job, JobType, JobTypeCategory } from "@/app/lib/definitions/job";
-import { Person, PersonLanguage } from "@/app/lib/definitions/person";
-import { Timezone } from "@definitions/misc";
+import { TCrewRole, TJob, TJobType, TJobTypeCategory } from "@/app/lib/definitions/job";
+import { TPerson, TPersonLanguage } from "@/app/lib/definitions/person";
+import { TTimezone } from "@definitions/misc";
 import { auth } from "@/auth";
 import dayjs from "dayjs";
 
@@ -12,7 +12,7 @@ const JOB_SEARCH_RESULTS_PER_PAGE = 8;
 /**
  * Search jobs by a search term.
  */
-export async function searchJobsPaginated(searchTerm: string = "", currentPage: number = 1): Promise<Job[] | {error:string}> {
+export async function searchJobsPaginated(searchTerm: string = "", currentPage: number = 1): Promise<TJob[] | {error:string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
 
@@ -78,7 +78,7 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
         LIMIT ${JOB_SEARCH_RESULTS_PER_PAGE} OFFSET ${pageOffset};`
     }
 
-    const jobs = jobData.map<Job>(row => ({
+    const jobs = jobData.map<TJob>(row => ({
       id: row.id,
       title: row.title,
       description: row.description,
@@ -88,11 +88,11 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
       owner: {
         id: row.person_id,
         moniker: row.moniker
-      } as Person,
+      } as TPerson,
       jobType: {
         id: row.jobtype_id,
-        name: row.job_type_name as JobType['name']
-      } as unknown as JobType
+        name: row.job_type_name as TJobType['name']
+      } as unknown as TJobType
     }));
 
     return jobs;
@@ -105,7 +105,7 @@ export async function searchJobsPaginated(searchTerm: string = "", currentPage: 
 /**
  * Get a single job by its id.
  */
-export async function getJobById(jobId: string): Promise<Job | {error:string}> {
+export async function getJobById(jobId: string): Promise<TJob | {error:string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
 
@@ -155,16 +155,16 @@ export async function getJobById(jobId: string): Promise<Job | {error:string}> {
         owner: {
           id: job.owner_id,
           moniker: job.moniker
-        } as Person,
+        } as TPerson,
         jobType: {
           id: job.jobtype_id,
           name: job.job_type_name,
           description: job.job_type_description
-        } as JobType,
+        } as TJobType,
         language: {
           code: job.language_code,
           name: job.language_name
-        } as PersonLanguage,
+        } as TPersonLanguage,
         crewRoles: jobRoles.map(role => {
           return {
             id: role.crew_role_id,
@@ -172,9 +172,9 @@ export async function getJobById(jobId: string): Promise<Job | {error:string}> {
             name: role.crew_role_name,
             description: role.crew_role_description,
             count: role.crew_role_count
-          } as CrewRole
+          } as TCrewRole
         })
-      } as Job;
+      } as TJob;
 
       return jobResp;
     }
@@ -189,10 +189,10 @@ export async function getJobById(jobId: string): Promise<Job | {error:string}> {
 /**
  * Get the job type categories.
  */
-export async function getJobTypeCategories(): Promise<JobTypeCategory[] | {error:string}> {
+export async function getJobTypeCategories(): Promise<TJobTypeCategory[] | {error:string}> {
   try {
     const sql = neon(process.env.DATABASE_URL!);
-    const data = await sql`SELECT * FROM job_type` as JobTypeCategory[];
+    const data = await sql`SELECT * FROM job_type` as TJobTypeCategory[];
     return data;
 
   } catch {
@@ -202,13 +202,13 @@ export async function getJobTypeCategories(): Promise<JobTypeCategory[] | {error
 /**
  *
  */
-export async function getCrewRoles(jobTypeId: number): Promise<CrewRole[] | {error:string}> {
+export async function getCrewRoles(jobTypeId: number): Promise<TCrewRole[] | {error:string}> {
 
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const data = await sql`SELECT * FROM crew_roles WHERE id = ANY (
       SELECT crew_role_id FROM job_type_crew_role_join WHERE job_type_id = ${jobTypeId}
-    ) OR id = 1` as CrewRole[];
+    ) OR id = 1` as TCrewRole[];
 
     return data;
 
@@ -220,10 +220,10 @@ export async function getCrewRoles(jobTypeId: number): Promise<CrewRole[] | {err
 /**
  * Get the timezones.
  */
-export async function getTimezones(): Promise<Timezone[] | {message:string}> {
+export async function getTimezones(): Promise<TTimezone[] | {message:string}> {
   try {
     const sql = neon(process.env.DATABASE_URL!);
-    const data = await sql`SELECT * FROM time_zones` as Timezone[];
+    const data = await sql`SELECT * FROM time_zones` as TTimezone[];
     return data;
 
   } catch {
@@ -231,7 +231,7 @@ export async function getTimezones(): Promise<Timezone[] | {message:string}> {
   }
 }
 
-export async function getMyJobs(jobStatusList: string[]): Promise<Job[] | {error:string}> {
+export async function getMyJobs(jobStatusList: string[]): Promise<TJob[] | {error:string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
 
@@ -262,7 +262,7 @@ export async function getMyJobs(jobStatusList: string[]): Promise<Job[] | {error
       AND status = ANY(${jobStatusList})
       AND j.job_start >= ${oneHourFromNow}
       GROUP BY j.id
-      ORDER BY created_at DESC;` as Job[];
+      ORDER BY created_at DESC;` as TJob[];
 
   } catch (error) {
     console.error(error);

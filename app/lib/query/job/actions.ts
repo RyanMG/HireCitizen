@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { auth } from 'auth';
 import { revalidatePath } from "next/cache";
-import { CrewRole } from "../../definitions/job";
+import { TCrewRole } from "@definitions/job";
 
 const JobFormSchema = z.object({
   id: z.string(),
@@ -199,7 +199,7 @@ export async function editJob(jobId: string, prevState: CreateJobFormState | nul
 /**
  * Save user-defined roles associated with a job
  */
-export async function saveJobRoles(jobId: string, selectedRoles: CrewRole[]) {
+export async function saveJobRoles(jobId: string, selectedRoles: TCrewRole[]) {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     for await (const role of selectedRoles) {

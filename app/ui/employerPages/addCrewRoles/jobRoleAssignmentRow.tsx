@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import CloseElementIcon from "@components/iconBtns/closeIcon";
-import { CrewRole } from "@/app/lib/definitions/job";
+import { TCrewRole } from "@definitions/job";
 
 interface IJobRoleAssignmentRowProps {
-  role: CrewRole;
+  role: TCrewRole;
   removeRole: (id: number) => void;
   updateRole: (id: number, count: number) => void;
 }

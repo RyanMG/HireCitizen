@@ -1,12 +1,12 @@
 import { getUserPastJobs } from "@/app/lib/query/jobRoles/data";
 import { auth } from '@/auth';
-import { Person } from "@/app/lib/definitions/person";
+import { TPerson } from "@/app/lib/definitions/person";
 import NoResultsBlock from "@components/noResultsBlock";
 import JobApplicationDetailsBlock from "@ui/employeePages/jobApplicationDetailsBlock";
 
 export default async function WorkHistory() {
   const session = await auth();
-  const user = session?.activeUser as Person;
+  const user = session?.activeUser as TPerson;
   const pastJobs = await getUserPastJobs(user);
 
   if ('error' in pastJobs) {

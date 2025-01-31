@@ -1,8 +1,8 @@
-import { JobApplicant } from "@/app/lib/definitions/job";
+import { TJobApplicant } from "@definitions/job";
 import clsx from "clsx";
 import Link from "next/link";
 
-export default function JobApplicationDetailsBlock({ application }: { application: JobApplicant }) {
+export default function JobApplicationDetailsBlock({ application }: { application: TJobApplicant }) {
   return (
     <div className="flex flex-row justify-between items-center bg-gray-400 px-4 py-2 my-1 rounded-md">
       <div className="flex flex-col">

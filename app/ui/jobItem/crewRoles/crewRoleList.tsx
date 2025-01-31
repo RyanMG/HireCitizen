@@ -1,24 +1,24 @@
 'use client';
 
-import { Job, JobApplicant } from "@/app/lib/definitions/job";
+import { TJob, TJobApplicant } from "@definitions/job";
 import CrewRoleListing from "./crewRoleListing";
 import { useCallback, useEffect, useState } from "react";
 import { getJobApplicationStatus } from "@/app/lib/query/jobRoles/data";
-import { Person } from "@/app/lib/definitions/person";
+import { TPerson } from "@definitions/person";
 
 interface CrewRoleListProps {
-  job: Job,
-  user: Person
+  job: TJob,
+  user: TPerson
 }
 
 export default function CrewRoleList({
   job,
   user
 }: CrewRoleListProps) {
-  const [application, setApplication] = useState<JobApplicant | null>(null);
+  const [application, setApplication] = useState<TJobApplicant | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchAndSetApplication = (user: Person, jobId: string) => {
+  const fetchAndSetApplication = (user: TPerson, jobId: string) => {
     getJobApplicationStatus(jobId, user)
       .then((updatedApplication) => {
         if (updatedApplication && 'error' in updatedApplication) {

@@ -3,7 +3,7 @@ import NotificationSnackbar from "../components/notificationSnackbar";
 import ProfileImage from "./profileImage";
 import Link from "next/link";
 import ReputationBar from "./reputationBars";
-import { Reputation } from "@/app/lib/definitions/person";
+import { TReputation } from "@definitions/person";
 
 export default async function MemberProfile({
   memberId
@@ -40,10 +40,10 @@ export default async function MemberProfile({
     <div className="w-full border-b border-gray-500 my-4" />
       <div className="flex flex-row gap-4 w-full">
         <div className="flex flex-col gap-2 w-1/2">
-          <ReputationBar title="Citizen's Employee Reputation" reputation={member?.employee_reputation as Reputation} />
+          <ReputationBar title="Citizen's Employee Reputation" reputation={member?.employee_reputation as TReputation} />
         </div>
         <div className="flex flex-col gap-2 w-1/2">
-          <ReputationBar title="Citizen's Employer Reputation" reputation={member?.employer_reputation as Reputation} />
+          <ReputationBar title="Citizen's Employer Reputation" reputation={member?.employer_reputation as TReputation} />
         </div>
       </div>
   </>

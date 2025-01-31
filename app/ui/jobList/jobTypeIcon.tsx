@@ -1,4 +1,4 @@
-import { JobType } from "@/app/lib/definitions/job";
+import { TJobType } from "@definitions/job";
 import clsx from "clsx";
 import { ReactElement } from "react";
 
@@ -87,7 +87,7 @@ function TransportIcon():ReactElement {
 }
 
 interface IJobTypeIconProps {
-  jobType: JobType
+  jobType: TJobType
   size?: 'small' | 'medium' | 'large'
 }
 

@@ -3,15 +3,9 @@
 import IconButton from "@ui/components/iconBtns/iconBtn";
 import Link from "next/link";
 import { getJobDateFormatted, getEstimatedTime } from "@/app/lib/utils/dateUtils";
-import { getJobById } from "@/app/lib/query/job/data";
-import NotificationSnackbar from "../components/notificationSnackbar";
+import { TJob } from "@definitions/job";
 
-export default async function JobDetails({ jobId }: { jobId: string }) {
-  const job = await getJobById(jobId);
-
-  if ('error' in job) {
-    return <NotificationSnackbar type="error" messages={[job.error]} />;
-  }
+export default async function JobDetails({ job }: { job: TJob }) {
 
   return (
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-sm mb-4 p-4">

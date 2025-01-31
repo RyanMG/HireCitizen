@@ -1,11 +1,11 @@
 'use client';
 
-import { CrewRole, JobApplicant } from "@/app/lib/definitions/job";
+import { TCrewRole, TJobApplicant } from "@definitions/job";
 import { Button, ButtonProps, styled } from "@mui/material";
 import { useActionState, useEffect, useState } from "react";
 import { applyToCrewRole, rescindCrewRoleApplication } from "@query/jobRoles/actions";
 
-const getButtonText = (currentApplication: JobApplicant | null, isApplied: boolean) => {
+const getButtonText = (currentApplication: TJobApplicant | null, isApplied: boolean) => {
   if (currentApplication && currentApplication.acceptedStatus === 'ACCEPTED') {
     return 'Accepted';
   } else if (currentApplication && currentApplication.acceptedStatus === 'REJECTED') {
@@ -25,9 +25,9 @@ const ApplicationButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 export default function CrewRoleListing(props: {
-  role: CrewRole,
+  role: TCrewRole,
   jobId: string,
-  currentApplication: JobApplicant | null,
+  currentApplication: TJobApplicant | null,
   updateApplication: (isApplied: boolean) => void
 }) {
   const {

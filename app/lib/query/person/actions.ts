@@ -1,6 +1,6 @@
 'use server';
 
-import { Person } from "@/app/lib/definitions/person";
+import { TPerson } from "@definitions/person";
 import { neon } from "@neondatabase/serverless";
 import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -33,7 +33,7 @@ const PersonSchema = z.object({
 /**
  * Create a new person from auth sign in
  */
-export const createNewPersonFromAuth = async (user: User): Promise<Person | null> => {
+export const createNewPersonFromAuth = async (user: User): Promise<TPerson | null> => {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const person = await sql`
@@ -52,7 +52,7 @@ export const createNewPersonFromAuth = async (user: User): Promise<Person | null
         code: language[0].code,
         name: language[0].name
       }
-    } as Person;
+    } as TPerson;
 
   } catch (error) {
     console.error('Error creating person:', error);

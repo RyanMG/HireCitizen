@@ -1,6 +1,6 @@
 'use server';
 
-import { Job } from "@/app/lib/definitions/job";
+import { TJob } from "@definitions/job";
 import { getJobById } from "@/app/lib/query/job/data";
 import JobCrewRoleList from "@ui/employerPages/addCrewRoles/jobCrewRoleList";
 import NotificationSnackbar from "@ui/components/notificationSnackbar";
@@ -13,7 +13,7 @@ export default async function AddCrewRolesWrapper({
   id
 }: AddCrewRolesWrapperProps) {
 
-  const job: Job | { error: string } = await getJobById(id);
+  const job: TJob | { error: string } = await getJobById(id);
 
   if ('error' in job) {
     return <NotificationSnackbar

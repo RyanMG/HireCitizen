@@ -2,7 +2,7 @@
 
 import Button from "@components/button";
 import AddJobRolesModal from "./addJobRolesModal";
-import { CrewRole, JobTypeCategory } from "@/app/lib/definitions/job";
+import { TCrewRole, TJobTypeCategory } from "@definitions/job";
 import { useState } from "react";
 import { saveJobRoles, removeJobRole } from "@/app/lib/query/job/actions";
 import CloseIcon from "@components/iconBtns/closeIcon";
@@ -10,13 +10,13 @@ import { useRouter } from "next/navigation";
 
 interface JobCrewRoleListProps {
   jobId: string;
-  crewRoles: CrewRole[] | undefined;
-  currentJobType: JobTypeCategory | null;
+  crewRoles: TCrewRole[] | undefined;
+  currentJobType: TJobTypeCategory | null;
 }
 /**
  * Initial role list item
  */
-const JobRoleListItem = ({ role, onClickRemove }: { role: CrewRole, onClickRemove: () => void }) => {
+const JobRoleListItem = ({ role, onClickRemove }: { role: TCrewRole, onClickRemove: () => void }) => {
   return (
     <div className="flex flex-row items-center gap-4 border border-gray-600 bg-gray-300 p-2 rounded-lg">
       <div className="w-6">
@@ -37,7 +37,7 @@ export default function JobCrewRoleList({
   currentJobType
 }: JobCrewRoleListProps) {
   const [rolesModalOpen, setRolesModalOpen] = useState<boolean>(false);
-  const [currentJobRoles, setCurrentJobRoles] = useState<CrewRole[]>(crewRoles || []);
+  const [currentJobRoles, setCurrentJobRoles] = useState<TCrewRole[]>(crewRoles || []);
   const router = useRouter();
   /**
    * Remove a role from the job
@@ -55,7 +55,7 @@ export default function JobCrewRoleList({
   /**
    * Save updated job roles
    */
-  const saveUpdatedJobRoles = async (selectedRoles: CrewRole[]) => {
+  const saveUpdatedJobRoles = async (selectedRoles: TCrewRole[]) => {
     const saveResp = await saveJobRoles(jobId, selectedRoles);
     if ('error' in saveResp) {
       // @TODO handle error
@@ -113,7 +113,7 @@ export default function JobCrewRoleList({
         onClickClose={() => {
           setRolesModalOpen(false);
         }}
-        onClickSave={(selectedRoles: CrewRole[]) => {
+        onClickSave={(selectedRoles: TCrewRole[]) => {
           setRolesModalOpen(false);
           saveUpdatedJobRoles(selectedRoles);
         }}

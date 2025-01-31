@@ -1,23 +1,23 @@
-import { Person, PersonLanguage } from "./person";
+import { TPerson, TPersonLanguage } from "./person";
 
-export type JobType = {
+export type TJobType = {
   id: number;
   name: "mining" | "cargo" | "construction" | "security" | "salvage" | "event" | "bountyHunting" | "rolePlay" | "repair" | "exploration";
   description: string;
 };
 
-export type JobTypeCategory = {
+export type TJobTypeCategory = {
   id: number;
   name: string;
   description?: string;
 };
 
-export type Job = {
+export type TJob = {
   id: string;
-  owner: Person;
+  owner: TPerson;
   title: string;
   description: string;
-  jobType: JobType;
+  jobType: TJobType;
   status?: 'PENDING' | 'ACTIVE' | 'FINISHED' | 'CANCELLED';
   createdAt?: string;
   updatedAt?: string;
@@ -25,34 +25,34 @@ export type Job = {
   estimatedTime?: number;
   jobPrivacy?: string;
   jobReputationGate?: string;
-  language?: PersonLanguage;
+  language?: TPersonLanguage;
   isBookmarked?: boolean;
   isFlagged?: boolean;
-  crewRoles?: CrewRole[];
+  crewRoles?: TCrewRole[];
 }
 
-export type CrewRole = {
+export type TCrewRole = {
   id: number;
   name: string;
   description: string;
   count: number;
 }
 
-export type CrewRoleOption = {
+export type TCrewRoleOption = {
   label: string;
   value: string;
 }
 
-export type JobApplicant = {
+export type TJobApplicant = {
   id: number;
   jobId: string;
-  job?: Job;
-  person: Person;
-  crewRole: CrewRole;
+  job?: TJob;
+  person: TPerson;
+  crewRole: TCrewRole;
   acceptedStatus: string;
 }
 
-export type JobTypeCrewRoleJoin = {
+export type TJobTypeCrewRoleJoin = {
   id: number;
   job_type_id: number;
   crew_role_id: number;

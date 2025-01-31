@@ -6,14 +6,14 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { useActionState } from "react";
 import { createNewJob, CreateJobFormState } from '@/app/lib/query/job/actions';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { JobTypeCategory } from '@/app/lib/definitions/job';
+import { TJobTypeCategory } from '@definitions/job';
 
 export default function CreateJobForm({
   jobTypeCategories,
   initialState,
   jobStartDate,
 }: {
-  jobTypeCategories: JobTypeCategory[],
+  jobTypeCategories: TJobTypeCategory[],
   initialState: CreateJobFormState,
   jobStartDate: string
 }) {

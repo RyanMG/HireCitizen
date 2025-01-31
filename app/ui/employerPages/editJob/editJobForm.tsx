@@ -6,7 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { useActionState, useState } from "react";
 import { CreateJobFormState, editJob } from '@/app/lib/query/job/actions';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { CrewRole, JobTypeCategory } from '@/app/lib/definitions/job';
+import { TCrewRole, TJobTypeCategory } from '@definitions/job';
 import JobCrewRoleList from '@ui/employerPages/addCrewRoles/jobCrewRoleList';
 
 export default function EditJobForm({
@@ -16,16 +16,16 @@ export default function EditJobForm({
   jobId,
   crewRoles
 }: {
-  jobTypeCategories: JobTypeCategory[],
+  jobTypeCategories: TJobTypeCategory[],
   initialState: CreateJobFormState,
   jobStartDate: string,
   jobId: string,
-  crewRoles: CrewRole[] | undefined
+  crewRoles: TCrewRole[] | undefined
 }) {
   const editJobAction = editJob.bind(null, jobId);
   const [state, formAction] = useActionState(editJobAction, initialState);
 
-  const [currentJobType, setCurrentJobType] = useState<JobTypeCategory | null>(jobTypeCategories.find(jobType => jobType.id === Number(initialState.prevState?.jobType)) || null);
+  const [currentJobType, setCurrentJobType] = useState<TJobTypeCategory | null>(jobTypeCategories.find(jobType => jobType.id === Number(initialState.prevState?.jobType)) || null);
 
   const onChangeJobType = (value: number) => {
     const jobType = jobTypeCategories.find(jobType => jobType.id === value) || null;

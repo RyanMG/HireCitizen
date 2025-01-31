@@ -1,9 +1,9 @@
-import { Job } from "@/app/lib/definitions/job";
+import { TJob } from "@/app/lib/definitions/job";
 import JobTypeIcon from "@ui/jobList/jobTypeIcon";
 import Link from "next/link";
 
 interface IJobSearchResultProps {
-  jobData: Job;
+  jobData: TJob;
   backPath: string;
 }
 

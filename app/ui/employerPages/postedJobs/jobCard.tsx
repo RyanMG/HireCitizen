@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteJob, toggleJobActive } from "@/app/lib/query/job/actions";
-import { Job } from "@/app/lib/definitions/job";
+import { TJob } from "@definitions/job";
 import Button from "@components/button";
 import Dialog from "@components/dialog";
 
@@ -10,14 +10,14 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { getJobDateFormatted } from "@/app/lib/utils/dateUtils";
 
-export default function ActiveJobCard({ job }: {job: Job}) {
+export default function ActiveJobCard({ job }: {job: TJob}) {
   const params = useSearchParams();
 
   const [state, deleteJobAction] = useActionState(deleteJob.bind(null, job.id), {message: null, error: null});
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [activateDialogOpen, setActivateDialogOpen] = useState<boolean>(false);
 
-  const jobIsFullyPopulated = (job: Job) => {
+  const jobIsFullyPopulated = (job: TJob) => {
     return job.crewRoles && job.crewRoles.length > 0;
   }
 

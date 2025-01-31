@@ -3,7 +3,7 @@
 import { Button, MenuItem, Modal, TextField } from "@mui/material";
 import PageHeader from "@components/pageHeader";
 import { initialCap } from "@lib/utils/textUtils";
-import { CrewRole, CrewRoleOption, JobTypeCategory } from "@/app/lib/definitions/job";
+import { TCrewRole, TCrewRoleOption, TJobTypeCategory } from "@definitions/job";
 import JobRoleAssignmentRow from "./jobRoleAssignmentRow";
 import { useEffect, useRef, useState } from "react";
 import { getCrewRoles } from "@/app/lib/query/job/data";
@@ -13,9 +13,9 @@ import ResultsLoading from "@components/resultsLoading";
 interface AddJobRolesModalProps {
   open: boolean,
   onClickClose: () => void,
-  onClickSave: (selectedRoles: CrewRole[]) => void,
-  jobType: JobTypeCategory | null,
-  currentJobRoles: CrewRole[]
+  onClickSave: (selectedRoles: TCrewRole[]) => void,
+  jobType: TJobTypeCategory | null,
+  currentJobRoles: TCrewRole[]
 }
 
 export default function AddJobRolesModal({
@@ -23,15 +23,15 @@ export default function AddJobRolesModal({
   onClickClose,
   onClickSave,
   jobType,
-  currentJobRoles = [] as CrewRole[]
+  currentJobRoles = [] as TCrewRole[]
 }: AddJobRolesModalProps) {
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedRoles, setSelectedRoles] = useState<CrewRole[]>(currentJobRoles);
-  const [rolesToPick, setRolesToPick] = useState<CrewRoleOption[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<TCrewRole[]>(currentJobRoles);
+  const [rolesToPick, setRolesToPick] = useState<TCrewRoleOption[]>([]);
   const [saveDisabled, setSaveDisabled] = useState<boolean>(true);
 
-  const crewRolesRef = useRef<CrewRole[]>([]);
+  const crewRolesRef = useRef<TCrewRole[]>([]);
   /**
    * Initial data state
    */
@@ -101,7 +101,7 @@ export default function AddJobRolesModal({
    */
   const buildCrewRoleOptions = () => {
     const options = crewRolesRef.current?.map((role) => (
-      { label: initialCap(role.name), value: role.id.toString() } as CrewRoleOption
+      { label: initialCap(role.name), value: role.id.toString() } as TCrewRoleOption
     )) || [];
     return options
   }
@@ -138,13 +138,13 @@ export default function AddJobRolesModal({
                     value={""}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => moveRoleFromPickerToSelectedRoles(e.target.value)}
                   >
-                    {rolesToPick.map((role: CrewRoleOption) => {
+                    {rolesToPick.map((role: TCrewRoleOption) => {
                       return <MenuItem key={role.value} value={role.value}>{role.label}</MenuItem>
                     })}
                   </TextField>
                 </form>
 
-                {selectedRoles.map((role:CrewRole) => {
+                {selectedRoles.map((role:TCrewRole) => {
                   return <JobRoleAssignmentRow
                     key={role.id}
                     role={role}

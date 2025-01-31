@@ -1,14 +1,16 @@
+'use server';
+
 import { getJobById } from "@/app/lib/query/job/data";
 import NotificationSnackbar from "../components/notificationSnackbar";
-import { Job } from "@/app/lib/definitions/job";
+import { TJob } from "@/app/lib/definitions/job";
 import JobDetails from "./jobDetails";
 import CrewRoleList from "./crewRoles/crewRoleList";
 import { auth } from "@/auth";
 
-export default async function JobOverview(props: { params: Promise<{ id: string }> }) {
+export default async function JobOverviewWrapper(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const jobId = params.id;
-  const job: Job | { error: string } = await getJobById(jobId);
+  const job: TJob | { error: string } = await getJobById(jobId);
   const session = await auth();
 
   if ('error' in job) {

@@ -1,21 +1,19 @@
-import PageWrapper from "@/app/ui/components/pageWrapper";
-import ResultsLoading from "@/app/ui/components/resultsLoading";
-import JobMessagesWrapper from "@ui/jobItem/jobMessages/jobMessagesWrapper";
-import JobDetails from "@ui/jobItem/jobDetails";
+/**
+ * Job Details - job page for people who are accepted to crew and the job owner
+ */
+'use server';
 
+import PageWrapper from "@/app/ui/components/pageWrapper";
+import JobWrapper from "@ui/jobItem/jobWrapper";
+import ResultsLoading from "@/app/ui/components/resultsLoading";
 import { Suspense } from "react";
 
 export default async function SharedJobPage(props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
-  const jobId = params.id;
 
   return (
     <PageWrapper pageHeaderTitle="Job Details">
       <Suspense fallback={<ResultsLoading />}>
-        <JobDetails jobId={jobId} />
-      </Suspense>
-      <Suspense fallback={<ResultsLoading />}>
-        <JobMessagesWrapper jobId={jobId} />
+        <JobWrapper params={props.params} />
       </Suspense>
     </PageWrapper>
   );
