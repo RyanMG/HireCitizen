@@ -7,7 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { Session } from "next-auth";
 import { useActionState, useState, useRef, useEffect } from "react";
 
-import FormWithErrorBlock from "@components/formWIthErrorBlock";
+import FormWithErrorBlock from "@/app/ui/components/formWithErrorBlock";
 import ProfileImage from "@ui/profile/profileImage";
 
 import { scrapeRSIDetails } from "@query/person/data";

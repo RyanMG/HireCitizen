@@ -1,8 +1,8 @@
 import { getUserJobApplications } from "@/app/lib/query/jobRoles/data";
 import { auth } from '@/auth';
 import { Person } from "@/app/lib/definitions/person";
-import NoResultsBlock from "@ui/jobCommon/noResultsBlock";
-import JobApplicationDetailsBlock from "./jobApplicationDetailsBlock";
+import NoResultsBlock from "@components/noResultsBlock";
+import JobApplicationDetailsBlock from "@ui/employeePages/jobApplicationDetailsBlock";
 
 export default async function UpcomingJobs() {
   const session = await auth();

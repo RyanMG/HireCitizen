@@ -58,8 +58,8 @@ export type CreateJobFormState = {
   };
 };
 
-const JOB_SAVE_REDIRECT_PATH = '/my-jobs?jobStatus=PENDING';
-const JOB_SAVE_REVALIDATE_PATH = '/my-jobs';
+const JOB_SAVE_REDIRECT_PATH = '/posted-jobs?jobStatus=PENDING';
+const JOB_SAVE_REVALIDATE_PATH = '/posted-jobs';
 /**
  * Create an new job
  */
@@ -254,11 +254,11 @@ export async function toggleJobActive(jobId: string, active: boolean): Promise<{
     const sql = neon(process.env.DATABASE_URL!);
     if (active) {
       await sql`UPDATE job SET status = 'ACTIVE' WHERE id = ${jobId}`;
-      revalidatePath('/my-jobs');
+      revalidatePath('/posted-jobs');
       return { message: 'Job activated.' };
     } else {
       await sql`UPDATE job SET status = 'PENDING' WHERE id = ${jobId}`;
-      revalidatePath('/my-jobs');
+      revalidatePath('/posted-jobs');
       return { message: 'Job deactivated.' };
     }
 

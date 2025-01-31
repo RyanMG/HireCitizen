@@ -56,7 +56,7 @@ const getNotificationLink = (notification: TUpcomingEmployeeJobsItem | TUpcoming
     case 'employeeApplicationChanges':
       return `/work-history/accepted-jobs/${notification.data.jobId}`;
     case 'employerApplicationsIncoming':
-      return `/my-jobs/${notification.data.jobId}`;
+      return `/job/${notification.data.jobId}`;
     case 'messages':
       return `/messages/${notification.data.chatId}`;
     default:

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import CloseElementIcon from "../components/iconBtns/closeIcon";
+import CloseElementIcon from "@components/iconBtns/closeIcon";
 import { CrewRole } from "@/app/lib/definitions/job";
 
 interface IJobRoleAssignmentRowProps {

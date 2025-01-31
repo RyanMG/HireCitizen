@@ -6,7 +6,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import FormWithErrorBlock from "../components/formWIthErrorBlock";
+import FormWithErrorBlock from "@components/formWithErrorBlock";
 import { JobTypeCategory } from "@/app/lib/definitions/job";
 import { initialCap } from "@/app/lib/utils/textUtils";
 import { CreateJobFormState } from "@query/job/actions";

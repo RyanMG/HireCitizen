@@ -100,7 +100,7 @@ export default function JobCrewRoleList({
           theme="primary"
           label="Done"
           onClick={() => {
-            router.push(`/my-jobs?jobStatus=PENDING,ACTIVE`);
+            router.push(`/posted-jobs?jobStatus=PENDING,ACTIVE`);
           }}
         />
       </div>

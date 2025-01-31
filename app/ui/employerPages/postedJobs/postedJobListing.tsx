@@ -1,8 +1,8 @@
 import { getMyJobs } from "@query/job/data";
 import SectionHeader from "@components/sectionHeader";
-import ActiveJobCard from "./activeJobCard";
+import ActiveJobCard from "./jobCard";
 import NotificationSnackbar from "@components/notificationSnackbar";
-import NoResultsBlock from "@ui/jobCommon/noResultsBlock";
+import NoResultsBlock from "@components/noResultsBlock";
 
 export default async function MyJobListing({
   jobStatusList

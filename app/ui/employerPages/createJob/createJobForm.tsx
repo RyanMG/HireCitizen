@@ -1,6 +1,6 @@
 'use client';
 
-import JobForm from '@ui/jobCommon/jobForm';
+import JobForm from '@ui/employerPages/createJob/jobForm';
 import { Button } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { useActionState } from "react";

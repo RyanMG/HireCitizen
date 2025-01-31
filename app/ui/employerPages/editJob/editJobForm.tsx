@@ -1,13 +1,13 @@
 'use client';
 
-import JobForm from '@ui/jobCommon/jobForm';
+import JobForm from '@ui/employerPages/createJob/jobForm';
 import { Button } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { useActionState, useState } from "react";
 import { CreateJobFormState, editJob } from '@/app/lib/query/job/actions';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CrewRole, JobTypeCategory } from '@/app/lib/definitions/job';
-import JobCrewRoleList from '@ui/jobCommon/jobCrewRoleList';
+import JobCrewRoleList from '@ui/employerPages/addCrewRoles/jobCrewRoleList';
 
 export default function EditJobForm({
   jobTypeCategories,

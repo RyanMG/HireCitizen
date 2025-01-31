@@ -27,7 +27,7 @@ export default function ActiveJobCard({ job }: {job: Job}) {
         const isFullyPopulated = jobIsFullyPopulated(job);
         return (
           <>
-            <Button href={`/my-jobs/${job.id}/edit?back=my-jobs?jobStatus=${params.get('jobStatus')}`} label="Edit Job" theme="primary" />
+            <Button href={`/job/${job.id}/edit?back=jobs?jobStatus=${params.get('jobStatus')}`} label="Edit Job" theme="primary" />
             <div className="my-1" />
               <Button
                 label={isFullyPopulated ? "Activate Job" : "Job is missing crew roles"}
@@ -69,7 +69,7 @@ export default function ActiveJobCard({ job }: {job: Job}) {
     <>
         <div className="bg-dark-blue border border-gray-400 rounded-xl my-4 p-4">
           <div className="flex flex-row justify-between">
-            <Link className="flex flex-col flex-1 gap-1 mr-4" href={`/my-jobs/${job.id}`}>
+            <Link className="flex flex-col flex-1 gap-1 mr-4" href={`/job/${job.id}`}>
               <p className="text-lg font-semibold text-white">{job.title}</p>
               <p className="text-sm text-gray-400 italic">{job.description}</p>
               <p className="text-sm text-gray-400">Job starts: <span className="font-semibold text-gray-200">{getJobDateFormatted(job.jobStart)}</span></p>

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, MenuItem, Modal, TextField } from "@mui/material";
-import PageHeader from "../components/pageHeader";
+import PageHeader from "@components/pageHeader";
 import { initialCap } from "@lib/utils/textUtils";
 import { CrewRole, CrewRoleOption, JobTypeCategory } from "@/app/lib/definitions/job";
 import JobRoleAssignmentRow from "./jobRoleAssignmentRow";
