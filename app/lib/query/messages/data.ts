@@ -5,7 +5,7 @@ export const getJobMessages = async (jobId: string) => {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     const messages = await sql`
-      SELECT jm.id, jm.job_id, jm.content, jm.created_at,
+      SELECT jm.id, jm.job_id as "jobId", jm.content, jm.created_at as "createdAt",
       (jsonb_agg(
         jsonb_build_object(
           'id', p.id,
@@ -18,7 +18,7 @@ export const getJobMessages = async (jobId: string) => {
       LEFT JOIN person p ON p.id = jm.sender_id
       WHERE jm.job_id = ${jobId}
       GROUP BY jm.id
-      ORDER BY jm.created_at DESC
+      ORDER BY jm.created_at ASC
     `;
     return messages as TJobMessage[];
 

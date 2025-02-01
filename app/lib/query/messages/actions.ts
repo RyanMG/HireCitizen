@@ -1,11 +1,13 @@
+'use server';
+
 import { neon } from "@neondatabase/serverless";
-import { TJobMessage } from "../../definitions/messages";
+import { TJobMessage } from "@definitions/messages";
 import { auth } from "@/auth";
 
 export const postJobMessages = async (message: string, jobId: string) => {
   const session = await auth();
   const userId = session?.activeUser?.id;
-  const createdAt = new Date().toISOString();
+  const createdAt = new Date().toLocaleString();
 
   try {
     const sql = neon(process.env.DATABASE_URL!);
@@ -15,6 +17,7 @@ export const postJobMessages = async (message: string, jobId: string) => {
       VALUES (${jobId}, ${userId}, ${message}, ${createdAt})
       RETURNING *;
     `;
+
     return {
       ...newMessage[0],
       sender: {
@@ -27,6 +30,6 @@ export const postJobMessages = async (message: string, jobId: string) => {
 
   } catch (error) {
     console.error(error);
-    return [];
+    return null;
   }
 };

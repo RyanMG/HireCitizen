@@ -1,4 +1,7 @@
 import DayJs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+DayJs.extend(relativeTime);
 
 export function getJobDateFormatted(jobStart: string | undefined):string {
   if (jobStart) {
@@ -16,4 +19,8 @@ export function getEstimatedTime(estimatedTime: number | undefined) {
     return hours > 1 ? `${hours} hours` : hours === 1 ? '1 hour' : `${hours} minutes`;
   }
   return '1 hour';
+}
+
+export function getRelativeTime(messageDate: string) {
+  return DayJs(messageDate).fromNow();
 }

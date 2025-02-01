@@ -8,7 +8,7 @@ export default async function JobMessagesWrapper({ jobId }: { jobId: string }) {
   return (
     <div>
       <SectionHeader title="Job Messages" />
-      <JobMessagesContainer messageList={messageList}/>
+      <JobMessagesContainer messageList={messageList} jobId={jobId}/>
     </div>
   );
 }

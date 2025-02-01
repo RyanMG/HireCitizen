@@ -29,7 +29,7 @@ export default function Button({
   size = "md"
 }: IButtonProps) {
 
-  let buttonClass = "flex justify-center items-center bg-blue-500 w-full rounded-lg";
+  let buttonClass = "flex justify-center items-center bg-blue-500 w-full h-full rounded-lg";
 
   if (disabled) {
     buttonClass += ` ${themeMap[theme + 'Disabled' as keyof typeof themeMap]}`;
