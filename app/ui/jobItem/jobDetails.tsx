@@ -36,12 +36,12 @@ export default async function JobDetails({ job }: { job: TJob }) {
       </div>
 
       <div className="flex flex-row justify-between py-2">
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           <p className="text-gray-400 text-sm italic">Job Start Date</p>
           <p className="text-white text-lg">{getJobDateFormatted(job.jobStart)}</p>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           <p className="text-gray-400 text-sm italic">Estimated Time to Complete</p>
           <p className="text-white text-lg">{getEstimatedTime(job.estimatedTime)} </p>
         </div>

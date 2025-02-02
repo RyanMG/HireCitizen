@@ -46,9 +46,9 @@ export default function CrewRoleList({
 
   return (
     <>
-      <h2 className="text-gray-400 text-lg font-bold mt-4 border-t border-gray-700 pt-4">Job Roles Available</h2>
+      <h2 className="text-gray-400 text-lg font-bold pb-1 border-b border-gray-600">Job Roles Available</h2>
       {error && <div className="text-red-500">{error}</div>}
-      <div className="flex flex-col pt-4">
+      <div className="flex flex-col">
         {job.crewRoles?.map(role => (
           <CrewRoleListing
             role={role}

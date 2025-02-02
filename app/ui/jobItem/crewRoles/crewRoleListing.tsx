@@ -63,7 +63,7 @@ export default function CrewRoleListing(props: {
       } else {
         applyAction();
       }
-    }} className="flex flex-row justify-between bg-blue rounded-lg p-2 mb-2 items-center">
+    }} className="flex flex-row justify-between mb-2 items-center border-b border-gray-800 py-3">
       <p className="text-white">{role.name} <span className="text-gray-400 text-sm pl-2">({role.count} {role.count === 1 ? 'spot' : 'spots'})</span></p>
       {showApplicationBtn &&
         <ApplicationButton

@@ -31,6 +31,9 @@ export default async function JobWrapper(props: { params: Promise<{ id: string }
         <CurrentCrewMembers jobId={jobId} />
       </Suspense>
       <Suspense fallback={<ResultsLoading />}>
+        <CurrentCrewMembers jobId={jobId} />
+      </Suspense>
+      <Suspense fallback={<ResultsLoading />}>
         <JobMessagesWrapper jobId={jobId} />
       </Suspense>
     </>
