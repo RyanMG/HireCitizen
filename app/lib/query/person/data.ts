@@ -100,7 +100,7 @@ export const scrapeRSIDetails = async (rsi_url: string): Promise<RsiUserDetails 
     moniker: "",
   };
 
-  const isValidFormat = rsi_url.match(/^https:\/\/robertsspaceindustries\.com\/citizens\/[a-zA-Z0-9_-]{3,16}$/);
+  const isValidFormat = rsi_url.match(/^https:\/\/robertsspaceindustries\.com\/en\/citizens\/[a-zA-Z0-9_-]{3,16}$/);
   if (!isValidFormat) {
     return {
       error: 'Invalid URL format'
