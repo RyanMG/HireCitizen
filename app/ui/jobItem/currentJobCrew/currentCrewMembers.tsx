@@ -14,6 +14,11 @@ export default async function CurrentCrewMembers({ jobId }: { jobId: string }) {
   return (
     <div>
       <SectionHeader title="Current Crew Members" />
+
+      {currentCrew.length === 0 && (
+        <p className="text-gray-400 text-center italic">No crew members yet.</p>
+      )}
+
       {currentCrew.map((crewMember) => (
         <div key={crewMember.id} className="flex flex-row items-center gap-4">
           <Link href={`/profile/${crewMember.person.id}?back=work-history/accepted-jobs/${jobId}`} className="text-blue">

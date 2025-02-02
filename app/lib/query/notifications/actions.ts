@@ -188,9 +188,10 @@ export async function deleteUserNotificationWithoutId(notificationType: TNotific
     });
 
     if (!notificationId) {
+      // Nothing to delete, we are ok.
       return {
-        error: 'No notification found for the provided user'
-      };
+        success: true
+      }
     }
 
     const wasDeleted = await client.json.del(`user:${notificationTargetUserId}`, `$.${notificationType}.${notificationId}`);

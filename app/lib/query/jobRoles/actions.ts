@@ -91,7 +91,7 @@ export async function rescindCrewRoleApplication(jobId: string, roleId: number):
 /**
  * Job owner toggles a job application status
  */
-export async function toggleApplicationStatus(applicationId: number, status: string): Promise<{submitted: boolean, message: string | null, error: string | null}> {
+export async function toggleApplicationStatus(applicationId: number, jobId: string, status: string): Promise<{submitted: boolean, message: string | null, error: string | null}> {
 
   try {
     const sql = neon(process.env.DATABASE_URL!);
@@ -122,17 +122,9 @@ export async function toggleApplicationStatus(applicationId: number, status: str
 
     // If the user is set to pending or rejected, ensure we clear out any existing notifications
     if (status === 'PENDING' || status === 'REJECTED') {
-      const notificationUpdateResp = await deleteUserNotificationWithoutId('employeeApplicationChanges', statusChangeResponse[0].person_id, {
+      await deleteUserNotificationWithoutId('employeeApplicationChanges', statusChangeResponse[0].person_id, {
         jobId: statusChangeResponse[0].job_id
       });
-
-      if ('error' in notificationUpdateResp || !notificationUpdateResp.success) {
-        return {
-          submitted: false,
-          message: null,
-          error: 'Failed to delete notification.'
-        };
-      }
     }
 
   } catch (error) {
@@ -144,7 +136,8 @@ export async function toggleApplicationStatus(applicationId: number, status: str
     };
   }
 
-  revalidatePath('/posted-jobs');
+  revalidatePath(`/job/${jobId}`);
+
   return {
     submitted: true,
     message: 'Job application status updated.',

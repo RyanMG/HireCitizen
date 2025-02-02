@@ -177,6 +177,7 @@ export async function getJobApplicants(jobId: string): Promise<TJobApplicant[] |
         JOIN person p ON p.id = ja.person_id
         JOIN crew_roles cr ON cr.id = ja.crew_role_id
         WHERE ja.job_id = ${jobId}
+        AND ja.accepted_status != 'ACCEPTED'
         GROUP BY ja.id;
     ` as TJobApplicant[];
 

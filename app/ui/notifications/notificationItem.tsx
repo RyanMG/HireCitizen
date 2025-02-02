@@ -54,7 +54,7 @@ const getNotificationLink = (notification: TUpcomingEmployeeJobsItem | TUpcoming
     case 'upcomingEmployerJobs':
       return `/jobs/${notification.data.jobId}`;
     case 'employeeApplicationChanges':
-      return `/work-history/accepted-jobs/${notification.data.jobId}`;
+      return `/job/${notification.data.jobId}`;
     case 'employerApplicationsIncoming':
       return `/job/${notification.data.jobId}`;
     case 'messages':
