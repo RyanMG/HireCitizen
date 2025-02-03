@@ -5,9 +5,14 @@ import { CreateJobFormState } from "@query/job/actions";
 import dayjs from "dayjs";
 import EditJobForm from "@ui/employerPages/editJob/editJobForm";
 import NotificationSnackbar from "@components/notificationSnackbar";
+import { auth } from "@/auth";
+import { TPerson } from "@/app/lib/definitions/person";
 
 export default async function EditJobFormWrapper(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
+  const session = await auth();
+  const user = session?.activeUser as TPerson;
+
   const [job, jobTypeCategories] = await Promise.all([
     getJobById(params.id),
     getJobTypeCategories(),
@@ -18,6 +23,14 @@ export default async function EditJobFormWrapper(props: { params: Promise<{ id: 
     return <NotificationSnackbar
       type="error"
       messages={messages}
+    />
+  }
+
+  if (user && job.owner.id !== user.id) {
+    return <NotificationSnackbar
+      type="error"
+      messages={['You are not authorized to edit this job.']}
+      redirectTo="/"
     />
   }
 
