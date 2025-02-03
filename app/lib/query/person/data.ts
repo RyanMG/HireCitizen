@@ -109,7 +109,7 @@ export const scrapeRSIDetails = async (rsi_url: string): Promise<RsiUserDetails 
 
   const handle = rsi_url.split('/').pop();
 
-  const response = await fetch(`https://robertsspaceindustries.com/citizens/${handle}`, {
+  const response = await fetch(`https://robertsspaceindustries.com/en/citizens/${handle}`, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
     }
@@ -126,15 +126,17 @@ export const scrapeRSIDetails = async (rsi_url: string): Promise<RsiUserDetails 
   }
 
   const profileImage = dom.querySelector('div.thumb img');
+  const profileImageUrl = profileImage?.attrs.src;
   const moniker = dom.querySelector('div.info .entry:first-child .value');
   // URL can be all lower case. The version from the HTML will be as the user entered it
   const handle_proper = dom.querySelector('div.info .entry:nth-child(2) .value');
 
+  console.log('profileImageUrl', profileImageUrl);
   // @TODO - scrape out ORG details
 
   profileResponse.handle = handle_proper?.textContent || handle || '';
   profileResponse.moniker = moniker?.textContent || '';
-  profileResponse.profileImage = `https://robertsspaceindustries.com/${profileImage?.attrs.src}` || '';
+  profileResponse.profileImage = profileImageUrl?.substring(0, 5) === 'https' ? profileImageUrl : `https://robertsspaceindustries.com/${profileImageUrl}`;
 
   return profileResponse;
 }

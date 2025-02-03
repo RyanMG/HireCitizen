@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'robertsspaceindustries.com'
+      },
+      {
+        protocol: 'https',
+        hostname: '*.robertsspaceindustries.com'
       }
     ]
   }

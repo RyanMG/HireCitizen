@@ -4,6 +4,7 @@ import PageWrapper from "@components/pageWrapper";
 import ResultsLoading from "@components/resultsLoading";
 import CitizenProfile from "@/app/ui/profile/citizenProfile";
 import { Suspense } from "react";
+import ProfileWrapper from "@/app/ui/profile/components/profileWrapper";
 
 export default async function MemberProfilePage(props: {
   params: Promise<{ id: string }>
@@ -17,11 +18,11 @@ export default async function MemberProfilePage(props: {
 
   return (
     <PageWrapper pageHeaderTitle="Citizen Profile" pageBackPath={backUrl}>
-      <div className="flex flex-col bg-gray-900 p-4 rounded-xl border border-indigo-900 min-h-[200px]">
+      <ProfileWrapper>
         <Suspense fallback={<ResultsLoading />}>
           <CitizenProfile memberId={id} />
         </Suspense>
-      </div>
+      </ProfileWrapper>
     </PageWrapper>
   );
 }

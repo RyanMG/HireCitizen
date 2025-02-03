@@ -1,12 +1,13 @@
 'use server';
 
 import { auth } from 'auth';
-import Link from 'next/link';
-import ProfileImage from '@ui/profile/profileImage';
-import ProfileActionButtons from '@ui/profile/profileActionBtns';
-import ReputationBar from './reputationBars';
-import { TReputation } from '@/app/lib/definitions/person';
 import { redirect } from 'next/navigation';
+import PrimaryProfileDetailsBlock from './components/primaryProfileDetailsBlock';
+import ProfileActionButtons from './components/profileActionBtns';
+import LineBreak from '../components/lineBreak';
+import TimezoneLanguage from './components/timezoneLanguage';
+import ProfileDetailsItem from './components/profileDetailsItem';
+import Reputation from './components/reputation';
 
 export default async function UserProfile() {
   const session = await auth();
@@ -19,36 +20,25 @@ export default async function UserProfile() {
 
   return (
     <>
-      <div className="flex flex-row gap-4">
-        <div>
-          <ProfileImage image={activeUser?.profile_image || null} />
-        </div>
-
-        <div className="flex flex-col gap-2 flex-1">
-          <h1 className="text-2xl font-bold text-gray-300">{activeUser?.moniker || "Unknown Citizen"}</h1>
-          <p className="text-gray-300"><span className="text-gray-500 italic">RSI Handle:</span> <span className="font-bold">{activeUser?.handle || "Unknown Handle"}</span></p>
-          {activeUser?.rsi_url ? (
-            <Link href={activeUser?.rsi_url || ''} target="_blank" className="text-light-blue">View on RSI</Link>
-          ) : (
-            <p className="text-gray-300 italic">No citizen profile found</p>
-          )}
-        </div>
-
+      <div className="flex flex-row justify-between">
+        <PrimaryProfileDetailsBlock user={activeUser} />
         <ProfileActionButtons />
       </div>
+
+      <TimezoneLanguage timezone={activeUser?.timezone.name} language={activeUser?.language.name} />
+
       <div className="flex flex-row mt-4 gap-6">
-        <p className="text-gray-300"><span className="text-gray-500 italic">Working Timezone:</span> <span className="font-bold">{activeUser?.timezone.name}</span></p>
-        <p className="text-gray-300"><span className="text-gray-500 italic">Primary Language:</span> <span className="font-bold">{activeUser?.language.name}</span></p>
+        <ProfileDetailsItem label="Registered Email" value={activeUser?.email || 'None'} />
+        <ProfileDetailsItem label="Registered Phone Number" value={activeUser?.phone || 'None'} />
       </div>
-      <div className="w-full border-b border-gray-500 my-4" />
-      <div className="flex flex-row gap-4 w-full">
-        <div className="flex flex-col gap-2 w-1/2">
-          <ReputationBar title="Your Employee Reputation" reputation={activeUser?.employee_reputation as TReputation} />
-        </div>
-        <div className="flex flex-col gap-2 w-1/2">
-          <ReputationBar title="Your Employer Reputation" reputation={activeUser?.employer_reputation as TReputation} />
-        </div>
-      </div>
+
+      <LineBreak />
+
+      <Reputation
+        person={activeUser}
+        employeeText="Your Employee Reputation"
+        employerText="Your Employer Reputation"
+      />
     </>
   );
 }

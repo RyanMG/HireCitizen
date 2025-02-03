@@ -8,7 +8,7 @@ import { Session } from "next-auth";
 import { useActionState, useState, useRef, useEffect } from "react";
 
 import FormWithErrorBlock from "@components/formWithErrorBlock";
-import ProfileImage from "@ui/profile/profileImage";
+import ProfileImage from "@/app/ui/profile/components/profileImage";
 
 import { scrapeRSIDetails } from "@query/person/data";
 import { GetUserRSIUrlFormState, updatePerson } from "@query/person/actions";
