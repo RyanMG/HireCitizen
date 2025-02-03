@@ -36,7 +36,7 @@ export default async function JobWrapper(props: { params: Promise<{ id: string }
     )
   }
 
-  if (userIsNotAuthorizedToViewJob({
+  if (!user || userIsNotAuthorizedToViewJob({
     job: job,
     crew: currentCrew,
     userId: user.id
