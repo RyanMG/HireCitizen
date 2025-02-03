@@ -85,8 +85,6 @@ export default function ApplicationCard({ application }: { application: TJobAppl
             <form className="w-full" action={async () => {
                 const resp = await toggleApplicationStatus(application.id, application.jobId, pickerValue);
 
-                console.log(resp);
-
                 if (resp.submitted) {
                   setStatusChangeDialogOpen(false);
                 }

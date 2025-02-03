@@ -7,14 +7,14 @@ import LineBreak from "../components/lineBreak";
 import TimezoneLanguage from "./components/timezoneLanguage";
 import Reputation from "./components/reputation";
 
-export default async function MemberProfile({
+export default async function CitizenProfile({
   memberId
 }: {
   memberId: string
 }) {
 
   const member = await getPersonById(memberId);
-  console.log('response', member);
+
   if ('error' in member) {
     return <NotificationSnackbar
       type="error"

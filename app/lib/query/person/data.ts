@@ -7,6 +7,7 @@ import { parse } from 'node-html-parser';
 export const getPersonById = async (id: string): Promise<TPerson | {error: string}> => {
   try {
     const sql = neon(process.env.DATABASE_URL!);
+
     const personQuery = await sql`
       SELECT p.*,
       l.code as language_code, l.name as language_name, l.id as language_id,
@@ -131,7 +132,6 @@ export const scrapeRSIDetails = async (rsi_url: string): Promise<RsiUserDetails 
   // URL can be all lower case. The version from the HTML will be as the user entered it
   const handle_proper = dom.querySelector('div.info .entry:nth-child(2) .value');
 
-  console.log('profileImageUrl', profileImageUrl);
   // @TODO - scrape out ORG details
 
   profileResponse.handle = handle_proper?.textContent || handle || '';

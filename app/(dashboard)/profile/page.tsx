@@ -2,7 +2,7 @@ import UserProfile from "@ui/profile/userProfile";
 import { Suspense } from "react";
 import ResultsLoading from "@components/resultsLoading";
 import PageWrapper from "@/app/ui/components/pageWrapper";
-import ProfileWrapper from "@/app/ui/profile/components/profileWrapper";
+import ProfileWrapper from "@ui/profile/components/profileWrapper";
 
 export default function Profile() {
   return (
