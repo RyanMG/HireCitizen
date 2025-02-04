@@ -5,10 +5,14 @@ import CloseElementIcon from "@components/iconBtns/closeIcon";
 import NotificationItem from "./notificationItem";
 import { useNotifications } from "@context/notificationProvider";
 import Button from "@components/button";
-import { markAllNotificationsAsRead } from "@query/notifications/actions";
 
 export default function NotificationPopover() {
-  const { notifications, toggleShowNotifications, notificationsShown } = useNotifications();
+  const {
+    notifications,
+    toggleShowNotifications,
+    notificationsShown,
+    clearAllNotifications
+  } = useNotifications();
 
   const notificationContent = Object.keys(notifications!.current!).reduce((output, notificationType) => {
     switch (notificationType) {
@@ -72,7 +76,7 @@ export default function NotificationPopover() {
 
             {notificationContent.length > 0 &&
               <div className="flex flex-row w-full">
-                <Button label="Mark all as read" theme="secondary" onClick={() => markAllNotificationsAsRead()} />
+                <Button label="Mark all as read" theme="secondary" onClick={() => clearAllNotifications()} />
               </div>
             }
 

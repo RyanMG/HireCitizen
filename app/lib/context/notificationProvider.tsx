@@ -1,5 +1,5 @@
 import {useEffect, createContext, useRef, ReactNode, useContext, useState, RefObject, SetStateAction, Dispatch} from 'react';
-import { getUserNotifications, deleteUserNotification } from '@query/notifications/actions';
+import { getUserNotifications, deleteUserNotification, markAllNotificationsAsRead } from '@query/notifications/actions';
 import { TNotification, TNotificationType } from '@definitions/notifications';
 import { NEW_USER_NOTIFICATION_BASE } from '../constants/notifications';
 
@@ -11,13 +11,15 @@ const NotificationContext = createContext<{
   notificationsShown: boolean,
   hasNewNotifications: boolean,
   dismissNotification: (notificationId: string, notificationType: TNotificationType) => void,
-  toggleShowNotifications: Dispatch<SetStateAction<boolean>>
+  toggleShowNotifications: Dispatch<SetStateAction<boolean>>,
+  clearAllNotifications: () => void
 }>({
   notifications: null,
   notificationsShown: false,
   hasNewNotifications: false,
   dismissNotification: () => {},
-  toggleShowNotifications: () => {}
+  toggleShowNotifications: () => {},
+  clearAllNotifications: () => {}
 });
 
 const useNotifications = () => {
@@ -72,6 +74,16 @@ function NotificationProvider({children}:{children: ReactNode}): ReactNode {
     setHasNewNotifications(hasChanges);
   }
 
+  const clearAllNotifications = async () => {
+    const response = await markAllNotificationsAsRead();
+    if ('error' in response) {
+      console.error(response.error);
+      return;
+    }
+    pollNotifications();
+    toggleShowNotifications(false);
+  }
+
   useEffect(() => {
     pollNotifications();
     const intervalId = setInterval(() => {
@@ -88,6 +100,7 @@ function NotificationProvider({children}:{children: ReactNode}): ReactNode {
       toggleShowNotifications,
       dismissNotification,
       hasNewNotifications,
+      clearAllNotifications
     }}>
       {children}
     </NotificationContext.Provider>

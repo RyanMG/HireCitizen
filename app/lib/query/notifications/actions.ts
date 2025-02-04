@@ -222,6 +222,8 @@ export async function markAllNotificationsAsRead(): Promise<{success: boolean} |
       error: 'No user session found'
     }
   }
+
+  console.log('userId', userId);
   try {
     const client = Redis.fromEnv();
     const wasReset = await client.json.set(
@@ -230,8 +232,7 @@ export async function markAllNotificationsAsRead(): Promise<{success: boolean} |
       JSON.stringify({
         ...NEW_USER_NOTIFICATION_BASE,
         lastNotificationCheck: new Date().toISOString()
-      }),
-      { nx: true }
+      })
     )
 
     return {
