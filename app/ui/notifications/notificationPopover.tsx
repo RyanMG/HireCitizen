@@ -4,6 +4,8 @@ import clsx from "clsx";
 import CloseElementIcon from "@components/iconBtns/closeIcon";
 import NotificationItem from "./notificationItem";
 import { useNotifications } from "@context/notificationProvider";
+import Button from "@components/button";
+import { markAllNotificationsAsRead } from "@query/notifications/actions";
 
 export default function NotificationPopover() {
   const { notifications, toggleShowNotifications, notificationsShown } = useNotifications();
@@ -52,20 +54,29 @@ export default function NotificationPopover() {
       )}/>
       <div className={`fixed right-0 top-0 h-full transition ease-in-out duration-300 ${notificationsShown ? "translate-x-0" : "translate-x-96"}`}>
         <div className={`w-80 bg-light-blue border border-gray-300 absolute bottom-5 right-2 top-5 rounded-xl p-4`}>
+          <div className="flex flex-col h-full justify-between">
+            <div>
+              <div className="flex flex-row justify-between border-b-2 border-gray-300 pb-2 mb-2">
+                <div className="text-white text-lg font-bold">Notifications</div>
+                <CloseElementIcon onClickFn={() => toggleShowNotifications(false)} iconFillColor="#e8eaed" />
+              </div>
 
-          <div className="flex flex-row justify-between border-b-2 border-gray-300 pb-2 mb-2">
-            <div className="text-white text-lg font-bold">Notifications</div>
-            <CloseElementIcon onClickFn={() => toggleShowNotifications(false)} iconFillColor="#e8eaed" />
-          </div>
-
-          {notificationContent.length === 0 ? (
-            <div className="flex flex-col justify-center items-start mt-4">
-              <p className="text-white text-sm">No new notifications. Get back to work!</p>
+              {notificationContent.length === 0 ? (
+                <div className="flex flex-col justify-center items-start mt-4">
+                  <p className="text-white text-sm italic">No new notifications. Get back to work!</p>
+                </div>
+              ) : (
+                notificationContent
+              )}
             </div>
-          ) : (
-            notificationContent
-          )}
 
+            {notificationContent.length > 0 &&
+              <div className="flex flex-row w-full">
+                <Button label="Mark all as read" theme="secondary" onClick={() => markAllNotificationsAsRead()} />
+              </div>
+            }
+
+          </div>
         </div>
       </div>
     </div>

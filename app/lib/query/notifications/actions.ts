@@ -126,7 +126,9 @@ export async function addUserNotification({
     };
   }
 }
-
+/**
+ * Delete a notification when we have the notificationID
+ */
 export async function deleteUserNotification(notificationId: string, notificationType: TNotificationType): Promise<{success: boolean} | {error: string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
@@ -151,7 +153,9 @@ export async function deleteUserNotification(notificationId: string, notificatio
     };
   }
 }
-
+/**
+ * Delete a notification when we do not have the notificationID
+*/
 export async function deleteUserNotificationWithoutId(notificationType: TNotificationType, notificationTargetUserId: string, keysToFindNotification: {jobId: string}|{messageId: string}): Promise<{success: boolean} | {error: string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
@@ -203,6 +207,41 @@ export async function deleteUserNotificationWithoutId(notificationType: TNotific
     console.error('Error deleting notification:', error);
     return {
       error: 'Error deleting notification'
+    };
+  }
+}
+/**
+ * When the user clears all notifications
+ */
+export async function markAllNotificationsAsRead(): Promise<{success: boolean} | {error: string}> {
+  const session = await auth();
+  const userId = session?.activeUser?.id;
+
+  if (!userId) {
+    return {
+      error: 'No user session found'
+    }
+  }
+  try {
+    const client = Redis.fromEnv();
+    const wasReset = await client.json.set(
+      `user:${userId}`,
+      '$',
+      JSON.stringify({
+        ...NEW_USER_NOTIFICATION_BASE,
+        lastNotificationCheck: new Date().toISOString()
+      }),
+      { nx: true }
+    )
+
+    return {
+      success: wasReset === 'OK' ? true : false
+    };
+
+  } catch (error) {
+    console.error('Error clearing notification:', error);
+    return {
+      error: 'Error clearing notification'
     };
   }
 }
