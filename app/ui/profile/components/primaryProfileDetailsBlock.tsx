@@ -20,7 +20,7 @@ export default function PrimaryProfileDetailsBlock({user}: {user: TPerson}) {
           <Link
             href={user?.rsi_url || ''}
             target="_blank"
-            className="text-light-blue"
+            className="text-light-blue font-bold"
           >
             View on RSI
           </Link>
