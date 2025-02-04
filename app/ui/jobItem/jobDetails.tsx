@@ -5,7 +5,13 @@ import Link from "next/link";
 import { getJobDateFormatted, getEstimatedTime } from "@/app/lib/utils/dateUtils";
 import { TJob } from "@definitions/job";
 
-export default async function JobDetails({ job }: { job: TJob }) {
+export default async function JobDetails({
+  job,
+  backPath
+}: {
+  job: TJob,
+  backPath: string
+}) {
 
   return (
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-sm mb-4 p-4">
@@ -25,7 +31,7 @@ export default async function JobDetails({ job }: { job: TJob }) {
         </div>
       </div>
 
-      <Link href={`/profile/${job.owner.id}?back=job-search/job/${job.id}`} className="py-2">
+      <Link href={`/profile/${job.owner.id}?back=${backPath}`} className="py-2">
         <p className="text-gray-400 text-sm italic">Job Owner</p>
         <p className="text-light-blue text-lg font-bold not-italic">{job.owner.moniker}</p>
       </Link>

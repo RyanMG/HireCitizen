@@ -52,7 +52,7 @@ export default async function JobWrapper(props: { params: Promise<{ id: string }
 
   return (
     <>
-      <JobDetails job={job} />
+      <JobDetails job={job} backPath={`job/${job.id}`} />
       <Suspense fallback={<ResultsLoading />}>
         <CurrentCrewMembers currentCrew={currentCrew} />
       </Suspense>

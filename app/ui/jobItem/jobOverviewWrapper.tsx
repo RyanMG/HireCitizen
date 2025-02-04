@@ -24,7 +24,7 @@ export default async function JobOverviewWrapper(props: { params: Promise<{ id: 
 
   return (
     <>
-      <JobDetails job={job} />
+      <JobDetails job={job} backPath={`job-search/job/${job.id}`} />
       <div className="flex flex-col">
         {session?.activeUser && (
           <CrewRoleList job={job} user={session?.activeUser} />
