@@ -69,7 +69,8 @@ export default function ActiveJobCard({ job }: {job: TJob}) {
     <>
         <div className="bg-dark-blue border border-gray-400 rounded-xl my-4 p-4">
           <div className="flex flex-row justify-between">
-            <Link className="flex flex-col flex-1 gap-1 mr-4" href={`/job/${job.id}`}>
+
+            <Link className="flex flex-col flex-1 gap-1 mr-4" href={`/job/${job.id}?back=posted-jobs?jobStatus=${params.get('jobStatus')}`}>
               <p className="text-lg font-semibold text-white">{job.title}</p>
               <p className="text-sm text-gray-400 italic">{job.description}</p>
               <p className="text-sm text-gray-400">Job starts: <span className="font-semibold text-gray-200">{getJobDateFormatted(job.jobStart)}</span></p>
