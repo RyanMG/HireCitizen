@@ -17,7 +17,11 @@ export default async function SignOutPage() {
           <h1 className="text-2xl font-semibold text-gray-800">Sign Out</h1>
         </div>
 
-        <p className="text-gray-800">Are you sure you want to sign out?</p>
+        <div className="flex flex-col gap-1 py-2">
+          <p className="text-gray-700 font-bold">Are you sure you want to sign out?</p>
+          <p className="text-gray-800 italic">This will remove all your account data, including your jobs, job history and pending applications.</p>
+        </div>
+
 
         <div className="flex flex-row gap-2 pt-4">
           <form
