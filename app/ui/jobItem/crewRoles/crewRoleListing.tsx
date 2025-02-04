@@ -11,7 +11,7 @@ const getButtonText = (currentApplication: TJobApplicant | null, isApplied: bool
   } else if (currentApplication && currentApplication.acceptedStatus === 'REJECTED') {
     return 'Rejected';
   } else if (isApplied) {
-    return 'Applied';
+    return 'Rescind Application';
   }
 
   return 'Apply';
@@ -72,8 +72,7 @@ export default function CrewRoleListing(props: {
           type="submit"
           disabled={Boolean(currentApplication && (
             currentApplication.acceptedStatus === 'REJECTED' ||
-            currentApplication.acceptedStatus === 'ACCEPTED' ||
-            currentApplication.acceptedStatus === 'PENDING'
+            currentApplication.acceptedStatus === 'ACCEPTED'
           ))}
         >
           {getButtonText(currentApplication, isApplied)}

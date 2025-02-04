@@ -1,5 +1,10 @@
 import {useEffect, createContext, useRef, ReactNode, useContext, useState, RefObject, SetStateAction, Dispatch} from 'react';
-import { getUserNotifications, deleteUserNotification, markAllNotificationsAsRead } from '@query/notifications/actions';
+import {
+  getUserNotifications,
+  deleteUserNotification,
+  markAllNotificationsAsRead
+} from '@query/notifications/actions';
+
 import { TNotification, TNotificationType } from '@definitions/notifications';
 import { NEW_USER_NOTIFICATION_BASE } from '../constants/notifications';
 
@@ -49,6 +54,9 @@ function NotificationProvider({children}:{children: ReactNode}): ReactNode {
     lastNotificationCheck: new Date().toISOString()
   });
 
+  /**
+   * Dismiss a single notification.
+   */
   const dismissNotification = async (notificationId: string, notificationType: TNotificationType) => {
     const response = await deleteUserNotification(notificationId, notificationType);
     if ('error' in response) {
@@ -60,7 +68,9 @@ function NotificationProvider({children}:{children: ReactNode}): ReactNode {
       pollNotifications();
     }
   }
-
+  /**
+   * Poll Upstash for new notifications.
+   */
   const pollNotifications = async () => {
     const notificationResponse = await getUserNotifications();
 
@@ -73,7 +83,9 @@ function NotificationProvider({children}:{children: ReactNode}): ReactNode {
     notifications.current = notificationResponse;
     setHasNewNotifications(hasChanges);
   }
-
+  /**
+   * Clear all notifications for this user
+   */
   const clearAllNotifications = async () => {
     const response = await markAllNotificationsAsRead();
     if ('error' in response) {
@@ -83,7 +95,9 @@ function NotificationProvider({children}:{children: ReactNode}): ReactNode {
     pollNotifications();
     toggleShowNotifications(false);
   }
-
+  /**
+   * Interval to poll for notifications.
+   */
   useEffect(() => {
     pollNotifications();
     const intervalId = setInterval(() => {

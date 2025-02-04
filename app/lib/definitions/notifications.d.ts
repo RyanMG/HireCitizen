@@ -64,6 +64,11 @@ export type TMessagesItem = {
   data: TMessageData
 }
 
+export type TNotificationSearchKeys =
+  | {jobId: string}
+  | {applicationId: string}
+  | {messageId: string}
+
 // SAMPLE NOTIFICATION CATEGORY
 // "employerApplicationsIncoming": {
 //   "89ca8c0c767a4618b6a9b0c405b69721": {

@@ -4,9 +4,14 @@ import { neon } from "@neondatabase/serverless";
 import { auth } from 'auth';
 import { revalidatePath } from "next/cache";
 
-import { addUserNotification, deleteUserNotificationWithoutId } from "@query/notifications/actions";
-import { buildNotificationPayload } from "../../utils/notifications";
-import { TApplicationsData } from "@definitions/notifications";
+import {
+  addUserNotification,
+  deleteUserNotificationWithoutId
+} from "@query/notifications/actions";
+import { buildNotificationPayload } from "@utils/notifications";
+import {
+  TApplicationsData
+ } from "@definitions/notifications";
 /**
  * User applies to a crew role
  */
@@ -70,9 +75,18 @@ export async function rescindCrewRoleApplication(jobId: string, roleId: number):
   const session = await auth();
   const userId = session?.activeUser?.id;
 
+  console.log('rescindCrewRoleApplication', jobId, roleId);
+
   try {
     const sql = neon(process.env.DATABASE_URL!);
-    await sql`DELETE FROM job_applicants WHERE job_id=${jobId} AND person_id=${userId} AND crew_role_id=${roleId}`;
+    const deletedApplicationId = await sql`DELETE FROM job_applicants WHERE job_id=${jobId} AND person_id=${userId} AND crew_role_id=${roleId} RETURNING id` as unknown as string[];
+
+    const jobOwnerId = await sql`SELECT owner_id FROM job WHERE id = ${jobId}` as unknown as string[];
+
+    await deleteUserNotificationWithoutId('employerApplicationsIncoming', jobOwnerId[0], {
+      applicationId: deletedApplicationId[0]
+    });
+
     return {
       submitted: true,
       message: 'Job application rescinded.',

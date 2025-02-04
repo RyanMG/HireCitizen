@@ -38,7 +38,7 @@ export default function Button({
   }
 
   if (size === "sm") {
-    buttonClass += " px-2 py-1";
+    buttonClass += " px-2 py-1 text-sm";
   } else if (size === "md") {
     buttonClass += " px-4 py-0";
   } else if (size === "lg") {

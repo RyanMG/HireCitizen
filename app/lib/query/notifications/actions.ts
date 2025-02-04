@@ -10,7 +10,8 @@ import {
   TEmployerApplicationsIncomingItem,
   TUpcomingEmployeeJobsItem,
   TUpcomingEmployerJobsItem,
-  TMessagesItem
+  TMessagesItem,
+  TNotificationSearchKeys
 } from "@definitions/notifications";
 import {NEW_USER_NOTIFICATION_BASE} from "@constants/notifications";
 
@@ -156,7 +157,7 @@ export async function deleteUserNotification(notificationId: string, notificatio
 /**
  * Delete a notification when we do not have the notificationID
 */
-export async function deleteUserNotificationWithoutId(notificationType: TNotificationType, notificationTargetUserId: string, keysToFindNotification: {jobId: string}|{messageId: string}): Promise<{success: boolean} | {error: string}> {
+export async function deleteUserNotificationWithoutId(notificationType: TNotificationType, notificationTargetUserId: string, keysToFindNotification: TNotificationSearchKeys): Promise<{success: boolean} | {error: string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
 
@@ -180,6 +181,7 @@ export async function deleteUserNotificationWithoutId(notificationType: TNotific
       switch (notificationType) {
         case 'employeeApplicationChanges':
         case 'employerApplicationsIncoming':
+          return 'applicationId' in keysToFindNotification && notifications[key].data.applicationId === keysToFindNotification.applicationId;
         case 'upcomingEmployeeJobs':
         case 'upcomingEmployerJobs':
           return 'jobId' in keysToFindNotification && notifications[key].data.jobId === keysToFindNotification.jobId;
