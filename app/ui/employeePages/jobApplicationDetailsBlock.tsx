@@ -12,7 +12,7 @@ export default function JobApplicationDetailsBlock({ application }: { applicatio
         </Link>
       </div>
 
-      <Link href={application.acceptedStatus === 'PENDING' || application.acceptedStatus === 'REJECTED' ? `/job-list/job/${application.job?.id}` : `/job/${application.job?.id}`} className="text-sm text-blue">
+      <Link href={application.acceptedStatus === 'PENDING' || application.acceptedStatus === 'REJECTED' ? `/job-search/job/${application.job?.id}` : `/job/${application.job?.id}`} className="text-sm text-blue">
         View Job
       </Link>
 
