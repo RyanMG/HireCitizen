@@ -3,10 +3,16 @@ import { auth } from '@/auth';
 import { TPerson } from "@definitions/person";
 import NoResultsBlock from "@components/noResultsBlock";
 import JobApplicationDetailsBlock from "@ui/employeePages/jobApplicationDetailsBlock";
+import { redirect } from "next/navigation";
 
 export default async function PendingApplications() {
   const session = await auth();
   const user = session?.activeUser as TPerson;
+
+  if (!user) {
+    redirect('/logout');
+  }
+
   const pendingApplications = await getUserJobApplications(user, ['PENDING', 'REJECTED']);
 
   if ('error' in pendingApplications) {
