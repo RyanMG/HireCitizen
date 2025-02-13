@@ -4,8 +4,9 @@ import TextField from "@mui/material/TextField";
 import Button from "@components/button";
 import { TJobMessage } from "@definitions/messages";
 import { postJobMessages } from "@query/messages/actions";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import JobMessage from "./jobMessage";
+import { getJobMessages } from "@/app/lib/query/messages/data";
 
 export default function JobMessagesContainer({
   messageList,
@@ -25,7 +26,7 @@ export default function JobMessagesContainer({
     if (!newMessage) {
       return;
     };
-
+    console.log('adding new message', newMessage);
     setMessages(
       [
         ...messages,
@@ -34,6 +35,23 @@ export default function JobMessagesContainer({
     );
     messageInputRef.current.value = '';
   }
+
+  /**
+   * Poll for new messages every 10 seconds
+   */
+  useEffect(() => {
+    const pollingInterval = setInterval(async () => {
+      const messageList = await getJobMessages(jobId);
+
+      if ('error' in messageList) {
+        return;
+      }
+
+      setMessages(messageList);
+    }, 10000);
+
+    return () => clearInterval(pollingInterval);
+  }, [messages]);
 
   return (
     <div className="flex flex-col gap-2 bg-gray-400 p-4 rounded-md">

@@ -72,16 +72,22 @@ function NotificationProvider({children}:{children: ReactNode}): ReactNode {
    * Poll Upstash for new notifications.
    */
   const pollNotifications = async () => {
-    const notificationResponse = await getUserNotifications();
+    try {
+      const notificationResponse = await getUserNotifications();
 
-    if ('error' in notificationResponse) {
-      console.error(notificationResponse.error);
+      if ('error' in notificationResponse) {
+        console.error(notificationResponse.error);
+        return;
+      }
+
+      const hasChanges = parseNotificationResponseForChanges(notificationResponse);
+      notifications.current = notificationResponse;
+      setHasNewNotifications(hasChanges);
+
+    } catch (error) {
+      console.error("Error polling notifications", error);
       return;
     }
-
-    const hasChanges = parseNotificationResponseForChanges(notificationResponse);
-    notifications.current = notificationResponse;
-    setHasNewNotifications(hasChanges);
   }
   /**
    * Clear all notifications for this user

@@ -1,7 +1,9 @@
 import DayJs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
 
 DayJs.extend(relativeTime);
+DayJs.extend(utc);
 
 export function getJobDateFormatted(jobStart: string | undefined):string {
   if (jobStart) {
@@ -22,5 +24,8 @@ export function getEstimatedTime(estimatedTime: number | undefined) {
 }
 
 export function getRelativeTime(messageDate: string) {
-  return DayJs(messageDate).fromNow();
+  const messageDateToUTC = new Date(messageDate).toISOString();
+  const diff = DayJs(messageDateToUTC).diff(new Date().toISOString(), 'seconds');
+  const timeAgo = diff / 60;
+  return timeAgo > 1 ? `${timeAgo} minutes ago` : timeAgo === 1 ? '1 minute ago' : `${timeAgo} seconds ago`;
 }

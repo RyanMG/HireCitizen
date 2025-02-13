@@ -1,9 +1,12 @@
+'use server';
+
 import { neon } from "@neondatabase/serverless";
 import { TJobMessage } from "../../definitions/messages";
 
-export const getJobMessages = async (jobId: string) => {
+export const getJobMessages = async (jobId: string): Promise<TJobMessage[] | { error: string }> => {
   try {
     const sql = neon(process.env.DATABASE_URL!);
+
     const messages = await sql`
       SELECT jm.id, jm.job_id as "jobId", jm.content, jm.created_at as "createdAt",
       (jsonb_agg(
@@ -20,10 +23,11 @@ export const getJobMessages = async (jobId: string) => {
       GROUP BY jm.id
       ORDER BY jm.created_at ASC
     `;
+
     return messages as TJobMessage[];
 
   } catch (error) {
     console.error(error);
-    return [];
+    return { error: 'Failed to fetch job messages' };
   }
 };

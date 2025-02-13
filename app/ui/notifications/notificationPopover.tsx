@@ -75,8 +75,8 @@ export default function NotificationPopover() {
             </div>
 
             {notificationContent.length > 0 &&
-              <div className="flex flex-row w-full justify-between">
-                <Button label="Mark all as read" theme="secondary" onClick={() => clearAllNotifications()} />
+              <div className="flex flex-row w-full justify-between gap-2">
+                <Button label="Mark all read" theme="secondary" onClick={() => clearAllNotifications()} />
                 <Button label="Close" theme="primary" onClick={() => toggleShowNotifications(false)} />
               </div>
             }

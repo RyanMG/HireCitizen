@@ -3,7 +3,11 @@ import JobMessagesContainer from "./jobMessagesContainer";
 import { getJobMessages } from "@query/messages/data";
 
 export default async function JobMessagesWrapper({ jobId }: { jobId: string }) {
-  const messageList = await getJobMessages(jobId);
+  let messageList = await getJobMessages(jobId);
+
+  if ('error' in messageList) {
+    messageList = [];
+  }
 
   return (
     <div>

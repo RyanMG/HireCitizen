@@ -3,11 +3,11 @@
 import { neon } from "@neondatabase/serverless";
 import { TJobMessage } from "@definitions/messages";
 import { auth } from "@/auth";
-
+import DayJs from "dayjs";
 export const postJobMessages = async (message: string, jobId: string) => {
   const session = await auth();
   const userId = session?.activeUser?.id;
-  const createdAt = new Date().toLocaleString();
+  const createdAt = DayJs().toISOString();
 
   try {
     const sql = neon(process.env.DATABASE_URL!);
@@ -19,7 +19,10 @@ export const postJobMessages = async (message: string, jobId: string) => {
     `;
 
     return {
-      ...newMessage[0],
+      id: newMessage[0].id,
+      content: newMessage[0].content,
+      createdAt: newMessage[0].created_at,
+      jobId: newMessage[0].job_id,
       sender: {
         id: session?.activeUser?.id,
         handle: session?.activeUser?.handle,
