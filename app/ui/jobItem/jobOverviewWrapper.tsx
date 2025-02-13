@@ -4,7 +4,7 @@ import { getJobById } from "@/app/lib/query/job/data";
 import NotificationSnackbar from "../components/notificationSnackbar";
 import { TJob } from "@/app/lib/definitions/job";
 import JobDetails from "./jobDetails";
-import CrewRoleList from "./crewRoles/crewRoleList";
+import JobRoleList from "./jobRoles/jobRoleList";
 import { auth } from "@/auth";
 
 export default async function JobOverviewWrapper(props: { params: Promise<{ id: string }> }) {
@@ -18,6 +18,7 @@ export default async function JobOverviewWrapper(props: { params: Promise<{ id: 
       <NotificationSnackbar
         type="error"
         messages={[job.error]}
+        redirectTo={`/`}
       />
     )
   }
@@ -27,7 +28,7 @@ export default async function JobOverviewWrapper(props: { params: Promise<{ id: 
       <JobDetails job={job} backPath={`job-search/job/${job.id}`} />
       <div className="flex flex-col">
         {session?.activeUser && (
-          <CrewRoleList job={job} user={session?.activeUser} />
+          <JobRoleList job={job} user={session?.activeUser} />
         )}
       </div>
     </>

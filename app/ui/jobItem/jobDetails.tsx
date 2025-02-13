@@ -3,7 +3,9 @@
 import IconButton from "@ui/components/iconBtns/iconBtn";
 import Link from "next/link";
 import { getJobDateFormatted, getEstimatedTime } from "@/app/lib/utils/dateUtils";
+import { auth } from '@/auth';
 import { TJob } from "@definitions/job";
+import { TPerson } from "@definitions/person";
 
 export default async function JobDetails({
   job,
@@ -12,23 +14,27 @@ export default async function JobDetails({
   job: TJob,
   backPath: string
 }) {
+  const session = await auth();
+  const user = session?.activeUser as TPerson;
 
   return (
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-sm mb-4 p-4">
       <div className="flex flex-row justify-between bg-blue border border-gray-700 rounded-md px-2 py-1 mb-2">
         <h1 className="flex items-center text-white text-2xl font-bold pl-1">{job.title}</h1>
-        <div className="flex flex-row">
-          <IconButton
-            type={"bookmark"}
-            selected={job.isBookmarked || false}
-            jobId={job.id}
-          />
-          <IconButton
-            type={"flag"}
-            selected={job.isFlagged || false}
-            jobId={job.id}
-          />
-        </div>
+        {user.id !== job.owner.id && (
+          <div className="flex flex-row">
+            <IconButton
+              type={"bookmark"}
+              selected={job.isBookmarked || false}
+              jobId={job.id}
+            />
+            <IconButton
+              type={"flag"}
+              selected={job.isFlagged || false}
+              jobId={job.id}
+            />
+          </div>
+        )}
       </div>
 
       <Link href={`/profile/${job.owner.id}?back=${backPath}`} className="py-2">

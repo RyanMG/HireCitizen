@@ -10,6 +10,7 @@ import JobMessagesWrapper from "@ui/jobItem/jobMessages/jobMessagesWrapper";
 import CurrentCrewMembers from "@ui/jobItem/currentJobCrew/currentCrewMembers";
 import JobDetails from "@ui/jobItem/jobDetails";
 import CrewRoleApplications from "@ui/employerPages/crewRoleApplications/incomingCrewRoleApplications";
+import UnfilledJobRoles from "@ui/jobItem/jobRoles/unfilledJobRoles";
 
 import ResultsLoading from "@components/resultsLoading";
 import NotificationSnackbar from "@components/notificationSnackbar";
@@ -32,6 +33,7 @@ export default async function JobWrapper(props: { params: Promise<{ id: string }
       <NotificationSnackbar
         type="error"
         messages={['error' in job ? job.error : '', 'error' in currentCrew ? currentCrew.error : ''].filter(Boolean) as string[]}
+        redirectTo={`/`}
       />
     )
   }
@@ -55,6 +57,10 @@ export default async function JobWrapper(props: { params: Promise<{ id: string }
       <JobDetails job={job} backPath={`job/${job.id}`} />
       <Suspense fallback={<ResultsLoading />}>
         <CurrentCrewMembers currentCrew={currentCrew} />
+      </Suspense>
+
+      <Suspense fallback={<ResultsLoading />}>
+        <UnfilledJobRoles job={job} />
       </Suspense>
 
       {user && job.owner.id === user.id && (

@@ -1,9 +1,10 @@
 'use client';
 
 import { TJob, TJobApplicant } from "@definitions/job";
-import CrewRoleListing from "./crewRoleListing";
+import JobRoleListing from "./jobRoleListing";
+import SectionHeader from "@components/sectionHeader";
 import { useCallback, useEffect, useState } from "react";
-import { getJobApplicationStatus } from "@/app/lib/query/jobRoles/data";
+import { getJobApplicationStatus } from "@query/jobRoles/data";
 import { TPerson } from "@definitions/person";
 
 interface CrewRoleListProps {
@@ -46,16 +47,17 @@ export default function CrewRoleList({
 
   return (
     <>
-      <h2 className="text-gray-400 text-lg font-bold pb-1 border-b border-gray-600">Job Roles Available</h2>
+      <SectionHeader title="Job Roles Available" />
       {error && <div className="text-red-500">{error}</div>}
       <div className="flex flex-col">
         {job.crewRoles?.map(role => (
-          <CrewRoleListing
+          <JobRoleListing
             role={role}
-            jobId={job.id}
+            job={job}
             key={role.id}
             currentApplication={application}
             updateApplication={updateApplication}
+            user={user}
           />
         ))}
       </div>

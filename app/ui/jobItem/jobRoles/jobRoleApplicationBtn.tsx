@@ -1,9 +1,7 @@
-'use client';
-
-import { TCrewRole, TJobApplicant } from "@definitions/job";
 import { Button, ButtonProps, styled } from "@mui/material";
 import { useActionState, useEffect, useState } from "react";
 import { applyToCrewRole, rescindCrewRoleApplication } from "@query/jobRoles/actions";
+import { TCrewRole, TJobApplicant } from "@definitions/job"
 
 const getButtonText = (currentApplication: TJobApplicant | null, isApplied: boolean) => {
   if (currentApplication && currentApplication.acceptedStatus === 'ACCEPTED') {
@@ -24,17 +22,18 @@ const ApplicationButton = styled(Button)<ButtonProps>(({ theme }) => ({
   }
 }));
 
-export default function CrewRoleListing(props: {
+export default function JobRoleApplicationBtn(props: {
   role: TCrewRole,
   jobId: string,
   currentApplication: TJobApplicant | null,
   updateApplication: (isApplied: boolean) => void
 }) {
+
   const {
     role,
     jobId,
     currentApplication,
-    updateApplication,
+    updateApplication
   } = props;
 
   const [showApplicationBtn, setShowApplicationBtn] = useState<boolean>(false);
@@ -57,27 +56,28 @@ export default function CrewRoleListing(props: {
   }, [state, rescindState]);
 
   return (
-    <form action={() => {
-      if (currentApplication) {
-        rescindAction();
-      } else {
-        applyAction();
-      }
-    }} className="flex flex-row justify-between mb-2 items-center border-b border-gray-800 py-3">
-      <p className="text-white">{role.name} <span className="text-gray-400 text-sm pl-2">({role.count} {role.count === 1 ? 'spot' : 'spots'})</span></p>
+    <>
       {showApplicationBtn &&
-        <ApplicationButton
-          variant="contained"
-          size="small"
-          type="submit"
-          disabled={Boolean(currentApplication && (
-            currentApplication.acceptedStatus === 'REJECTED' ||
-            currentApplication.acceptedStatus === 'ACCEPTED'
-          ))}
-        >
-          {getButtonText(currentApplication, isApplied)}
-        </ApplicationButton>
+        <form action={() => {
+          if (currentApplication) {
+            rescindAction();
+          } else {
+            applyAction();
+          }
+        }}>
+          <ApplicationButton
+            variant="contained"
+            size="small"
+            type="submit"
+            disabled={Boolean(currentApplication && (
+              currentApplication.acceptedStatus === 'REJECTED' ||
+             currentApplication.acceptedStatus === 'ACCEPTED'
+            ))}
+          >
+            {getButtonText(currentApplication, isApplied)}
+          </ApplicationButton>
+        </form>
       }
-    </form>
-  )
+    </>
+  );
 }
