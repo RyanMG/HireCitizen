@@ -57,7 +57,7 @@ export default async function JobWrapper(props: { params: Promise<{ id: string }
       <JobDetails job={job} backPath={`job/${job.id}`} />
       <div className="overflow-auto">
         <Suspense fallback={<ResultsLoading />}>
-          <CurrentCrewMembers currentCrew={currentCrew} />
+          <CurrentCrewMembers ownerId={job.owner.id} currentCrew={currentCrew} />
         </Suspense>
 
         <Suspense fallback={<ResultsLoading />}>

@@ -174,3 +174,28 @@ export async function toggleApplicationStatus(applicationId: number, jobId: stri
     error: null
   };
 }
+
+export async function removeCrewMember(jobId: string, roleId: number, crewMemberId: string): Promise<{submitted: boolean, message: string | null, error: string | null}> {
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+
+    await sql`DELETE FROM job_applicants WHERE job_id=${jobId} AND person_id=${crewMemberId} AND crew_role_id=${roleId} RETURNING id` as unknown as string[];
+    await sql`UPDATE job_crew_role_join SET crew_role_filled_count = crew_role_filled_count - 1 WHERE job_id = ${jobId} AND crew_role_id = ${roleId}`;
+
+  } catch (error) {
+    console.error(error);
+    return {
+      submitted: false,
+      message: null,
+      error: 'Database Error: Failed to remove accepted crew member.'
+    };
+  }
+
+  revalidatePath(`/job/${jobId}`);
+
+  return {
+    submitted: true,
+    message: 'Crew member removed.',
+    error: null
+  };
+}
