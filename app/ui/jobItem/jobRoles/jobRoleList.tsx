@@ -50,16 +50,20 @@ export default function CrewRoleList({
       <SectionHeader title="Job Roles Available" />
       {error && <div className="text-red-500">{error}</div>}
       <div className="flex flex-col">
-        {job.crewRoles?.map(role => (
-          <JobRoleListing
-            role={role}
-            job={job}
-            key={role.id}
-            currentApplication={application}
-            updateApplication={updateApplication}
-            user={user}
-          />
-        ))}
+        {job.crewRoles?.map(role => {
+          debugger;
+
+          return (
+            <JobRoleListing
+              role={role}
+              job={job}
+              key={role.id}
+              currentApplication={application}
+              updateApplication={updateApplication}
+              user={user}
+            />
+          )
+})}
       </div>
     </>
   )

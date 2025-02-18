@@ -15,7 +15,7 @@ export default function JobRoleAssignmentRow({
   removeRole,
   updateRole
 }: IJobRoleAssignmentRowProps) {
-  const [count, setCount] = useState(role.count);
+  const [count, setCount] = useState(role.requestedCount);
 
   const increaseCount = () => {
     setCount(count + 1);

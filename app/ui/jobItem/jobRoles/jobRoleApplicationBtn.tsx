@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, ButtonProps, styled } from "@mui/material";
 import { useActionState, useEffect, useState } from "react";
 import { applyToCrewRole, rescindCrewRoleApplication } from "@query/jobRoles/actions";

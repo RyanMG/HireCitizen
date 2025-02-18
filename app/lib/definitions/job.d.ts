@@ -35,7 +35,8 @@ export type TCrewRole = {
   id: number;
   name: string;
   description: string;
-  count: number;
+  requestedCount: number;
+  filledCount: number;
 }
 
 export type TCrewRoleOption = {

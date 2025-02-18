@@ -26,7 +26,7 @@ const JobRoleListItem = ({ role, onClickRemove }: { role: TCrewRole, onClickRemo
         />
       </div>
       <p className="flex-1 text-gray-800 text-sm"><span className="font-bold text-gray-500">Role:</span> {role.name}</p>
-      <p className="text-gray-800 text-sm"><span className="font-bold text-gray-500">Number requested:</span> {role.count}</p>
+      <p className="text-gray-800 text-sm"><span className="font-bold text-gray-500">Number requested:</span> {role.requestedCount}</p>
     </div>
   )
 }

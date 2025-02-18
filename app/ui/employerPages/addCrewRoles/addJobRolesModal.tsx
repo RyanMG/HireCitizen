@@ -77,7 +77,8 @@ export default function AddJobRolesModal({
         ...selectedRoles,
         {
           ...roleToAdd,
-          count: 1
+          requestedCount: 1,
+          filledCount: 0
         }
       ]);
     }
@@ -109,7 +110,7 @@ export default function AddJobRolesModal({
    * Update a given role's count
    */
   const updateRole = (id: number, count: number) => {
-    setSelectedRoles(selectedRoles.map((role) => role.id === id ? { ...role, count } : role));
+    setSelectedRoles(selectedRoles.map((role) => role.id === id ? { ...role, requestedCount: count } : role));
   }
 
   return (

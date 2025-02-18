@@ -203,7 +203,7 @@ export async function saveJobRoles(jobId: string, selectedRoles: TCrewRole[]) {
   try {
     const sql = neon(process.env.DATABASE_URL!);
     for await (const role of selectedRoles) {
-      await sql`INSERT INTO job_crew_role_join (job_id, crew_role_id, crew_role_count) VALUES (${jobId}, ${role.id}, ${role.count})`;
+      await sql`INSERT INTO job_crew_role_join (job_id, crew_role_id, crew_role_requested_count, crew_role_filled_count) VALUES (${jobId}, ${role.id}, ${role.requestedCount}, 0)`;
     }
     return { message: 'Job roles saved.' };
 

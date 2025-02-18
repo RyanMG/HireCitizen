@@ -20,11 +20,9 @@ export default function JobRoleListing(props: {
     user
   } = props;
 
-  console.log('job', job)
-
   return (
     <article className="flex flex-row justify-between mb-1 items-center border-b border-gray-800 py-2">
-      <p className="text-white">{role.name} <span className="text-gray-400 text-sm pl-2">({role.count} {role.count === 1 ? 'spot' : 'spots'})</span></p>
+      <p className="text-white">{role.name} <span className="text-gray-400 text-sm pl-2">({role.requestedCount - role.filledCount} {role.requestedCount - role.filledCount === 1 ? 'spot' : 'spots'})</span></p>
       {job.owner.id !== user.id &&
         <JobRoleApplicationBtn role={role} jobId={job.id} currentApplication={currentApplication!} updateApplication={updateApplication!}/>
       }
