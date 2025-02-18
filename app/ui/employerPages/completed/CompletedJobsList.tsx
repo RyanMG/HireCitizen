@@ -1,6 +1,7 @@
 import CompletedJobCard from './CompletedJobCard';
 import SectionHeader from "@components/sectionHeader";
 import JobFilters from "@ui/employerPages/postedJobs/jobFilters";
+import NoResultsBlock from '@components/noResultsBlock'
 import { getAllPastJobsJobs } from "@query/job/data";
 
 export default async function CompletedJobsList(props: {
@@ -30,24 +31,28 @@ export default async function CompletedJobsList(props: {
   return (
     <>
       <JobFilters types={['COMPLETE', 'CANCELED']} />
-      {completedJobsSort.active && completedJobsSort.active.length > 0 && (
-        <div>
-          <SectionHeader title="Past Due" />
-          {completedJobsSort.active}
-        </div>
-      )}
-      {completedJobsSort.complete && completedJobsSort.complete.length > 0 && (
+      <div>
+        <SectionHeader title="Past Due" />
+        {completedJobsSort.active && completedJobsSort.active.length > 0 && completedJobsSort.active}
+        {(!completedJobsSort.active || completedJobsSort.active.length === 0) && <NoResultsBlock text="No active jobs" />}
+      </div>
+
+      {statusList.includes('COMPLETE') && (
         <div>
           <SectionHeader title="Completed" />
-          {completedJobsSort.complete}
+          {completedJobsSort.complete && completedJobsSort.complete.length > 0 && completedJobsSort.complete}
+          {(!completedJobsSort.complete || completedJobsSort.complete.length === 0) && <NoResultsBlock text="No completed jobs" />}
         </div>
       )}
-      {completedJobsSort.canceled && completedJobsSort.canceled.length > 0 && (
+
+      {statusList.includes('CANCELED') && (
         <div>
           <SectionHeader title="Canceled Jobs" />
-          {completedJobsSort.canceled}
+          {completedJobsSort.canceled && completedJobsSort.canceled.length > 0 && completedJobsSort.canceled}
+          {(!completedJobsSort.canceled || completedJobsSort.canceled.length === 0) && <NoResultsBlock text="No canceled jobs" />}
         </div>
       )}
+
     </>
   )
 }

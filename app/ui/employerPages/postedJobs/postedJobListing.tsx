@@ -23,10 +23,6 @@ export default async function MyJobListing({
     />
   }
 
-  if (jobs.length === 0) {
-    return <NoResultsBlock text="No jobs found" />;
-  }
-
   const jobDisplay = jobs.reduce((acc, job) => {
     const status = job.status?.toLowerCase() || '';
     if (!acc[status]) {
@@ -38,30 +34,21 @@ export default async function MyJobListing({
 
   return (
     <>
-      {jobDisplay.pending && jobDisplay.pending.length > 0 &&
+      {jobStatusList.includes('PENDING') && (
         <div>
           <SectionHeader title="Pending" />
-          {jobDisplay.pending}
+          {jobDisplay.pending && jobDisplay.pending.length > 0 && jobDisplay.pending}
+          {(!jobDisplay.pending || jobDisplay.pending.length === 0) && <NoResultsBlock text="No pending jobs" />}
         </div>
-      }
-      {jobDisplay.active && jobDisplay.active.length > 0 &&
+      )}
+
+      {jobStatusList.includes('ACTIVE') && (
         <div>
           <SectionHeader title="Active" />
-          {jobDisplay.active}
+          {jobDisplay.active && jobDisplay.active.length > 0 && jobDisplay.active}
+          {(!jobDisplay.active || jobDisplay.active.length === 0) && <NoResultsBlock text="No active jobs" />}
         </div>
-      }
-      {jobDisplay.finished && jobDisplay.finished.length > 0 &&
-        <div>
-          <SectionHeader title="Finished" />
-          {jobDisplay.finished}
-        </div>
-      }
-      {jobDisplay.cancelled && jobDisplay.cancelled.length > 0 &&
-        <div>
-          <SectionHeader title="Cancelled" />
-          {jobDisplay.cancelled}
-        </div>
-      }
+      )}
     </>
   )
 }
