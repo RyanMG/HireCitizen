@@ -1,10 +1,17 @@
-import { signOut } from "@/auth";
+'use client';
+
+import {useRouter} from "next/navigation";
+import {useEffect} from "react";
 
 export default function LogoutPage() {
 
-  setTimeout(() => {
-    signOut({ redirectTo: "/login" });
-  }, 5000);
+  const router = useRouter();
+
+  useEffect(() => {
+    setTimeout(() => {
+      router.push("/login");
+    }, 5000);
+  }, [router]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
