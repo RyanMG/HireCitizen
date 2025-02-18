@@ -2,7 +2,7 @@
 
 import IconButton from "@ui/components/iconBtns/iconBtn";
 import Link from "next/link";
-import { getJobDateFormatted, getEstimatedTime } from "@/app/lib/utils/dateUtils";
+import { getJobDateFormatted, getEstimatedTime } from "@utils/dateUtils";
 import { auth } from '@/auth';
 import { TJob } from "@definitions/job";
 import { TPerson } from "@definitions/person";

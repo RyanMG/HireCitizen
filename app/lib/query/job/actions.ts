@@ -318,3 +318,28 @@ export async function toggleJobBookmark(jobId: string, selected: boolean): Promi
     return { error: 'Database Error: Failed to add job bookmark.' };
   }
 }
+
+export async function markJobComplete(jobId: string): Promise<{success: boolean, error?: string}> {
+  const session = await auth()
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    redirect('/logout');
+  }
+
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+    await sql`UPDATE job SET status = 'COMPLETE' WHERE id = ${jobId}`;
+    revalidatePath('/completed-jobs');
+    return {
+      success: true
+    }
+
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error: 'Database Error: Failed to mark job as complete.'
+    };
+  }
+}

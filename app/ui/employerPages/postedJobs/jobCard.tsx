@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteJob, toggleJobActive } from "@/app/lib/query/job/actions";
+import { deleteJob, toggleJobActive } from "@query/job/actions";
 import { TJob } from "@definitions/job";
 import Button from "@components/button";
 import Dialog from "@components/dialog";
@@ -8,7 +8,7 @@ import Dialog from "@components/dialog";
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { getJobDateFormatted } from "@/app/lib/utils/dateUtils";
+import { getJobDateFormatted } from "@utils/dateUtils";
 
 export default function ActiveJobCard({ job }: {job: TJob}) {
   const params = useSearchParams();

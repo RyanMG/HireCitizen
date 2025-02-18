@@ -271,11 +271,16 @@ export async function getMyJobs(jobStatusList: string[]): Promise<TJob[] | {erro
   }
 }
 
+/**
+ * GET a job owners past jobs - meaning either
+ * COMPLETE
+ * CANCELLED
+ * ACTIVE but the job start date is in the past
+ */
 export async function getAllPastJobsJobs(): Promise<TJob[] | {error:string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
   const yesterday = dayjs().subtract(1, 'day').endOf('day').toDate();
-  console.log('yesterday', yesterday)
 
   try {
     const sql = neon(process.env.DATABASE_URL!);
