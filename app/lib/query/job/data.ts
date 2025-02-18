@@ -171,7 +171,8 @@ export async function getJobById(jobId: string): Promise<TJob | {error:string}> 
             jobId: role.job_id,
             name: role.crew_role_name,
             description: role.crew_role_description,
-            count: role.crew_role_count
+            requestedCount: role.crew_role_requested_count,
+            filledCount: role.crew_role_filled_count
           } as TCrewRole
         })
       } as TJob;
@@ -267,5 +268,44 @@ export async function getMyJobs(jobStatusList: string[]): Promise<TJob[] | {erro
   } catch (error) {
     console.error(error);
     return { error: 'Database Error: Failed to get active jobs.' };
+  }
+}
+
+export async function getAllPastJobsJobs(): Promise<TJob[] | {error:string}> {
+  const session = await auth();
+  const userId = session?.activeUser?.id;
+  const yesterday = dayjs().subtract(1, 'day').endOf('day').toDate();
+  console.log('yesterday', yesterday)
+
+  try {
+    const sql = neon(process.env.DATABASE_URL!);
+
+    return await sql`
+      SELECT j.*,
+      TO_CHAR(j.job_start, 'YYYY-MM-DD HH24:MI:SS') as "jobStart",
+      COALESCE(NULLIF(jsonb_agg(
+        CASE WHEN cr.name IS NOT NULL THEN
+          jsonb_build_object(
+            'id', cr.id,
+            'name', cr.name,
+            'description', cr.description
+          )
+        END
+      ), '[null]'), '[]'::jsonb) AS "crewRoles"
+      FROM job j
+      LEFT JOIN job_crew_role_join jcrj ON j.id = jcrj.job_id
+      LEFT JOIN crew_roles cr ON jcrj.crew_role_id = cr.id
+      WHERE owner_id = ${userId}
+      AND (
+        (status = ANY(ARRAY['COMPLETE'::job_status, 'CANCELED'::job_status]))
+        OR
+        (status = 'ACTIVE'::job_status AND j.job_start <= ${yesterday})
+      )
+      GROUP BY j.id
+      ORDER BY created_at DESC;` as TJob[];
+
+  } catch (error) {
+    console.error(error);
+    return { error: 'Database Error: Failed to get past jobs.' };
   }
 }
