@@ -6,6 +6,7 @@ import { getJobDateFormatted, getEstimatedTime } from "@/app/lib/utils/dateUtils
 import { auth } from '@/auth';
 import { TJob } from "@definitions/job";
 import { TPerson } from "@definitions/person";
+import { redirect } from "next/navigation";
 
 export default async function JobDetails({
   job,
@@ -16,6 +17,10 @@ export default async function JobDetails({
 }) {
   const session = await auth();
   const user = session?.activeUser as TPerson;
+
+  if (!user) {
+    redirect('/logout');
+  }
 
   return (
     <div className="flex flex-col bg-dark-blue border border-gray-400 rounded-sm mb-4 p-4">
