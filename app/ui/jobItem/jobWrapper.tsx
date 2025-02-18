@@ -55,23 +55,25 @@ export default async function JobWrapper(props: { params: Promise<{ id: string }
   return (
     <>
       <JobDetails job={job} backPath={`job/${job.id}`} />
-      <Suspense fallback={<ResultsLoading />}>
-        <CurrentCrewMembers currentCrew={currentCrew} />
-      </Suspense>
-
-      <Suspense fallback={<ResultsLoading />}>
-        <UnfilledJobRoles job={job} />
-      </Suspense>
-
-      {user && job.owner.id === user.id && (
+      <div className="overflow-scroll">
         <Suspense fallback={<ResultsLoading />}>
-          <CrewRoleApplications job={job} />
+          <CurrentCrewMembers currentCrew={currentCrew} />
         </Suspense>
-      )}
 
-      <Suspense fallback={<ResultsLoading />}>
-        <JobMessagesWrapper jobId={jobId} />
-      </Suspense>
+        <Suspense fallback={<ResultsLoading />}>
+          <UnfilledJobRoles job={job} />
+        </Suspense>
+
+        {user && job.owner.id === user.id && (
+          <Suspense fallback={<ResultsLoading />}>
+            <CrewRoleApplications job={job} />
+          </Suspense>
+        )}
+
+        <Suspense fallback={<ResultsLoading />}>
+          <JobMessagesWrapper jobId={jobId} />
+        </Suspense>
+      </div>
     </>
   );
 }
