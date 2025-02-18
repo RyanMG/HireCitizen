@@ -24,8 +24,5 @@ export function getEstimatedTime(estimatedTime: number | undefined) {
 }
 
 export function getRelativeTime(messageDate: string) {
-  const messageDateToUTC = new Date(messageDate).toISOString();
-  const diff = DayJs(messageDateToUTC).diff(new Date().toISOString(), 'seconds');
-  const timeAgo = diff / 60;
-  return timeAgo > 1 ? `${timeAgo} minutes ago` : timeAgo === 1 ? '1 minute ago' : `${timeAgo} seconds ago`;
+  return DayJs(DayJs(messageDate).utc().format()).fromNow();
 }
