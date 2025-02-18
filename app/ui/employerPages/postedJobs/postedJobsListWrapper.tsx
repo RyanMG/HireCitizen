@@ -1,4 +1,4 @@
-import MyJobFilters from "./jobFilters";
+import JobFilters from "./jobFilters";
 import { Suspense } from "react";
 import ResultsLoading from "@components/resultsLoading";
 import MyJobListing from "./postedJobListing";
@@ -14,7 +14,7 @@ export default async function ActiveJobsList(props: {
 
   return (
     <div>
-      <MyJobFilters />
+      <JobFilters types={['PENDING', 'ACTIVE']} />
       <Suspense fallback={<ResultsLoading />}>
         <MyJobListing jobStatusList={statusList} />
       </Suspense>

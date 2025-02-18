@@ -1,9 +1,18 @@
 import CompletedJobCard from './CompletedJobCard';
 import SectionHeader from "@components/sectionHeader";
+import JobFilters from "@ui/employerPages/postedJobs/jobFilters";
 import { getAllPastJobsJobs } from "@query/job/data";
 
-export default async function CompletedJobsList() {
-  const completedJobs = await getAllPastJobsJobs();
+export default async function CompletedJobsList(props: {
+  searchParams?: Promise<{
+    jobStatus?: string
+  }>
+}) {
+  const jobStatusListParams = await props.searchParams;
+  const jobStatus = jobStatusListParams?.jobStatus || '';
+  const statusList = !jobStatus || jobStatus === '' ? [] : jobStatus.split(',');
+
+  const completedJobs = await getAllPastJobsJobs(statusList);
 
   if ('error' in completedJobs) {
     return <div>{completedJobs.error}</div>;
@@ -20,6 +29,7 @@ export default async function CompletedJobsList() {
 
   return (
     <>
+      <JobFilters types={['COMPLETE', 'CANCELED']} />
       {completedJobsSort.active && completedJobsSort.active.length > 0 && (
         <div>
           <SectionHeader title="Past Due" />

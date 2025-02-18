@@ -18,7 +18,7 @@ export type TJob = {
   title: string;
   description: string;
   jobType: TJobType;
-  status?: 'PENDING' | 'ACTIVE' | 'FINISHED' | 'CANCELLED';
+  status?: 'PENDING' | 'ACTIVE' | 'COMPLETE' | 'CANCELED';
   createdAt?: string;
   updatedAt?: string;
   jobStart?: string;

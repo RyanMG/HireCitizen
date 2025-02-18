@@ -277,7 +277,7 @@ export async function getMyJobs(jobStatusList: string[]): Promise<TJob[] | {erro
  * CANCELLED
  * ACTIVE but the job start date is in the past
  */
-export async function getAllPastJobsJobs(): Promise<TJob[] | {error:string}> {
+export async function getAllPastJobsJobs(jobStatusList: string[]): Promise<TJob[] | {error:string}> {
   const session = await auth();
   const userId = session?.activeUser?.id;
   const yesterday = dayjs().subtract(1, 'day').endOf('day').toDate();
@@ -302,7 +302,7 @@ export async function getAllPastJobsJobs(): Promise<TJob[] | {error:string}> {
       LEFT JOIN crew_roles cr ON jcrj.crew_role_id = cr.id
       WHERE owner_id = ${userId}
       AND (
-        (status = ANY(ARRAY['COMPLETE'::job_status, 'CANCELED'::job_status]))
+        (status = ANY(${jobStatusList}))
         OR
         (status = 'ACTIVE'::job_status AND j.job_start <= ${yesterday})
       )
