@@ -8,7 +8,7 @@ import { Suspense } from "react";
 
 import JobMessagesWrapper from "@ui/jobItem/jobMessages/jobMessagesWrapper";
 import CurrentCrewMembers from "@ui/jobItem/currentJobCrew/currentCrewMembers";
-import JobDetails from "@ui/jobItem/jobDetails";
+import JobDetails from "@/app/ui/jobItem/jobDetailsBlock";
 import CrewRoleApplications from "@ui/employerPages/crewRoleApplications/incomingCrewRoleApplications";
 import UnfilledJobRoles from "@ui/jobItem/jobRoles/unfilledJobRoles";
 
@@ -55,7 +55,7 @@ export default async function JobWrapper(props: { params: Promise<{ id: string }
   return (
     <>
       <JobDetails job={job} backPath={`job/${job.id}`} />
-      <div className="overflow-scroll">
+      <div className="overflow-auto">
         <Suspense fallback={<ResultsLoading />}>
           <CurrentCrewMembers currentCrew={currentCrew} />
         </Suspense>

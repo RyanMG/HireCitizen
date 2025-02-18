@@ -26,7 +26,7 @@ export default function JobMessagesContainer({
     if (!newMessage) {
       return;
     };
-    console.log('adding new message', newMessage);
+
     setMessages(
       [
         ...messages,

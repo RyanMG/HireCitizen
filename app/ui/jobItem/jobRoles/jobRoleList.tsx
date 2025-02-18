@@ -51,8 +51,6 @@ export default function CrewRoleList({
       {error && <div className="text-red-500">{error}</div>}
       <div className="flex flex-col">
         {job.crewRoles?.map(role => {
-          debugger;
-
           return (
             <JobRoleListing
               role={role}

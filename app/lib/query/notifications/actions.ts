@@ -225,7 +225,6 @@ export async function markAllNotificationsAsRead(): Promise<{success: boolean} |
     }
   }
 
-  console.log('userId', userId);
   try {
     const client = Redis.fromEnv();
     const wasReset = await client.json.set(
